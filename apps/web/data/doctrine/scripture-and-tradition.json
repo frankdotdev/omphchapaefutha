@@ -1,0 +1,531 @@
+[
+  {
+    "id": "st-scripture-and-sacred-tradition",
+    "category": "scripture-and-tradition",
+    "question": "How are Sacred Scripture and Sacred Tradition related?",
+    "answer": "Sacred Scripture and Sacred Tradition are bound closely together, communicating one with the other. Flowing from the same divine well-spring, both come together to form one sacred deposit of the Word of God entrusted to the Church.\n\nSacred Scripture is the speech of God put down in writing under the inspiration of the Holy Spirit. Sacred Tradition is the living transmission of the Word of God, accomplished in the Holy Spirit by the Apostles through their preaching, institutions, worship, and way of life.\n\nChristianity is not a 'religion of the book' alone, but of the living Word of God made flesh, Jesus Christ. Sacred Tradition actually preceded the New Testament: the early Church preached the Gospel, celebrated the Eucharist, and lived the faith for decades before the individual books of the New Testament were written and compiled.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "80"
+      },
+      {
+        "type": "ccc",
+        "ref": "82"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Thessalonians 2:15"
+      }
+    ],
+    "keywords": [
+      "scripture and tradition",
+      "deposit of faith",
+      "word of god",
+      "apostles",
+      "sacred scripture",
+      "living tradition"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-role-of-magisterium",
+    "category": "scripture-and-tradition",
+    "question": "What is the Magisterium, and what is its role in interpreting the Bible?",
+    "answer": "The Magisterium is the living teaching office of the Church, exercised by the Pope and the bishops in communion with him.\n\nThe task of giving an authentic and binding interpretation of the Word of God, whether written in Scripture or handed on in Tradition, has been entrusted exclusively to the Magisterium. Christ promised the Apostles that the Holy Spirit would guide them into all truth and said to them: 'Whoever listens to you listens to me.'\n\nThe Magisterium is not superior to the Word of God; it is its servant. It teaches only what has been handed on, listening to it devoutly, guarding it scrupulously, and explaining it faithfully. The Magisterium protects the faithful from private, contradictory interpretations that distort the true Gospel.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "85"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Peter 1:20-21"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 10:16"
+      }
+    ],
+    "keywords": [
+      "magisterium",
+      "teaching authority",
+      "interpreting scripture",
+      "bishops",
+      "pope",
+      "guarding the faith"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-inspiration-of-the-bible",
+    "category": "scripture-and-tradition",
+    "question": "What does it mean that the Bible is inspired by the Holy Spirit?",
+    "answer": "Catholic doctrine teaches that God is the primary author of Sacred Scripture. Under the supernatural influence of the Holy Spirit, human authors were inspired to write all that God wanted written, and only what he wanted.\n\nThis inspiration was not mechanical dictation. God made full use of the human authors' genuine literary faculties, language, cultural background and research abilities. While acting as true authors, they were so guided by the Holy Spirit that their words convey without error that saving truth which God wished to put into writing for our salvation.\n\nBecause Scripture is inspired, the Church venerates the divine Scriptures just as she venerates the Body of the Lord, continually feeding the faithful from the one table of God's Word and Christ's Body.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "105"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Timothy 3:16-17"
+      }
+    ],
+    "keywords": [
+      "biblical inspiration",
+      "holy spirit",
+      "divine authorship",
+      "human authors",
+      "sacred scripture",
+      "inerrancy"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-catholic-bible-canon",
+    "category": "scripture-and-tradition",
+    "question": "Why does the Catholic Bible have 73 books while Protestant Bibles have 66?",
+    "answer": "The Catholic Bible contains 73 books (46 in the Old Testament and 27 in the New Testament), whereas Protestant Bibles generally include 66 books.\n\nThe difference concerns seven books of the Old Testament: Tobit, Judith, 1 and 2 Maccabees, Wisdom, Sirach (Ecclesiasticus), and Baruch, along with additions to Esther and Daniel. Catholics refer to these as the 'deuterocanonical' books (meaning 'second canon').\n\nThese books were part of the Septuagint, the Greek translation of the Old Testament used by Jesus, the Apostles, and the early Church. Historical Church councils (such as the Council of Rome in AD 382, Hippo, and Carthage) consistently included them in the scriptural canon. During the 16th-century Reformation, reformers removed these books, following a shorter Hebrew canon. The Council of Trent confirmed the complete 73-book canon received from the early centuries.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "120"
+      }
+    ],
+    "keywords": [
+      "bible canon",
+      "deuterocanonical",
+      "73 books",
+      "septuagint",
+      "old testament",
+      "council of trent"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-how-to-read-the-bible",
+    "category": "scripture-and-tradition",
+    "question": "How should a Catholic read and interpret Sacred Scripture?",
+    "answer": "Because Sacred Scripture is inspired by the Holy Spirit, it must also be read and interpreted in the same Spirit by whom it was written.\n\nThe Second Vatican Council gave three golden criteria for authentic Catholic interpretation. First, pay attentive heed to the content and unity of the whole Scripture: individual verses cannot be ripped out of context to contradict the overall narrative of salvation. Second, read Scripture within the living Tradition of the whole Church, listening to the Fathers and liturgical practice. Third, maintain the analogy of faith: the coherence of the truths of faith among themselves.\n\nCatholics are encouraged to study both the literal sense (what the words intended by the human author convey) and the spiritual senses (allegorical, moral, and anagogical), allowing Scripture to illuminate prayer and daily life.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "111"
+      },
+      {
+        "type": "ccc",
+        "ref": "112"
+      },
+      {
+        "type": "document",
+        "title": "Dei Verbum",
+        "ref": "no. 12",
+        "year": "1965"
+      }
+    ],
+    "keywords": [
+      "interpreting scripture",
+      "literal sense",
+      "spiritual sense",
+      "unity of scripture",
+      "analogy of faith",
+      "dei verbum"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-word-of-god-in-life",
+    "category": "scripture-and-tradition",
+    "question": "Why does the Church encourage daily reading of the Scriptures?",
+    "answer": "Saint Jerome famously declared: 'Ignorance of the Scriptures is ignorance of Christ.' The Church forcefully urges all the faithful to frequent reading and prayerful meditation on the divine Scriptures.\n\nIn the sacred books, the Father who is in heaven comes lovingly to meet his children and speaks with them. The Word of God possesses divine power: it strengthens the weak, comforts the afflicted, enlightens moral decisions, and purifies our desires.\n\nApproaching Scripture in an attitude of prayerful listening—known in the Catholic tradition as lectio divina (sacred reading)—allows the text to become a personal conversation between God and the reader. Daily reading of the Mass readings is an excellent, structured way for every Catholic to encounter Christ every day.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "131"
+      },
+      {
+        "type": "ccc",
+        "ref": "133"
+      },
+      {
+        "type": "scripture",
+        "ref": "Hebrews 4:12"
+      }
+    ],
+    "keywords": [
+      "daily scripture",
+      "lectio divina",
+      "word of god",
+      "saint jerome",
+      "bible reading",
+      "spiritual nourishment"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-private-revelations",
+    "category": "scripture-and-tradition",
+    "question": "Are Catholics required to believe in approved apparitions and private revelations?",
+    "answer": "No. The Catholic Church distinguishes between public Revelation and private revelations.\n\nPublic Revelation was completed and closed with Christ and the death of the last Apostle; it is preserved in the Deposit of Faith and requires divine and Catholic faith from all believers. In contrast, private revelations (such as apparitions at Lourdes, Fatima, or Guadalupe) do not belong to the deposit of faith.\n\nEven when the Church formally investigates and approves a private revelation as worthy of belief, Catholics are not strictly obliged to believe it as a condition of salvation. Their legitimate role is not to improve or add to Christ's definitive Revelation, but to help people live by it more fully in a particular historical period.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "67"
+      }
+    ],
+    "keywords": [
+      "private revelations",
+      "apparitions",
+      "public revelation",
+      "fatima",
+      "lourdes",
+      "deposit of faith"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-three-legged-stool-theology",
+    "category": "scripture-and-tradition",
+    "question": "What is the relationship between Scripture, Tradition, and the Magisterium?",
+    "answer": "In Catholic theology, Sacred Scripture, Sacred Tradition, and the Magisterium are so closely linked that no one of them can stand without the others (often compared to a three-legged stool). As the Second Vatican Council taught in Dei Verbum, Sacred Scripture is the written speech of God, Sacred Tradition transmits the full living Word of God entrusted to the Apostles, and the Magisterium (the Pope and bishops) is the living teaching authority that authentically interprets them. Together, under the Holy Spirit, they safeguard the one divine deposit of faith.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "80-95"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Thessalonians 2:15"
+      }
+    ],
+    "keywords": [
+      "three-legged stool",
+      "dei verbum",
+      "sacred tradition",
+      "magisterium",
+      "deposit of faith"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-biblical-inerrancy-meaning",
+    "category": "scripture-and-tradition",
+    "question": "Does the Catholic Church teach that the Bible is without error (Inerrancy)?",
+    "answer": "Yes. The Catholic Church firmly teaches the biblical inerrancy of Sacred Scripture regarding saving truth. Because the human authors wrote under the supernatural inspiration of the Holy Spirit, God Himself is the principal author of the Bible. Therefore, as Dei Verbum states: 'The books of Scripture firmly, faithfully, and without error teach that truth which God, for the sake of our salvation, wished to see confided to the Sacred Scriptures.' Inerrancy does not mean treating ancient poetic idioms as modern scientific textbooks, but affirms that Scripture never deceives regarding salvation, faith, and morals.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "105-108"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Timothy 3:16"
+      }
+    ],
+    "keywords": [
+      "biblical inerrancy",
+      "inspiration of scripture",
+      "dei verbum",
+      "saving truth",
+      "holy spirit author"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-four-senses-of-scripture",
+    "category": "scripture-and-tradition",
+    "question": "What are the Four Senses of Scripture in Catholic exegesis?",
+    "answer": "According to ancient Catholic tradition, Scripture can be understood according to four senses: 1) The Literal Sense: the meaning conveyed by the words discovered through historical-grammatical exegesis; and the Spiritual Sense, divided into three: 2) The Allegorical Sense: acquiring a deeper understanding by recognizing events as pointing to Christ (e.g., the crossing of the Red Sea prefigures Baptism); 3) The Moral Sense: events reported in Scripture that instruct us to act justly; and 4) The Anagogical Sense: viewing realities in terms of their eternal significance, leading us toward Heaven.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "115-119"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 10:1-11"
+      }
+    ],
+    "keywords": [
+      "four senses of scripture",
+      "literal allegorical moral anagogical",
+      "biblical interpretation",
+      "exegesis"
+    ],
+    "level": "advanced"
+  },
+  {
+    "id": "st-deuterocanonical-seven-books",
+    "category": "scripture-and-tradition",
+    "question": "Why do Catholic Bibles contain seven more Old Testament books than Protestant Bibles?",
+    "answer": "Catholic Bibles contain 73 books (46 in the Old Testament, 27 in the New Testament), whereas Protestant Bibles omit 7 Old Testament books (Tobit, Judith, 1 and 2 Maccabees, Wisdom, Sirach, and Baruch, plus portions of Daniel and Esther). These are called the 'Deuterocanonical' books. The early Christians and Apostles used the Greek translation of the Old Testament (the Septuagint), which contained these books. While 16th-century Protestant reformers dropped them following a later rabbinic canon, the Catholic Church definitively confirmed the historic 73-book canon at the Council of Trent.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "120"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Maccabees 12:43-46"
+      }
+    ],
+    "keywords": [
+      "deuterocanonical books",
+      "septuagint",
+      "73 books",
+      "canon of scripture",
+      "council of trent",
+      "apocrypha"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-latin-vulgate-st-jerome",
+    "category": "scripture-and-tradition",
+    "question": "What is the Latin Vulgate and what was Saint Jerome's contribution?",
+    "answer": "In the late 4th century, Pope Damasus I commissioned Saint Jerome to translate the Sacred Scriptures from their original Hebrew, Aramaic, and Greek into the common Latin language of the people ('versio vulgata'). Jerome spent decades in Bethlehem producing this monumental work, known as the Latin Vulgate. For over a millennium, the Vulgate served as the standard liturgical and theological biblical text of the Western Church, celebrated for its fidelity. Jerome famously declared: 'Ignorance of Scripture is ignorance of Christ.'",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "133"
+      },
+      {
+        "type": "scripture",
+        "ref": "Hebrews 4:12"
+      }
+    ],
+    "keywords": [
+      "latin vulgate",
+      "st jerome",
+      "translation of bible",
+      "ignorance of scripture",
+      "biblical text"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-lectio-divina-steps",
+    "category": "scripture-and-tradition",
+    "question": "What are the four classical steps of Lectio Divina (Sacred Reading)?",
+    "answer": "Lectio Divina is an ancient monastic method of praying with Sacred Scripture, structured in four progressive movements: 1) Lectio (Reading): reading a short biblical passage slowly and attentively, listening to what God says; 2) Meditatio (Meditation): reflecting deeply on the text, asking what God is saying to my life personally; 3) Oratio (Prayer): responding to God in conversational prayer with thanksgiving, petition, or repentance; and 4) Contemplatio (Contemplation): resting silently in God's loving presence beyond words, letting His grace transform the heart.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1177"
+      },
+      {
+        "type": "ccc",
+        "ref": "2708"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 2:19"
+      }
+    ],
+    "keywords": [
+      "lectio divina",
+      "meditation on scripture",
+      "reading praying meditating",
+      "contemplation",
+      "bible study"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-gnostic-gospels-rejection",
+    "category": "scripture-and-tradition",
+    "question": "Why did the early Catholic Church reject the 'Gnostic gospels' (e.g., Gospel of Thomas)?",
+    "answer": "During the 2nd and 3rd centuries, heretical sects (such as the Gnostics) wrote pseudepigraphal texts falsely attributing them to apostles like Thomas, Judas, or Mary Magdalene. The Church evaluated writings based on four apostolic criteria: 1) Apostolic Origin (written by an apostle or close disciple); 2) Orthodoxy (conforming to the apostolic Rule of Faith, not denying Christ's true humanity or creation's goodness); 3) Catholicity (broadly recognized and used by Churches everywhere); and 4) Liturgical Use (publicly read at Mass). The Gnostic texts failed all four tests.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "120"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 John 4:1-3"
+      }
+    ],
+    "keywords": [
+      "gnostic gospels",
+      "gospel of thomas",
+      "canon criteria",
+      "apostolic origin",
+      "orthodoxy"
+    ],
+    "level": "advanced"
+  },
+  {
+    "id": "st-typology-in-salvation-history",
+    "category": "scripture-and-tradition",
+    "question": "What is biblical 'Typology' in Catholic Scripture reading?",
+    "answer": "Typology is the discernment of God's works in the Old Testament as prefigurations ('types') that find fulfillment in the New Testament in the person of Jesus Christ. Saint Augustine beautifully encapsulated this: 'The New Testament lies hidden in the Old, and the Old Testament is unveiled in the New.' For instance, the sacrifice of Isaac prefigures Christ's sacrifice on Calvary; the Passover Lamb prefigures Christ our Pasch; and the bronze serpent in the desert prefigures Christ lifted up on the Cross to heal those poisoned by sin.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "128-130"
+      },
+      {
+        "type": "scripture",
+        "ref": "John 3:14-15"
+      }
+    ],
+    "keywords": [
+      "typology",
+      "augustine quote",
+      "old and new testaments",
+      "prefiguration",
+      "passover lamb"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-how-councils-fixed-canon",
+    "category": "scripture-and-tradition",
+    "question": "When and how did the Catholic Church settle the 73-book Canon of the Bible?",
+    "answer": "The Bible did not fall from the sky complete with a table of contents; it was the Catholic Church that discerned which ancient writings were inspired by the Holy Spirit. Early local councils under the authority of Rome—Council of Rome (382 AD under Pope Damasus I), Council of Hippo (393 AD), and Council of Carthage (397 AD)—established the list of 73 inspired books. This same list was reaffirmed at the Ecumenical Council of Florence (1442) and dogmatically defined against Protestant deletions at the Council of Trent (1546).",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "120"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Peter 3:15-16"
+      }
+    ],
+    "keywords": [
+      "canon of scripture",
+      "council of hippo",
+      "council of carthage",
+      "pope damasus",
+      "council of trent"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-psalms-as-prayerbook",
+    "category": "scripture-and-tradition",
+    "question": "Why are the Psalms central to Catholic liturgy and prayer?",
+    "answer": "The 150 Psalms of the Old Testament are the inspired prayer book of God's People, expressing every human emotion—praise, joy, lament, sorrow, fear, repentance, and thanksgiving. Jesus Himself prayed the Psalms during His earthly life and quoted Psalm 22 on the Cross. In the Mass, the Responsorial Psalm responds to the First Reading, and in the Liturgy of the Hours, the Psalms form the continuous heartbeat of the Church's unceasing prayer throughout every day, training our hearts to pray in Christ's own voice.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "2585-2589"
+      },
+      {
+        "type": "scripture",
+        "ref": "Psalm 22:1"
+      }
+    ],
+    "keywords": [
+      "book of psalms",
+      "responsorial psalm",
+      "prayer of the church",
+      "psalm on the cross",
+      "david"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-interpreting-hard-ot-passages",
+    "category": "scripture-and-tradition",
+    "question": "How should Catholics understand violent and difficult passages in the Old Testament?",
+    "answer": "Difficult Old Testament passages (such as ancient warfare or harsh judicial laws) must be interpreted according to divine pedagogy—God's progressive, patient education of a fallen human race across centuries. God met His people in their historical culture, slowly weaning them away from pagan brutality and idolatry toward higher moral truth, culminating in Jesus Christ. Jesus taught the definitive meaning of the Law, commanding love of enemies. Violent imagery is also understood spiritually as a fierce allegorical battle against sin and demonic temptation.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "53"
+      },
+      {
+        "type": "ccc",
+        "ref": "122"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 5:43-48"
+      }
+    ],
+    "keywords": [
+      "difficult bible passages",
+      "divine pedagogy",
+      "old testament violence",
+      "spiritual warfare",
+      "sermon on mount"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-bible-within-living-tradition",
+    "category": "scripture-and-tradition",
+    "question": "Why can the Bible not be interpreted in complete isolation from the Church?",
+    "answer": "As Saint Peter explicitly warns: 'No prophecy of Scripture is a matter of one's own private interpretation' (2 Peter 1:20). Sacred Scripture was written within the living community of the Church, for the Church, and inspired by the Holy Spirit who guides the Church. Separating the Bible from Sacred Tradition and the Magisterium leads to thousands of conflicting private interpretations, sectarian splits, and theological errors. The Bible is only read in its authentic fullness within the living faith of the Church that compiled it.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "113"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Peter 1:20-21"
+      }
+    ],
+    "keywords": [
+      "private interpretation",
+      "living tradition",
+      "communion of faith",
+      "st peter warning",
+      "unity of truth"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "st-gospels-historical-fidelity",
+    "category": "scripture-and-tradition",
+    "question": "What does the Church teach concerning the historical accuracy of the Four Gospels?",
+    "answer": "The Second Vatican Council solemnly declared in Dei Verbum (no. 19) that the Church unhesitatingly asserts the historical character of the four Gospels. They faithfully hand on what Jesus, the Son of God, while He lived among men, really did and taught for their eternal salvation until the day He was taken up. The Apostles and evangelists wrote based on eyewitness accounts, oral transmission, and guided synthesis under the inspiration of the Holy Spirit, giving us authentic testimony concerning Christ.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "126"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 1:1-4"
+      }
+    ],
+    "keywords": [
+      "four gospels",
+      "historical character",
+      "dei verbum",
+      "eyewitness accounts",
+      "apostolic testimony"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "st-scripture-in-catechesis",
+    "category": "scripture-and-tradition",
+    "question": "What role does Sacred Scripture play in Catholic preaching, prayer, and catechesis?",
+    "answer": "Sacred Scripture is the soul of all theology and catechesis. As Dei Verbum states, 'The Church has always venerated the divine Scriptures just as she venerates the body of the Lord, since, especially in the sacred liturgy, she unceasingly receives and offers to the faithful the bread of life from the table both of God's Word and of Christ's body.' All pastoral homilies, catechisms, and personal devotions must be continually nourished and ruled by Sacred Scripture to remain vibrant and true.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "131-133"
+      },
+      {
+        "type": "scripture",
+        "ref": "Colossians 3:16"
+      }
+    ],
+    "keywords": [
+      "table of the word",
+      "catechesis",
+      "soul of theology",
+      "veneration of scripture",
+      "christian instruction"
+    ],
+    "level": "basic"
+  }
+]

@@ -1,0 +1,543 @@
+[
+  {
+    "id": "ssl-what-is-holy-orders",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What are the three degrees of the Sacrament of Holy Orders?",
+    "answer": "The Sacrament of Holy Orders is the sacrament through which the mission entrusted by Christ to his apostles continues to be exercised in the Church until the end of time. It comprises three distinct degrees: the episcopate (bishops), the presbyterate (priests), and the diaconate (deacons).\n\nBishops receive the fullness of the sacrament, succeeding the Apostles and serving as pastors of local dioceses in union with the Pope. Priests are co-workers of the bishops, consecrated to preach the Gospel, shepherd the faithful, and celebrate the sacraments, especially the Holy Eucharist and Confession. Deacons are ordained not unto the priesthood, but unto ministry and service (diakonia), assisting at the altar, baptising, presiding at weddings and funerals, and ministering to the poor.\n\nLike Baptism and Confirmation, Holy Orders imprints an indelible sacramental character on the soul and can never be repeated or undone.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1536"
+      },
+      {
+        "type": "ccc",
+        "ref": "1554"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Timothy 3:1"
+      }
+    ],
+    "keywords": [
+      "holy orders",
+      "priesthood",
+      "bishop",
+      "priest",
+      "deacon",
+      "sacraments of service"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-priestly-celibacy-and-ordination",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why does the Western Catholic Church ordain only unmarried men to the priesthood?",
+    "answer": "The Church's teaching on who can be ordained involves two distinct aspects: the male priesthood and clerical celibacy.\n\nFirst, regarding the ordination of men, the Church recognises that she is bound by the example and choice of Jesus Christ himself, who chose Twelve men as his Apostles, even though he accorded deep dignity to holy women like Mary Magdalene. The priest acts 'in persona Christi Capitis' (in the person of Christ the Head and Bridegroom) when celebrating the Eucharist.\n\nSecond, priestly celibacy in the Latin rite is a holy discipline and gift. Christ lived as a celibate, and Saint Paul recommended celibacy for the sake of the kingdom of heaven, allowing the priest to offer his undivided heart and life to God and to his spiritual family in total availability.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1577"
+      },
+      {
+        "type": "ccc",
+        "ref": "1579"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 19:12"
+      }
+    ],
+    "keywords": [
+      "priesthood",
+      "celibacy",
+      "male ordination",
+      "in persona christi",
+      "bridegroom",
+      "vocation"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-holy-matrimony-nature",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What does the Catholic Church teach about the nature of Christian marriage?",
+    "answer": "The matrimonial covenant, by which a baptised man and a baptised woman establish between themselves a lifelong partnership, was created by God and raised by Christ to the dignity of a sacrament.\n\nChristian marriage has two essential and inseparable purposes: the good of the spouses (mutual love and unitive partnership) and the procreation and education of offspring. By its very nature, marital love demands total fidelity, emotional exclusivity, and lifelong permanence.\n\nIn Holy Matrimony, the bride and bridegroom are themselves the ministers of the sacrament; they mutually confer the sacrament upon each other by expressing their free and unconditional marital consent before God and the Church. Their union reflects the unbreakable covenant between Christ and the Church.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1601"
+      },
+      {
+        "type": "scripture",
+        "ref": "Mark 10:6-9"
+      },
+      {
+        "type": "scripture",
+        "ref": "Ephesians 5:31-32"
+      }
+    ],
+    "keywords": [
+      "holy matrimony",
+      "marriage",
+      "christian family",
+      "spouses",
+      "covenant",
+      "marital fidelity"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-marriage-indissolubility",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why does the Catholic Church teach that a valid sacramental marriage cannot be dissolved?",
+    "answer": "Jesus taught unambiguously: 'What God has joined together, let no one put asunder.' The Church faithfully preserves this teaching: a valid, consummated sacramental marriage between baptised persons cannot be dissolved by any human power or authority.\n\nThis indissolubility is not merely a legal rule; it is an ontological spiritual reality. When two baptised Christians give true marital consent, God seals their covenant. This bond mirrors Christ's unconditional, irrevocable fidelity to his Church.\n\nWhile a civil divorce or physical separation may become necessary in tragic situations (such as domestic violence or safeguarding children), civil divorce cannot break the underlying sacramental bond in the eyes of God. A declaration of nullity (annulment) is different: it is an ecclesiastical tribunal finding that a valid marriage was never established from the beginning due to a grave defect of consent or capacity.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1640"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 19:6"
+      },
+      {
+        "type": "canon",
+        "ref": "can. 1056"
+      }
+    ],
+    "keywords": [
+      "indissolubility",
+      "divorce",
+      "annulment",
+      "sacramental bond",
+      "marital consent",
+      "matrimonial tribunal"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-catholic-wedding-form",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why must Catholics marry in the presence of an authorised priest or deacon?",
+    "answer": "Canon law requires that Catholics celebrate their marriage according to the canonical form—in the presence of an authorised bishop, priest or deacon, and before at least two witnesses.\n\nMarriage is not a purely private agreement between two individuals; it is an ecclesial sacrament and an ecclesiastical state of life in the public community of faith. Celebrating marriage before the Church ensures that the couple are free from impediments, that their consent is given freely and intentionally, and that the marriage is registered in church records.\n\nFurthermore, the liturgical blessing of the Church invokes God's Holy Spirit and grace upon the new family. If a Catholic wishes to marry a non-Catholic Christian or non-Christian, appropriate ecclesiastical permissions or dispensations must be obtained from the diocesan ordinary.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1631"
+      },
+      {
+        "type": "canon",
+        "ref": "can. 1108"
+      }
+    ],
+    "keywords": [
+      "canonical form",
+      "catholic wedding",
+      "witnesses",
+      "church marriage",
+      "dispensation",
+      "marital blessing"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-liturgical-assembly",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is the role of the congregation during the celebration of the Holy Mass?",
+    "answer": "The liturgy is the public worship of the entire Mystical Body of Christ, Head and members together. It is never a solo performance by the priest with the congregation acting as passive spectators.\n\nBy virtue of the common priesthood received in Baptism, all faithful present are called to full, conscious and active participation (actuosa participatio). This participation is first of all interior: uniting one's heart, personal struggles and daily work to the sacrifice of Christ being offered on the altar.\n\nExternally, the congregation participates through attentive listening to Sacred Scripture, communal singing, making the liturgical responses, postures of reverence (standing, kneeling, bowing), and worthily receiving the Holy Eucharist when properly disposed.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1140"
+      },
+      {
+        "type": "ccc",
+        "ref": "1141"
+      },
+      {
+        "type": "document",
+        "title": "Sacrosanctum Concilium",
+        "ref": "no. 14",
+        "year": "1963"
+      }
+    ],
+    "keywords": [
+      "liturgical assembly",
+      "active participation",
+      "holy mass",
+      "common priesthood",
+      "worship",
+      "congregation"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-sacred-music-and-singing",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why is liturgical music and singing so important in Catholic worship?",
+    "answer": "The musical tradition of the Catholic Church is a treasure of inestimable value, greater even than that of any other art. Sacred music is not an intermission or mere decoration during Mass; it forms an integral part of the solemn liturgy itself.\n\nSinging adds delight to prayer, fosters unity of minds and voices, and confers greater solemnity upon sacred rites. Saint Augustine famously remarked that he who sings well prays twice. Sacred song lifts the soul above mundane distractions and echoes the heavenly choirs.\n\nThe Church insists that music used in the liturgy must possess holiness and true artistic beauty, using texts in harmony with Catholic doctrine and drawn primarily from Sacred Scripture and liturgical sources.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1156"
+      },
+      {
+        "type": "scripture",
+        "ref": "Colossians 3:16"
+      }
+    ],
+    "keywords": [
+      "sacred music",
+      "liturgical singing",
+      "choir",
+      "psalms and hymns",
+      "solemnity",
+      "worship"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-the-mass-as-holy-sacrifice",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why does Catholic theology call the Mass a 'True Sacrifice'?",
+    "answer": "The Holy Mass is not a mere symbolic reenactment or a simple fellowship meal; it is the re-presentation (making present) of the one, identical sacrifice of Jesus Christ on Calvary. The victim is the same (Jesus Christ), the high priest offering it is the same (Jesus acting through the ordained priest 'in persona Christi'), only the manner of offering differs: on Calvary it was bloody, whereas on the altar it is offered in an unbloody sacramental manner. Through this sacrifice, the infinite graces of the Cross are applied to the living and dead.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1362-1372"
+      },
+      {
+        "type": "scripture",
+        "ref": "Malachi 1:11"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 11:26"
+      }
+    ],
+    "keywords": [
+      "sacrifice of the mass",
+      "calvary",
+      "unbloody sacrifice",
+      "re-presentation",
+      "in persona christi"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-liturgical-seasons-cycle",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What are the seasons of the Catholic Liturgical Year and their spiritual focus?",
+    "answer": "The Liturgical Year celebrates the entire mystery of Christ across six distinct seasons: 1) Advent: four weeks of prayerful preparation and penitence for the birth of Christ and His Second Coming; 2) Christmas: rejoicing in the Incarnation, extending from Christmas Eve to the Baptism of the Lord; 3) Ordinary Time (first part): reflecting on Jesus' teachings and miracles; 4) Lent: forty days of fasting, prayer, and almsgiving preparing for Holy Week; 5) The Sacred Paschal Triduum (Holy Thursday, Good Friday, Easter Vigil/Sunday): the summit of the year; 6) Easter: fifty days of joy culminating in Pentecost; followed by Ordinary Time (second part).",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1163-1171"
+      },
+      {
+        "type": "scripture",
+        "ref": "Ecclesiastes 3:1"
+      }
+    ],
+    "keywords": [
+      "liturgical seasons",
+      "advent christmas lent easter",
+      "paschal triduum",
+      "ordinary time",
+      "liturgical calendar"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-liturgical-colors-meaning",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What do the various liturgical vestment colors symbolize at Mass?",
+    "answer": "The Church uses specific liturgical vestment colors to visually express the character of the mystery being celebrated: 1) White/Gold: Joy, purity, and victory, worn during Easter, Christmas, feasts of Our Lord, Mary, and non-martyr saints; 2) Red: Fire of the Holy Spirit and shed blood, worn on Palm Sunday, Good Friday, Pentecost, and feasts of martyrs; 3) Green: Hope, spiritual life, and growth, worn during Ordinary Time; 4) Violet/Purple: Penance, expectation, and mourning, worn in Advent, Lent, and funerals; 5) Rose: Joy amidst penance, worn on Gaudete Sunday (Advent) and Laetare Sunday (Lent); 6) Black: Mourning, permitted on All Souls' Day and requiems.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1155"
+      },
+      {
+        "type": "scripture",
+        "ref": "Revelation 7:9"
+      }
+    ],
+    "keywords": [
+      "liturgical colors",
+      "vestments",
+      "white red green violet rose",
+      "gaudete laetare",
+      "symbolism"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-what-are-sacramentals",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What are sacramentals and how do they differ from the seven sacraments?",
+    "answer": "Sacramentals are sacred signs (such as blessings, holy water, blessed salt, crucifixes, palms, ashes, and rosaries) instituted by the Church rather than directly by Christ. Unlike the seven sacraments which confer grace 'ex opere operato' by their own power, sacramentals prepare the soul to receive grace and dispose us to cooperate with God's Holy Spirit ('ex opere operantis Ecclesiae'). They sanctify every circumstance of daily human life and protect against demonic influences.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1667-1679"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Timothy 4:4-5"
+      }
+    ],
+    "keywords": [
+      "sacramentals",
+      "holy water",
+      "crucifix",
+      "blessings",
+      "sacred signs"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-liturgy-of-the-hours",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is the Liturgy of the Hours (Divine Office)?",
+    "answer": "The Liturgy of the Hours (the Breviary or Divine Office) is the official public liturgical prayer of the universal Catholic Church, consecrating the hours of day and night with the Psalms, canticles, Scripture readings, and intercessions. Ordained clergy and consecrated religious are canonically bound to pray the Hours daily, and the Second Vatican Council strongly encouraged the laity to pray them as well. The two hinges are Morning Prayer (Lauds) at daybreak and Evening Prayer (Vespers) at sunset, keeping the Church in unceasing prayer.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1174-1178"
+      },
+      {
+        "type": "scripture",
+        "ref": "Psalm 119:164"
+      }
+    ],
+    "keywords": [
+      "liturgy of the hours",
+      "divine office",
+      "breviary",
+      "lauds and vespers",
+      "psalms"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-active-participation-liturgy",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is 'full, conscious, and active participation' in the sacred liturgy?",
+    "answer": "Emphasized by the Second Vatican Council in Sacrosanctum Concilium, active liturgical participation is first and foremost internal: uniting one's heart, intellect, intentions, and trials with Christ's sacrifice on the altar through reverent prayer, attentive listening, and spiritual silence. Externally, this interior devotion is expressed by reciting communal responses, singing hymns, observing reverent bodily postures (kneeling, bowing, standing), and receiving Holy Communion with clean hearts.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1140-1144"
+      },
+      {
+        "type": "scripture",
+        "ref": "Romans 12:1"
+      }
+    ],
+    "keywords": [
+      "active participation",
+      "sacrosanctum concilium",
+      "liturgical worship",
+      "reverence",
+      "postures at mass"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-marriage-annulment-vs-divorce",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is a Decree of Nullity (Annulment) and how does it differ from a divorce?",
+    "answer": "A civil divorce claims to dissolve a legal marriage contract. In contrast, the Catholic Church upholds Christ's explicit teaching that a valid, consummated sacramental marriage can never be dissolved by any human power ('What God has joined together, let not man put asunder'). A Decree of Nullity is not 'Catholic divorce'; it is a canonical judgment after ecclesiastical investigation stating that on the wedding day, an essential element was missing (such as lack of free consent, grave lack of discretion, psychological incapacity, or deliberate exclusion of children or fidelity), meaning no valid sacramental bond was ever formed.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1625-1632"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 19:6"
+      }
+    ],
+    "keywords": [
+      "annulment",
+      "decree of nullity",
+      "indissolubility",
+      "matrimonial tribunal",
+      "divorce difference"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-mixed-marriages-disparity-cult",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Can a Catholic marry a non-Catholic, and what permissions are required?",
+    "answer": "Yes. A marriage between a Catholic and a baptized non-Catholic Christian is a 'mixed marriage' requiring episcopal permission. A marriage between a Catholic and an unbaptized person is 'disparity of cult' requiring a dispensation for validity. In both cases, the Catholic party must sincerely promise to preserve their Catholic faith and do everything in their power to have all children baptized and brought up in the Catholic Church, and the non-Catholic partner must be informed of this commitment.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1633-1637"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 7:12-16"
+      }
+    ],
+    "keywords": [
+      "mixed marriage",
+      "disparity of cult",
+      "dispensation",
+      "raising children catholic",
+      "wedding rules"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-convalidation-of-marriage",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is the convalidation of a marriage in the Catholic Church?",
+    "answer": "If a Catholic entered into a civil marriage or married outside the canonical form without dispensation from the bishop, that union is not recognized as valid by the Church. Convalidation is the canonical process by which this union is made a valid, sacramental marriage. The couple renews their true matrimonial consent before an authorized priest or deacon and two witnesses in a sacred ceremony, imparting sacramental grace and allowing the Catholic spouse to resume receiving the Sacraments.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1623"
+      },
+      {
+        "type": "scripture",
+        "ref": "Colossians 3:18-19"
+      }
+    ],
+    "keywords": [
+      "convalidation",
+      "canonical form",
+      "civil marriage",
+      "validation of marriage",
+      "sacramental bond"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-priestly-celibacy-reasons",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why does the Latin Catholic Church practice clerical celibacy?",
+    "answer": "In the Latin (Roman) Rite, priests freely choose perpetual celibacy 'for the sake of the kingdom of heaven' (Matthew 19:12). Following the example of Jesus Christ Himself, the celibate priest consecrates his whole heart and body to God with an undivided love. Celibacy frees the priest from familial obligations so he can be fully available to all parishioners day and night as a spiritual father, and serves as an eschatological witness pointing to the heavenly life where people neither marry nor are given in marriage.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1579-1580"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 19:12"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 7:32-35"
+      }
+    ],
+    "keywords": [
+      "priestly celibacy",
+      "clergy celibacy",
+      "undivided heart",
+      "chastity",
+      "latin rite discipline"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-why-only-men-ordained",
+    "category": "sacraments-service-and-liturgy",
+    "question": "Why does the Catholic Church only ordain men to the ministerial priesthood?",
+    "answer": "In Ordinatio Sacerdotalis (1994), Pope Saint John Paul II reaffirmed that the Church has no authority whatsoever to confer priestly ordination on women, a teaching to be held definitively by all the faithful. This is not about human inequality or dignity (Mary is higher in dignity than any apostle or pope), but fidelity to Christ's own divine example: Jesus chose twelve men as His Apostles despite living in a culture filled with pagan priestesses, and the Apostles did likewise. The priest acts 'in persona Christi Capitis' (in the person of Christ the Bridegroom) offering His life for the Church, His Bride.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1577-1578"
+      },
+      {
+        "type": "scripture",
+        "ref": "Mark 3:13-19"
+      }
+    ],
+    "keywords": [
+      "ordination of men",
+      "ordinatio sacerdotalis",
+      "in persona christi",
+      "twelve apostles",
+      "priestly role"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ssl-postures-genuflection-reverence",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What is the meaning of genuflecting, bowing, and kneeling in Catholic liturgy?",
+    "answer": "In Catholic worship, bodily postures express and reinforce interior dispositions of faith. Kneeling is a sign of humble adoration, penance, and reverence before the majesty of God, especially during the Eucharistic Consecration. Genuflecting (touching the right knee completely to the floor) is an act of adoration directed specifically to the Real Presence of Jesus Christ in the Tabernacle. Bowing of the head or body honors the Holy Trinity, the name of Jesus and Mary, the altar of sacrifice, and the bishop.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1153-1155"
+      },
+      {
+        "type": "scripture",
+        "ref": "Philippians 2:10"
+      }
+    ],
+    "keywords": [
+      "genuflection",
+      "kneeling at mass",
+      "bowing",
+      "bodily postures",
+      "adoration of eucharist"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-liturgy-of-the-word-structure",
+    "category": "sacraments-service-and-liturgy",
+    "question": "How is the Liturgy of the Word structured at Sunday Mass?",
+    "answer": "The Liturgy of the Word feeds the faithful from the table of God's Word. On Sundays and Solemnities, it follows a three-year cycle (Years A, B, C) featuring: 1) The First Reading (almost always from the Old Testament, harmonizing with the Gospel); 2) The Responsorial Psalm (the sung prayer of Israel); 3) The Second Reading (from the New Testament Epistles or Revelation); 4) The Gospel Acclamation (Alleluia); 5) The Gospel reading (proclaimed by a deacon or priest while the assembly stands); followed by the Homily, the Creed, and the Universal Prayer (Prayers of the Faithful).",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1349"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 4:16-21"
+      }
+    ],
+    "keywords": [
+      "liturgy of the word",
+      "three year cycle",
+      "readings at mass",
+      "responsorial psalm",
+      "gospel proclamation"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ssl-sacred-vessels-and-linens",
+    "category": "sacraments-service-and-liturgy",
+    "question": "What are the sacred vessels and linens used on the altar at Mass?",
+    "answer": "Due to reverence for the Real Presence, the Church uses dedicated sacred vessels and linens: 1) The Chalice (the cup holding the Precious Blood); 2) The Paten (the gold or silver plate holding the host); 3) The Ciborium (the covered vessel containing hosts for communion and reservation in the tabernacle); 4) The Corporal (the white linen cloth unfolded on the altar upon which the chalice and paten rest); 5) The Purificator (the linen cloth used to wipe the chalice); and 6) The Pall (a stiff linen square placed over the chalice to prevent foreign particles from falling into the Precious Blood).",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1147-1148"
+      },
+      {
+        "type": "scripture",
+        "ref": "Exodus 25:29"
+      }
+    ],
+    "keywords": [
+      "sacred vessels",
+      "chalice and paten",
+      "ciborium",
+      "corporal and purificator",
+      "altar linens"
+    ],
+    "level": "basic"
+  }
+]

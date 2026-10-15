@@ -1,0 +1,540 @@
+[
+  {
+    "id": "ch-four-marks-of-the-church",
+    "category": "church-and-hierarchy",
+    "question": "What are the four marks of the Church?",
+    "answer": "In the Nicene Creed, Catholics profess that the Church is 'one, holy, catholic and apostolic'. These four marks are inseparable characteristics that point to the true nature and mission of the Church.\n\nThe Church is One because her source and founder is the one God in Trinity, and she possesses one faith, one sacramental life, and one apostolic governance. She is Holy because Christ her Head is holy and gave himself up to sanctify her, giving her the sacraments as instruments of grace, even though her members on earth are sinners.\n\nShe is Catholic (meaning 'universal' and 'whole') because Christ is present in her, commissioning her to bring the full truth of the Gospel to every nation and culture. Finally, she is Apostolic because she is built on the foundation of the apostles, handing on their teaching and continuing to be guided by their successors, the bishops in union with the Pope.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "811"
+      },
+      {
+        "type": "scripture",
+        "ref": "Ephesians 4:4-6"
+      }
+    ],
+    "keywords": [
+      "four marks",
+      "one holy catholic apostolic",
+      "creed",
+      "nature of the church",
+      "unity",
+      "apostolic foundation"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-role-of-the-pope",
+    "category": "church-and-hierarchy",
+    "question": "What is the role of the Pope in the Catholic Church?",
+    "answer": "The Pope, who is the Bishop of Rome, is the successor of Saint Peter and the visible head of the universal Catholic Church on earth.\n\nWhen Jesus established his Church, he singled out Peter among the Twelve Apostles, declaring him the rock upon which he would build his Church and giving him the keys of the kingdom of heaven. The Pope inherits this ministry of unity and pastoral oversight.\n\nAs the Vicar of Christ, the Pope's primary duty is to shepherd the flock of Christ, protect and hand on the authentic apostolic faith, and ensure the unity of all dioceses across the globe. Together with the college of bishops around the world, he provides teaching, pastoral care, and sacramental communion to Catholic believers everywhere.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "881"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 16:18-19"
+      },
+      {
+        "type": "scripture",
+        "ref": "John 21:15-17"
+      }
+    ],
+    "keywords": [
+      "pope",
+      "bishop of rome",
+      "saint peter",
+      "keys of the kingdom",
+      "vicar of christ",
+      "primacy of peter"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-papal-infallibility",
+    "category": "church-and-hierarchy",
+    "question": "Does papal infallibility mean the Pope can never make a mistake or sin?",
+    "answer": "No. Papal infallibility does not mean that the Pope is personally sinless (impeccable) or that every personal opinion or casual interview he gives is free from human error. The Pope goes to confession like every other Catholic.\n\nInfallibility is a specific spiritual gift promised by Christ to protect the Church from error when proclaiming essential truths of faith or morals. The Pope exercises this charism only in very precise circumstances: when he speaks 'ex cathedra' (from the chair of Peter) as the universal pastor and teacher of all Christians, solemnly defining a doctrine concerning faith or morals that must be held by the whole Church.\n\nIn such cases, the Holy Spirit prevents the Pope from committing the universal Church to an error. This gift exists not for the Pope's personal prestige, but to assure ordinary believers that the truth of the Gospel remains pure and dependable throughout history.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "891"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 22:32"
+      }
+    ],
+    "keywords": [
+      "papal infallibility",
+      "ex cathedra",
+      "dogma",
+      "holy spirit",
+      "doctrine",
+      "teaching authority"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-apostolic-succession",
+    "category": "church-and-hierarchy",
+    "question": "What is apostolic succession, and why does it matter?",
+    "answer": "Apostolic succession is the unbroken line of spiritual authority and sacramental ordination passing down through the centuries from the original Twelve Apostles to modern Catholic bishops.\n\nBefore completing their earthly mission, the Apostles consecrated successors by the laying on of hands and prayer, entrusting to them the responsibility to teach, sanctify and govern the Christian community. This transmission of apostolic authority is continued through the Sacrament of Holy Orders in every generation.\n\nApostolic succession ensures that the Church today remains the identical living community established by Christ. It guarantees that our sacraments are valid, that our Holy Mass is offered in communion with the historic Church, and that the teachings handed down to us are not private novelties, but the faith once delivered to the saints.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "861"
+      },
+      {
+        "type": "scripture",
+        "ref": "2 Timothy 2:2"
+      }
+    ],
+    "keywords": [
+      "apostolic succession",
+      "bishops",
+      "laying on of hands",
+      "holy orders",
+      "tradition",
+      "authority"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-salvation-outside-the-church",
+    "category": "church-and-hierarchy",
+    "question": "Can non-Catholics and non-Christians be saved?",
+    "answer": "The Church teaches that all salvation comes from Christ the Head through the Church which is his Body. Christ explicitly tied salvation to faith and baptism, and the Catholic Church is the universal sacrament of salvation instituted by him.\n\nHowever, this doctrine is addressed to those who recognise the truth of the Catholic Church yet willfully refuse to enter or remain in her. It does not condemn those who, through no fault of their own, do not know the Gospel of Christ or his Church.\n\nThe Second Vatican Council taught that those who sincerely seek God and strive under the influence of his grace to do his will as known through the dictate of their conscience may attain eternal salvation. God's mercy is not bounded by the visible boundaries of the sacraments, though all who are saved are saved by the grace of Jesus Christ.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "846"
+      },
+      {
+        "type": "ccc",
+        "ref": "847"
+      },
+      {
+        "type": "document",
+        "title": "Lumen Gentium",
+        "ref": "no. 16",
+        "year": "1964"
+      }
+    ],
+    "keywords": [
+      "salvation",
+      "non catholics",
+      "extra ecclesiam nulla salus",
+      "grace",
+      "conscience",
+      "mercy of god"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-role-of-the-laity",
+    "category": "church-and-hierarchy",
+    "question": "What is the mission of lay Catholics in the world?",
+    "answer": "Lay Catholics are full and active members of the People of God. By virtue of their Baptism and Confirmation, the laity share in Christ's priestly, prophetic and royal offices.\n\nThe distinctive vocation of lay faithful is to seek the kingdom of God by engaging in temporal affairs and directing them according to God's will. While clergy and religious serve primarily within ecclesiastical structures, lay men and women are called to be the salt of the earth and the light of the world in secular society.\n\nThis means sanctifying daily life in the family, the hospital ward, the university campus, business, science and politics. By professional competence, moral integrity and Christian love, lay Catholics bring the Gospel into realms of society that ordained ministers can rarely enter.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "898"
+      },
+      {
+        "type": "ccc",
+        "ref": "900"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Peter 2:9"
+      }
+    ],
+    "keywords": [
+      "laity",
+      "lay apostolate",
+      "vocation",
+      "baptismal priesthood",
+      "christian witness",
+      "sanctifying daily life"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-dioceses-and-parishes",
+    "category": "church-and-hierarchy",
+    "question": "How is the Catholic Church organised locally into dioceses and parishes?",
+    "answer": "The universal Catholic Church is structured geographically and pastorally into local churches called dioceses (or archdioceses), each entrusted to a bishop as its chief pastor.\n\nA diocese is not merely an administrative branch office of Rome; it is the Church of Christ fully present and active in that locality. Within a diocese, the bishop divides pastoral care into individual parishes and chaplaincies, appointing priests to pastor them.\n\nThe parish or hospital chaplaincy is where ordinary believers gather for the Sunday Eucharist, receive the sacraments, receive instruction in the faith, and build fraternal charity. In this way, every local Catholic is united through their parish priest to the diocesan bishop, and through the bishop to the Pope and the universal worldwide Church.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "833"
+      },
+      {
+        "type": "ccc",
+        "ref": "2179"
+      },
+      {
+        "type": "canon",
+        "ref": "can. 369"
+      }
+    ],
+    "keywords": [
+      "diocese",
+      "parish",
+      "chaplaincy",
+      "bishop",
+      "parish priest",
+      "church structure"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-mystical-body-of-christ",
+    "category": "church-and-hierarchy",
+    "question": "What does it mean that the Church is the 'Mystical Body of Christ'?",
+    "answer": "The Apostle Paul teaches that the Church is not merely a social club or human organization, but the living Mystical Body of Christ on earth (1 Corinthians 12). Christ is the divine Head, and all baptized faithful are His members, united by the Holy Spirit. Just as bodily organs have distinct functions yet cooperate for the health of the whole, each Christian has specific charisms and duties. When one member suffers, all suffer together; when one is honored, all rejoice. Through the sacraments, especially the Eucharist, this mystical union with Christ and each other is continually nourished.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "787-795"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 12:12-27"
+      }
+    ],
+    "keywords": [
+      "mystical body",
+      "head and members",
+      "communion",
+      "st paul",
+      "unity in diversity"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-magisterium-ordinary-extraordinary",
+    "category": "church-and-hierarchy",
+    "question": "What is the difference between the Extraordinary and Ordinary Magisterium?",
+    "answer": "The Magisterium is the teaching authority of the Church entrusted to the Pope and the bishops in communion with him. The Extraordinary Magisterium is exercised in two definitive ways: when the Pope speaks 'ex cathedra' to define a dogma of faith or morals, or when an Ecumenical Council in union with the Pope defines doctrine. The Ordinary and Universal Magisterium is exercised when bishops worldwide, teaching in communion with the Roman Pontiff, agree on a doctrine to be held definitively. Catholics owe religious submission of will and intellect to the authentic teaching of both.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "888-892"
+      },
+      {
+        "type": "scripture",
+        "ref": "Luke 10:16"
+      }
+    ],
+    "keywords": [
+      "magisterium",
+      "extraordinary magisterium",
+      "ordinary magisterium",
+      "dogma",
+      "papal teaching"
+    ],
+    "level": "advanced"
+  },
+  {
+    "id": "ch-three-degrees-holy-orders",
+    "category": "church-and-hierarchy",
+    "question": "What are the three degrees of the Sacrament of Holy Orders?",
+    "answer": "The Sacrament of Holy Orders comprises three distinct hierarchical degrees instituted by Christ: the Episcopate (bishops), the Presbyterate (priests), and the Diaconate (deacons). Bishops possess the fullness of the sacrament, succeeding the Apostles as chief pastors, teachers, and sanctifiers of their dioceses. Priests are co-workers of the bishops, consecrated to preach the Gospel, shepherd the faithful, and celebrate the sacraments, especially the Eucharist and Reconciliation. Deacons are ordained not unto the priesthood, but unto ministry of service (caritas), the Word, and liturgical assistance.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1554-1571"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Timothy 3:1-13"
+      }
+    ],
+    "keywords": [
+      "holy orders",
+      "bishops",
+      "priests",
+      "deacons",
+      "episcopate",
+      "presbyterate",
+      "diaconate"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-permanent-diaconate-role",
+    "category": "church-and-hierarchy",
+    "question": "What is the permanent diaconate and what can a Catholic deacon do?",
+    "answer": "Restored as a permanent rank by the Second Vatican Council, the permanent diaconate allows both married and single men to be ordained to sacred ministry for life. A deacon is an ordained minister who proclaims the Gospel at Mass, preaches homilies, administers solemn Baptism, witnesses and blesses Holy Matrimony, brings Viaticum to the dying, and presides at funeral vigils and burial services. Deacons also lead works of charitable outreach and social justice in parishes, embodying Christ the Servant.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "1569-1571"
+      },
+      {
+        "type": "scripture",
+        "ref": "Acts 6:1-6"
+      }
+    ],
+    "keywords": [
+      "permanent deacon",
+      "diaconate",
+      "parish ministry",
+      "christ the servant",
+      "ordination"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-consecrated-life-vows",
+    "category": "church-and-hierarchy",
+    "question": "What is consecrated religious life and the evangelical counsels?",
+    "answer": "Consecrated life is a special state in the Church where men and women profess the three evangelical counsels of poverty, chastity, and obedience through public vows. Living in religious communities (such as Benedictines, Franciscans, Dominicans, or Salesians) or as consecrated virgins and hermits, they dedicate their entire lives to God's love and the salvation of souls. Their life of prayer, contemplation, and apostolic charity serves as a living sign of the heavenly kingdom and a witness to the radical demands of the Gospel.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "914-933"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 19:12"
+      }
+    ],
+    "keywords": [
+      "consecrated life",
+      "evangelical counsels",
+      "poverty chastity obedience",
+      "religious orders",
+      "monks and nuns"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-ecumenism-christian-unity",
+    "category": "church-and-hierarchy",
+    "question": "What is the Catholic approach to ecumenism and non-Catholic Christians?",
+    "answer": "Ecumenism is the Holy Spirit-inspired movement toward restoring full visible unity among all baptized Christians, in accordance with Christ's prayer 'that they may all be one' (John 17:21). The Second Vatican Council affirmed that non-Catholic Christians are real brothers and sisters in Christ through Baptism, sharing many elements of sanctification and truth (such as Sacred Scripture, grace, faith, and the gifts of the Spirit). True ecumenism requires spiritual conversion, prayer, fraternal dialogue, and common charitable action, while faithfully upholding the fullness of Catholic truth.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "817-822"
+      },
+      {
+        "type": "scripture",
+        "ref": "John 17:20-23"
+      }
+    ],
+    "keywords": [
+      "ecumenism",
+      "christian unity",
+      "unitatis redintegratio",
+      "separated brethren",
+      "dialogue"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-interreligious-dialogue-nostra-aetate",
+    "category": "church-and-hierarchy",
+    "question": "How does the Catholic Church view non-Christian religions?",
+    "answer": "In the declaration Nostra Aetate, the Second Vatican Council stated that the Catholic Church rejects nothing that is true and holy in non-Christian religions (such as Judaism, Islam, Hinduism, and Buddhism). The Church recognizes whatever truth and goodness they contain as a 'preparation for the Gospel.' The Church holds a special spiritual bond with the Jewish people, the root of salvation history. Nevertheless, the Church constantly proclaims Jesus Christ as 'the Way, the Truth, and the Life' in whom all fullness of religious life is found.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "839-845"
+      },
+      {
+        "type": "scripture",
+        "ref": "Acts 17:22-28"
+      }
+    ],
+    "keywords": [
+      "interreligious dialogue",
+      "nostra aetate",
+      "non-christian religions",
+      "judaism and islam",
+      "evangelization"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-ecumenical-councils-authority",
+    "category": "church-and-hierarchy",
+    "question": "What is an Ecumenical Council and what authority do its teachings hold?",
+    "answer": "An Ecumenical (Universal) Council is a solemn assembly of the worldwide College of Bishops convened and confirmed by the Roman Pontiff to address crucial matters of doctrine, morals, and Church discipline. There have been 21 historical Ecumenical Councils, from Nicaea I (325 AD) to Vatican II (1962-1965). When an Ecumenical Council solemnly defines a dogma of faith or morals in union with the Pope, its decrees are infallible and binding on the universal Church, guided by the Holy Spirit.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "884"
+      },
+      {
+        "type": "scripture",
+        "ref": "Acts 15:1-29"
+      }
+    ],
+    "keywords": [
+      "ecumenical councils",
+      "council of nicaea",
+      "vatican ii",
+      "college of bishops",
+      "infallibility"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-canon-law-purpose",
+    "category": "church-and-hierarchy",
+    "question": "What is the Code of Canon Law and why does the Church have legal rules?",
+    "answer": "The Code of Canon Law (Codex Iuris Canonici) is the organized body of ecclesiastical laws governing the life, sacraments, administration, and rights of the faithful in the Catholic Church. Canon law does not replace the Gospel, but translates the Gospel and theology into practical ecclesiastical life. Its supreme purpose is summarized in its final canon (Canon 1752): 'the salvation of souls, which must always be the supreme law in the Church' (salus animarum suprema lex).",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "894-896"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Corinthians 14:40"
+      }
+    ],
+    "keywords": [
+      "canon law",
+      "code of canon law",
+      "church discipline",
+      "salvation of souls",
+      "administration"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-eastern-catholic-churches",
+    "category": "church-and-hierarchy",
+    "question": "What are the Eastern Catholic Churches and how are they related to Rome?",
+    "answer": "The Catholic Church is an organic communion of 24 distinct 'Sui Iuris' (self-governing) autonomous Churches: 1 Western (Latin) Church and 23 Eastern Catholic Churches (such as the Byzantine, Maronite, Melkite, Ukrainian, and Syro-Malabar Churches). Eastern Catholics share identical dogmas and full sacramental communion under the Pope, but celebrate different ancient liturgical rites, have unique spiritual and canonical traditions, and ordain married men to the priesthood according to their patrimony.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "814"
+      },
+      {
+        "type": "ccc",
+        "ref": "1202-1203"
+      },
+      {
+        "type": "scripture",
+        "ref": "Galatians 3:28"
+      }
+    ],
+    "keywords": [
+      "eastern catholic churches",
+      "byzantine rite",
+      "maronite",
+      "sui iuris",
+      "communion with rome"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-parish-pastoral-and-finance-councils",
+    "category": "church-and-hierarchy",
+    "question": "What is the role of Parish Pastoral and Finance Councils in local chaplaincies?",
+    "answer": "Under Canon Law (Canons 536 and 537), each parish and chaplaincy is guided by the Parish Priest (Pastor / Chaplain), assisted by consultative bodies of the lay faithful: the Parish Pastoral Council and Parish Finance Council. The Pastoral Council helps discern pastoral initiatives, evangelization, and youth programs, while the Finance Council oversees the stewardship, budgeting, auditing, and maintenance of church properties. These councils embody co-responsibility and active lay collaboration.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "900-913"
+      },
+      {
+        "type": "scripture",
+        "ref": "1 Peter 4:10"
+      }
+    ],
+    "keywords": [
+      "parish pastoral council",
+      "finance council",
+      "stewardship",
+      "laity collaboration",
+      "parish administration"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-synodality-meaning",
+    "category": "church-and-hierarchy",
+    "question": "What does 'Synodality' mean in the life of the Catholic Church?",
+    "answer": "The Greek word 'synod' means 'walking together on the way'. Synodality describes the specific style, culture, and path of the Church as the People of God journeying together in mission, guided by the Holy Spirit. It emphasizes mutual listening between the hierarchy and the laity, discernment through prayer and dialogue, and co-responsibility for the Gospel. Synodality is not parliamentary democracy or changing settled dogmas; rather, it is a spiritual renewal of communion and participation for evangelization.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "781-782"
+      },
+      {
+        "type": "scripture",
+        "ref": "Acts 15:28"
+      }
+    ],
+    "keywords": [
+      "synodality",
+      "synod of bishops",
+      "walking together",
+      "listening",
+      "communion participation mission"
+    ],
+    "level": "intermediate"
+  },
+  {
+    "id": "ch-vatican-city-holy-see",
+    "category": "church-and-hierarchy",
+    "question": "What is the Holy See and why does Vatican City exist as an independent state?",
+    "answer": "The 'Holy See' (Sancta Sedes) is the episcopal jurisdiction and supreme governing authority of the Bishop of Rome (the Pope) over the universal Catholic Church. Vatican City State is the small sovereign territory established by the Lateran Treaty in 1929. Its primary purpose is not political power, but to guarantee the complete spiritual freedom, diplomatic sovereignty, and independence of the Pope and the Holy See from control by any secular nation or political empire.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "882"
+      },
+      {
+        "type": "scripture",
+        "ref": "Matthew 16:18-19"
+      }
+    ],
+    "keywords": [
+      "holy see",
+      "vatican city",
+      "papacy",
+      "sovereignty",
+      "lateran treaty",
+      "independence"
+    ],
+    "level": "basic"
+  },
+  {
+    "id": "ch-parish-societies-pious-organizations",
+    "category": "church-and-hierarchy",
+    "question": "Why does the Church encourage pious societies and lay apostolic organizations?",
+    "answer": "The Catholic Church strongly encourages lay associations, pious societies, and confraternities (such as the Legion of Mary, Catholic Men Organization, Catholic Women Organization, St. Vincent de Paul Society, and Catholic Youth Organization) as vital expressions of the lay apostolate. These organizations foster deep spiritual growth, brotherly fellowship, charitable service to the poor, and active evangelization within parishes, helping parishioners live out their baptismal call in daily family and professional life.",
+    "sources": [
+      {
+        "type": "ccc",
+        "ref": "900-905"
+      },
+      {
+        "type": "scripture",
+        "ref": "Romans 12:4-8"
+      }
+    ],
+    "keywords": [
+      "pious societies",
+      "lay associations",
+      "legion of mary",
+      "cmo",
+      "cwo",
+      "cyo",
+      "apostolate"
+    ],
+    "level": "basic"
+  }
+]
