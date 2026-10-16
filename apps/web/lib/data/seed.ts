@@ -8,11 +8,14 @@ import type {
   Announcement,
   ChaplaincyEvent,
   EcclesiasticalEntry,
+  PublicMassIntention,
+  PublicPrayerIntention,
   RecurringSchedule,
   Society,
   SocietyCategory,
   Weekday,
 } from "@/lib/types";
+import { lagosDateString } from "@/lib/time/lagos";
 
 let n = 0;
 function rs(
@@ -402,3 +405,78 @@ export const SEED_EVENTS: ChaplaincyEvent[] = [
     isCancelled: false,
   },
 ];
+
+export const SEED_PRAYER_INTENTIONS: PublicPrayerIntention[] = [
+  {
+    id: "prayer-001",
+    category: "Healing and Health",
+    body: "Praying for quick recovery and divine healing for my mother admitted at the female surgical ward, and for strength for our family.",
+    displayName: "Ngozi E.",
+  },
+  {
+    id: "prayer-002",
+    category: "Thanksgiving",
+    body: "Heartfelt thanksgiving to Almighty God for the safe delivery of our bouncing baby boy and my wife's sound health.",
+    displayName: "The Okonkwo Family",
+  },
+  {
+    id: "prayer-003",
+    category: "Students & Exams",
+    body: "Praying for divine wisdom, calmness, retentive memory, and remarkable success in our upcoming final MBBS examinations.",
+    displayName: "Final Year Medical Student",
+  },
+  {
+    id: "prayer-004",
+    category: "Repose of the Soul",
+    body: "For the peaceful repose of the soul of Papa John Ani, and for comfort, strength, and consolation upon the grieving family.",
+    displayName: "Ani Family",
+  },
+  {
+    id: "prayer-005",
+    category: "Vocations & Priests",
+    body: "For our chaplain, assistant chaplain, and all priests ministering to the sick and afflicted in the hospital, for protection and grace.",
+    displayName: "Rosa Mystica Society",
+  },
+  {
+    id: "prayer-006",
+    category: "Peace and Protection",
+    body: "For journey mercies for all parishioners travelling this week, and for divine peace and security in our homes and families.",
+    displayName: "Anonymous Parishioner",
+  },
+];
+
+export const SEED_MASS_INTENTIONS: PublicMassIntention[] = [
+  {
+    id: "mass-int-001",
+    scheduledDate: lagosDateString(),
+    activityName: "Morning Mass (06:20)",
+    listOrder: 1,
+    text: "Thanksgiving Mass for God's continuous blessings, guidance, and protection upon the family on my birthday.",
+    displayName: "Dr. & Mrs. C. Nwankwo",
+  },
+  {
+    id: "mass-int-002",
+    scheduledDate: lagosDateString(),
+    activityName: "Morning Mass (06:20)",
+    listOrder: 2,
+    text: "For the eternal repose of the soul of Pa Michael and Mama Theresa. May perpetual light shine upon them.",
+    displayName: "The Igwe Family",
+  },
+  {
+    id: "mass-int-003",
+    scheduledDate: lagosDateString(),
+    activityName: "Afternoon Mass (15:15)",
+    listOrder: 1,
+    text: "Special intention for successful surgical procedure and divine healing for a patient in the hospital ward.",
+    displayName: "FECAMDS Members",
+  },
+  {
+    id: "mass-int-004",
+    scheduledDate: lagosDateString(),
+    activityName: "Evening Mass (17:30)",
+    listOrder: 1,
+    text: "In thanksgiving to Our Mother of Perpetual Help for answered prayers and family breakthrough.",
+    displayName: "Anonymous",
+  },
+];
+

@@ -20,7 +20,7 @@ import type {
   SaintProfile,
   LiturgicalOverride,
 } from "@/lib/types";
-import { SEED_SOCIETIES } from "./seed";
+import { SEED_SOCIETIES, SEED_ECCLESIASTICAL, SEED_MASS_INTENTIONS, SEED_PRAYER_INTENTIONS } from "./seed";
 
 const hhmm = (t: string | null) => (t ? t.slice(0, 5) : null);
 
@@ -181,25 +181,42 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getEcclesiasticalDirectory(): Promise<EcclesiasticalEntry[]> {
-    const offices = await this.rows(this.sb.from("ecclesiastical_offices").select("*").order("display_order"));
-    const appts = await this.rows(
-      this.sb.from("ecclesiastical_appointments").select("*, people(full_name, display_name, portrait:media_assets!portrait_id(object_key, storage_provider))").eq("is_current", true),
-    );
-    return offices.map((o) => {
-      const a = appts.find((x) => x.office_id === o.id);
-      return {
-        officeKey: o.key,
-        title: o.title,
-        level: o.level,
-        description: o.description,
-        personName: a?.people?.display_name ?? null,
-        occupancy: a?.occupancy ?? "occupied",
-        designation: a?.designation,
-        sourceUrl: a?.source_url,
-        verifiedAt: a?.verified_at,
-        portraitSrc: a?.people?.portrait ? this.mediaUrl(a.people.portrait.object_key) : null,
-      };
-    });
+    // 1. Check if admin configured custom directory in chaplaincy_settings
+    try {
+      const sRows = await this.rows(this.sb.from("chaplaincy_settings").select("value").eq("key", "directory.ecclesiastical"));
+      if (sRows[0]?.value) {
+        const val = typeof sRows[0].value === "string" ? JSON.parse(sRows[0].value) : sRows[0].value;
+        if (Array.isArray(val) && val.length > 0) return val;
+      }
+    } catch {}
+
+    // 2. Query relational ecclesiastical offices & appointments
+    try {
+      const offices = await this.rows(this.sb.from("ecclesiastical_offices").select("*").order("display_order"));
+      if (offices && offices.length > 0) {
+        const appts = await this.rows(
+          this.sb.from("ecclesiastical_appointments").select("*, people(full_name, display_name, portrait:media_assets!portrait_id(object_key, storage_provider))").eq("is_current", true),
+        );
+        return offices.map((o) => {
+          const a = appts.find((x) => x.office_id === o.id);
+          return {
+            officeKey: o.key,
+            title: o.title,
+            level: o.level,
+            description: o.description,
+            personName: a?.people?.display_name ?? null,
+            occupancy: a?.occupancy ?? "occupied",
+            designation: a?.designation,
+            sourceUrl: a?.source_url,
+            verifiedAt: a?.verified_at,
+            portraitSrc: a?.people?.portrait ? this.mediaUrl(a.people.portrait.object_key) : null,
+          };
+        });
+      }
+    } catch {}
+
+    // 3. Fallback to default canonical hierarchy
+    return SEED_ECCLESIASTICAL;
   }
 
   async getLeadership(): Promise<LeadershipEntry[]> {
@@ -227,24 +244,34 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getPublicMassIntentions(date: string): Promise<PublicMassIntention[]> {
-    const rows = await this.rows(
-      this.sb.from("public_mass_intentions").select("*").eq("scheduled_date", date).order("list_order"),
-    );
-    return rows.map((r) => ({
-      id: r.id,
-      scheduledDate: r.scheduled_date,
-      activityName: r.activity_name,
-      listOrder: r.list_order,
-      text: r.intention_text,
-      displayName: r.display_name,
-    }));
+    try {
+      const rows = await this.rows(
+        this.sb.from("public_mass_intentions").select("*").eq("scheduled_date", date).order("list_order"),
+      );
+      if (rows && rows.length > 0) {
+        return rows.map((r) => ({
+          id: r.id,
+          scheduledDate: r.scheduled_date,
+          activityName: r.activity_name,
+          listOrder: r.list_order,
+          text: r.intention_text,
+          displayName: r.display_name,
+        }));
+      }
+    } catch {}
+    return SEED_MASS_INTENTIONS.filter((m) => m.scheduledDate === date || !m.scheduledDate);
   }
 
   async getPublicPrayerIntentions(limit = 30): Promise<PublicPrayerIntention[]> {
-    const rows = await this.rows(
-      this.sb.from("public_prayer_intentions").select("*").order("created_at", { ascending: false }).limit(limit),
-    );
-    return rows.map((r) => ({ id: r.id, body: r.body, category: r.category, displayName: r.display_name }));
+    try {
+      const rows = await this.rows(
+        this.sb.from("public_prayer_intentions").select("*").order("created_at", { ascending: false }).limit(limit),
+      );
+      if (rows && rows.length > 0) {
+        return rows.map((r) => ({ id: r.id, body: r.body, category: r.category, displayName: r.display_name }));
+      }
+    } catch {}
+    return SEED_PRAYER_INTENTIONS.slice(0, limit);
   }
 
   async getOfferingInfo(): Promise<OfferingInfo> {

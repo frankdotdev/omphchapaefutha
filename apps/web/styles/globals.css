@@ -277,18 +277,104 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .directory li a:hover { color: var(--burgundy); }
 .directory .abbr { color: var(--gold-text); font-size: 0.82rem; letter-spacing: 0.08em; margin-left: 0.4rem; }
 
-/* ---------------------------------------------------------------- communion: stepped sequence, not an org chart */
+/* ---------------------------------------------------------------- communion: stepped sequence, matching dark navy & gold timeline */
+.communion-container {
+  background: var(--navy);
+  color: var(--ivory);
+  padding: 2.5rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(197, 155, 39, 0.3);
+}
+.communion-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.communion-timeline::before {
+  content: "";
+  position: absolute;
+  top: 1.25rem;
+  bottom: 2rem;
+  left: 19px;
+  width: 2px;
+  background: var(--gold);
+}
+.communion-node-item {
+  position: relative;
+  padding-bottom: 2.75rem;
+}
+.communion-node-item:last-child {
+  padding-bottom: 0.5rem;
+}
+.communion-ring {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--navy);
+  z-index: 2;
+  box-shadow: 0 0 0 3px var(--navy);
+}
+.communion-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding-left: 50px;
+}
+.communion-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  object-fit: cover;
+  object-position: center top;
+  flex-shrink: 0;
+  background: var(--marian);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.communion-details {
+  flex: 1;
+}
+.communion-level {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 0.25rem 0;
+}
+.communion-name {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3.2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 0.35rem 0;
+}
+.communion-text {
+  color: #cfd8dc;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 52ch;
+}
+.communion-text strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Backward compatibility for old communion class */
 .communion { list-style: none; margin: 0; padding: 0; counter-reset: step; border-left: 2px solid var(--gold); }
 .communion li { position: relative; padding: 0.2rem 0 1.9rem 1.75rem; }
 .communion li::before { content: ""; position: absolute; left: -0.5rem; top: 0.55rem; width: 0.85rem; height: 0.85rem; background: var(--navy); border: 2px solid var(--gold); border-radius: 50%; }
 .communion .level { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin: 0; }
 .communion .person { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.15; margin: 0.15rem 0; color: var(--ivory); }
-.communion .person.pending { font-family: var(--sans); font-size: 1rem; font-weight: 400; font-style: italic; color: #cfc8b9; }
 .communion .desc { color: #d9d3c6; font-size: 0.97rem; margin: 0; max-width: 52ch; }
-.light .communion .person { color: var(--navy); }
-.light .communion .person.pending { color: var(--muted); }
-.light .communion .desc { color: var(--muted); }
-.light .communion .level { color: var(--gold-text); }
 
 .two-col { display: grid; gap: 2.5rem 4rem; }
 @media (min-width: 52rem) { .two-col { grid-template-columns: 1fr 1fr; align-items: start; } }
