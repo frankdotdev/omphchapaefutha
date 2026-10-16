@@ -58,7 +58,7 @@ export default async function MassIntentionsPage({ searchParams }: Props) {
                   Official schedule of intentions offered during Holy Mass by our priests.
                 </p>
               </div>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                 <a href="#offer-intention" className="btn" style={{ fontSize: "0.88rem", padding: "0.55rem 1.1rem" }}>
                   + Offer a Mass Intention
                 </a>

@@ -590,3 +590,28 @@ dl.facts dd { margin: 0 0 1rem; }
 .lang-switch select { min-height: 2.5rem; font: inherit; padding: 0 0.4rem; border: 1px solid var(--line); background: var(--paper); color: var(--navy); }
 .widget-frame { width: 100%; height: 34rem; border: 1px solid var(--line); background: #fff; }
 .slide .eyebrow { color: #e6c98a; }
+
+/* ---------------------------------------------------------------- responsive prayer grid & chatbot */
+.prayer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+}
+@media (min-width: 44rem) {
+  .prayer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+@media (max-width: 36rem) {
+  .padre-chat-widget {
+    bottom: 0.85rem !important;
+    right: 0.85rem !important;
+  }
+  .padre-chat-widget button#padre-chat-trigger {
+    padding: 0.55rem 0.9rem !important;
+    font-size: 0.85rem !important;
+  }
+}
+

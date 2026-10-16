@@ -20,28 +20,37 @@ export default async function PrayerPage() {
       <section className="section">
         <div className="wrap" style={{ maxWidth: "58rem" }}>
           {/* 1. COMMUNITY PRAYERS AND INTENTIONS (COMES FIRST) */}
-          <div style={{ marginBottom: "3.5rem" }}>
+          <div style={{ marginBottom: "3rem" }}>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "baseline",
+                alignItems: "flex-start",
                 flexWrap: "wrap",
                 gap: "1rem",
                 marginBottom: "1.5rem",
                 borderBottom: "2px solid var(--gold)",
-                paddingBottom: "0.75rem",
+                paddingBottom: "0.85rem",
               }}
             >
-              <div>
-                <h2 style={{ margin: 0, fontSize: "clamp(1.7rem, 3.5vw, 2.2rem)", color: "var(--navy)" }}>
+              <div style={{ flex: "1 1 18rem", minWidth: 0 }}>
+                <h2 style={{ margin: 0, fontSize: "clamp(1.5rem, 4vw, 2.2rem)", color: "var(--navy)", wordBreak: "break-word" }}>
                   Intentions We Are Praying For
                 </h2>
-                <p className="muted" style={{ margin: "0.35rem 0 0 0", fontSize: "0.98rem" }}>
+                <p className="muted" style={{ margin: "0.35rem 0 0 0", fontSize: "0.95rem", lineHeight: 1.45 }}>
                   Remembered daily at Holy Mass, during Sunday Benediction, and in hospital ward devotions.
                 </p>
               </div>
-              <a href="#submit-prayer" className="btn" style={{ fontSize: "0.88rem", padding: "0.55rem 1.1rem" }}>
+              <a
+                href="#submit-prayer"
+                className="btn"
+                style={{
+                  fontSize: "0.88rem",
+                  padding: "0.55rem 1.1rem",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
                 + Submit Your Intention
               </a>
             </div>
@@ -52,14 +61,15 @@ export default async function PrayerPage() {
               </div>
             ) : (
               <ul
-                className="entries"
+                className="entries prayer-grid"
                 style={{
                   display: "grid",
-                  gap: "1.25rem",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(24rem, 1fr))",
+                  gap: "1rem",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 18rem), 1fr))",
                   listStyle: "none",
                   padding: 0,
                   margin: 0,
+                  width: "100%",
                 }}
               >
                 {published.map((p) => (
@@ -67,13 +77,17 @@ export default async function PrayerPage() {
                     key={p.id}
                     className="card pattern-paper"
                     style={{
-                      padding: "1.5rem",
+                      padding: "clamp(1.1rem, 3.5vw, 1.5rem)",
                       borderRadius: "8px",
                       border: "1px solid var(--line)",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                      overflowWrap: "anywhere",
+                      wordBreak: "break-word",
+                      boxSizing: "border-box",
+                      width: "100%",
                     }}
                   >
                     <div>
@@ -98,10 +112,11 @@ export default async function PrayerPage() {
                       <p
                         style={{
                           margin: "0 0 1rem 0",
-                          fontSize: "1.05rem",
+                          fontSize: "clamp(0.98rem, 2.5vw, 1.05rem)",
                           lineHeight: 1.55,
                           color: "var(--navy)",
                           fontStyle: "italic",
+                          overflowWrap: "anywhere",
                         }}
                       >
                         &ldquo;{p.body}&rdquo;
@@ -110,13 +125,15 @@ export default async function PrayerPage() {
 
                     <div
                       style={{
-                        fontSize: "0.88rem",
+                        fontSize: "0.85rem",
                         color: "var(--muted)",
                         borderTop: "1px dashed var(--line)",
                         paddingTop: "0.65rem",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: "0.4rem",
                       }}
                     >
                       <span>
@@ -137,17 +154,18 @@ export default async function PrayerPage() {
             id="submit-prayer"
             className="card pattern-paper"
             style={{
-              padding: "clamp(1.5rem, 4vw, 2.75rem)",
+              padding: "clamp(1.2rem, 4vw, 2.5rem)",
               border: "1px solid var(--gold)",
               borderRadius: "8px",
               boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+              marginBottom: "3rem",
             }}
           >
-            <div style={{ marginBottom: "1.75rem", borderBottom: "1px solid var(--line)", paddingBottom: "1rem" }}>
-              <h2 style={{ margin: "0 0 0.5rem 0", fontSize: "1.85rem", color: "var(--navy)" }}>
+            <div style={{ marginBottom: "1.5rem", borderBottom: "1px solid var(--line)", paddingBottom: "1rem" }}>
+              <h2 style={{ margin: "0 0 0.5rem 0", fontSize: "clamp(1.5rem, 4vw, 1.85rem)", color: "var(--navy)" }}>
                 Ask for Prayers
               </h2>
-              <p className="muted" style={{ margin: 0, fontSize: "0.98rem" }}>
+              <p className="muted" style={{ margin: 0, fontSize: "0.95rem", lineHeight: 1.5 }}>
                 Submit your prayer intention below. Our chaplains and pious societies will pray with you.
                 This service is completely free and your contact details remain private.
               </p>
