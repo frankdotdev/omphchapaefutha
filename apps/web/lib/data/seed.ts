@@ -7,7 +7,9 @@ import { PORTRAITS } from "@/lib/media";
 import type {
   Announcement,
   ChaplaincyEvent,
+  ChurchAccountProject,
   EcclesiasticalEntry,
+  OfferingInfo,
   PublicMassIntention,
   PublicPrayerIntention,
   RecurringSchedule,
@@ -174,6 +176,10 @@ export const SEED_SOCIETIES: Society[] = [
     patron: "Saint Joseph the Worker",
     feastDay: "19 March (Solemnity of Saint Joseph); 1 May (Saint Joseph the Worker)",
     activities: "Spiritual retreats and seminars for husbands and fathers, financial and physical support for chaplaincy infrastructure, men's prayer fellowships, and mentoring young men.",
+    accountName: "CMO PADRE PIO",
+    accountNumber: "1024371925",
+    bankName: "UBA",
+    executiveContacts: "Catechist: 08063314891 / CMO Secretariat",
   }),
   soc("organizations", "catholic-women-organization", "Catholic Women Organization", "CWO", {
     summary: "The Catholic Women Organization (CWO) unites Catholic mothers and women in the chaplaincy, serving as a beacon of maternal care, faith formation, and charitable outreach.",
@@ -479,8 +485,6 @@ export const SEED_MASS_INTENTIONS: PublicMassIntention[] = [
     displayName: "Anonymous",
   },
 ];
-
-
 
 export const SEED_OFFERING_INFO: OfferingInfo = {
   amount: "₦300 per day / Mass",
