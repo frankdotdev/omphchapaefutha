@@ -102,6 +102,10 @@ export const RESOURCES: Resource[] = [
       { name: "meeting_schedule", label: "Meeting days and times", type: "text" },
       { name: "meeting_venue", label: "Meeting venue", type: "text" },
       { name: "membership_info", label: "Membership information", type: "textarea" },
+      { name: "executive_contacts", label: "Executive Contacts & Phone Numbers", type: "text", hint: "e.g. President: 080... | Secretary: 081..." },
+      { name: "bank_name", label: "Society Bank Name", type: "text", hint: "e.g. UBA, First Bank" },
+      { name: "account_name", label: "Society Bank Account Name", type: "text", hint: "e.g. CMO PADRE PIO" },
+      { name: "account_number", label: "Society Bank Account Number", type: "text", hint: "e.g. 1024371925" },
       { name: "source_notes", label: "Source notes (internal)", type: "textarea" },
       { name: "is_featured", label: "Featured", type: "boolean" },
       { name: "display_order", label: "Display order", type: "number" },
@@ -285,12 +289,21 @@ export const resourceByKey = (key: string) => RESOURCES.find((r) => r.key === ke
 /** Fixed public settings edited on the Settings page. Values are stored as JSON strings. */
 export const SETTING_KEYS: { key: string; label: string; type: "text" | "textarea"; hint?: string }[] = [
   { key: "contact.address", label: "Address", type: "textarea" },
-  { key: "contact.phone", label: "Telephone", type: "text" },
+  { key: "contact.phone", label: "Telephone / Contacts", type: "text" },
   { key: "contact.email", label: "Email", type: "text" },
   { key: "contact.maps_url", label: "Map link", type: "text", hint: "A link to the location on a map service." },
   { key: "about.history", label: "Chaplaincy history", type: "textarea", hint: "Shown on the About page. Separate paragraphs with a blank line. Publish only what the chaplaincy has confirmed." },
-  { key: "offering.amount", label: "Mass intention offering", type: "text", hint: "Shown to visitors who offer an intention." },
+  { key: "offering.amount", label: "Mass intention stipend amount", type: "text", hint: "Default: ₦300 per day / Mass." },
+  { key: "offering.bank_name", label: "Chaplaincy Bank Name", type: "text", hint: "e.g. First Bank" },
+  { key: "offering.account_name", label: "Chaplaincy Bank Account Name", type: "text", hint: "e.g. St. Padre Pio Catholic Chaplaincy" },
+  { key: "offering.account_number", label: "Chaplaincy Bank Account Number", type: "text", hint: "e.g. 3056076559" },
+  { key: "offering.catechist_phone", label: "Catechist WhatsApp & Telephone", type: "text", hint: "e.g. 08063314891" },
+  { key: "offering.chaplain_phone", label: "Chaplain WhatsApp & Telephone", type: "text", hint: "e.g. 08091422688" },
   { key: "offering.bank_instructions", label: "How to give the offering", type: "textarea", hint: "Bank name, account name and number, and any reference to quote. Shown publicly." },
+  { key: "bazaar.bank_name", label: "Harvest & Bazaar Bank Name", type: "text", hint: "e.g. FCMB" },
+  { key: "bazaar.account_name", label: "Harvest & Bazaar Account Name", type: "text", hint: "e.g. ST PADRE PIO CATHOLIC CHAPLAINCY BAZAAR COMMITTEE" },
+  { key: "bazaar.account_number", label: "Harvest & Bazaar Account Number", type: "text", hint: "e.g. 8552777011" },
+  { key: "bazaar.whatsapp", label: "Harvest & Bazaar WhatsApp for Receipts", type: "text", hint: "e.g. 08132932726" },
 ];
 
 /** Admin navigation. `permission` hides links the signed-in user cannot use. */

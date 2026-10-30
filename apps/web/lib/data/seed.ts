@@ -480,3 +480,54 @@ export const SEED_MASS_INTENTIONS: PublicMassIntention[] = [
   },
 ];
 
+
+
+export const SEED_OFFERING_INFO: OfferingInfo = {
+  amount: "₦300 per day / Mass",
+  bankName: "First Bank",
+  accountName: "St. Padre Pio Catholic Chaplaincy",
+  accountNumber: "3056076559",
+  catechistPhone: "08063314891",
+  chaplainPhone: "08091422688",
+  bazaarAccountName: "ST PADRE PIO CATHOLIC CHAPLAINCY BAZAAR COMMITTEE",
+  bazaarAccountNumber: "8552777011",
+  bazaarBankName: "FCMB",
+  bazaarPhone: "08132932726",
+  bankInstructions: "Account Number: 3056076559\nBank: First Bank\nAccount Name: St. Padre Pio Catholic Chaplaincy\nStipend: ₦300 per Mass / day\n\nNote: The chaplaincy was formerly known as St. Padre Pio Catholic Chaplaincy before it was renamed by the late Bishop Peter Nworie in 2023 during the dedication of the Our Mother of Perpetual Help Grotto.\n\nAfter making the transfer, notify the Catechist (08063314891) or Chaplain (08091422688) on WhatsApp with your reference code to confirm and schedule your Mass intention.",
+};
+
+export const SEED_CHURCH_ACCOUNTS: ChurchAccountProject[] = [
+  {
+    id: "acct-chaplaincy",
+    title: "Chaplaincy General Account",
+    purpose: "Supports daily liturgical operations, hospital bedside pastoral care, maintenance of the chapel and grotto, and pastoral emergencies.",
+    accountName: "ST PADRE PIO CATHOLIC CHAPLAINCY",
+    accountNumber: "3056076559",
+    bankName: "FIRST BANK",
+    receiptContact: "08063314891 / 08091422688",
+    isFeaturedHome: true,
+    active: true,
+  },
+  {
+    id: "acct-bazaar",
+    title: "Harvest & Bazaar Account",
+    purpose: "Dedicated account for annual harvest thanksgiving, bazaar levies, family thanksgiving envelopes, and capital infrastructure development.",
+    accountName: "ST PADRE PIO CATHOLIC CHAPLAINCY BAZAAR COMMITTEE",
+    accountNumber: "8552777011",
+    bankName: "FCMB",
+    receiptContact: "08132932726",
+    isFeaturedHome: true,
+    active: true,
+  },
+  {
+    id: "acct-cmo",
+    title: "Catholic Men Organization (CMO)",
+    purpose: "Apostolate fund for Catholic fathers, family seminars, fraternal outreach, and male mentorship projects in the chaplaincy.",
+    accountName: "CMO PADRE PIO",
+    accountNumber: "1024371925",
+    bankName: "UBA",
+    receiptContact: "08063314891",
+    isFeaturedHome: true,
+    active: true,
+  },
+];

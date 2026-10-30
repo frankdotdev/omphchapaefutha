@@ -54,6 +54,10 @@ export interface Society {
   meetingSchedule?: string | null;
   meetingVenue?: string | null;
   membershipInfo?: string | null;
+  accountName?: string | null;
+  accountNumber?: string | null;
+  bankName?: string | null;
+  executiveContacts?: string | null;
   isFeatured: boolean;
   imageSrc?: string | null;
   /** Whether the editorial content has been checked against sources. */
@@ -125,6 +129,8 @@ export interface PublicMassIntention {
   listOrder: number;
   text: string;
   displayName: string | null;
+  status?: string;
+  numberOfDays?: number;
 }
 
 export interface PublicPrayerIntention {
@@ -134,10 +140,32 @@ export interface PublicPrayerIntention {
   displayName: string | null;
 }
 
-/** Public offering instructions, maintained in protected admin settings. Null fields = not yet configured. */
+/** Public offering instructions, maintained in protected admin settings. */
 export interface OfferingInfo {
-  amount: string | null;
+  amount: string | null; // e.g. "₦300 per day / Mass"
   bankInstructions: string | null;
+  bankName?: string | null; // "First Bank"
+  accountName?: string | null; // "St. Padre Pio Catholic Chaplaincy"
+  accountNumber?: string | null; // "3056076559"
+  catechistPhone?: string | null; // "08063314891"
+  chaplainPhone?: string | null; // "08091422688"
+  bazaarAccountName?: string | null;
+  bazaarAccountNumber?: string | null;
+  bazaarBankName?: string | null;
+  bazaarPhone?: string | null;
+}
+
+export interface ChurchAccountProject {
+  id: string;
+  title: string;
+  purpose: string;
+  accountName: string;
+  accountNumber: string;
+  bankName: string;
+  receiptContact?: string | null;
+  targetAmount?: string | null;
+  isFeaturedHome: boolean;
+  active: boolean;
 }
 
 export interface MassOption { id: string; name: string }

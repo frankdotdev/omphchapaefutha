@@ -4,6 +4,7 @@ import type { Slide } from "@/lib/slides";
 import type {
   Announcement,
   ChaplaincyEvent,
+  ChurchAccountProject,
   DailyReadings,
   EcclesiasticalEntry,
   LeadershipEntry,
@@ -23,10 +24,6 @@ import type {
 /**
  * REST API client for standalone backends (NestJS, Express, Go, etc.)
  * deployed on Neon, Railway, Render, VPS, or self-hosted servers.
- *
- * Each call attempts to fetch from the configured API endpoint.
- * If the API is unreachable, down, or returns an error, it gracefully falls back
- * to the built-in seed data client so public pages continue functioning smoothly.
  */
 export class ApiDataClient implements DataClient {
   readonly backend = "api" as const;
@@ -52,12 +49,12 @@ export class ApiDataClient implements DataClient {
   }
 
   async getRecurringSchedule(): Promise<RecurringSchedule[]> {
-    return this.fetchJson<RecurringSchedule[]>("/api/v1/schedule", await this.fallback.getRecurringSchedule());
+    return this.fetchJson<RecurringSchedule[]>("/api/v1/schedules/recurring", await this.fallback.getRecurringSchedule());
   }
 
   async getScheduleExceptions(from: string, to: string): Promise<ScheduleException[]> {
     return this.fetchJson<ScheduleException[]>(
-      `/api/v1/schedule/exceptions?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
+      `/api/v1/schedules/exceptions?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
       await this.fallback.getScheduleExceptions(from, to),
     );
   }
@@ -74,16 +71,21 @@ export class ApiDataClient implements DataClient {
     return this.fetchJson<Society | null>(`/api/v1/societies/${encodeURIComponent(slug)}`, await this.fallback.getSociety(slug));
   }
 
-  async getAnnouncements(limit = 10): Promise<Announcement[]> {
-    return this.fetchJson<Announcement[]>(`/api/v1/announcements?limit=${limit}`, await this.fallback.getAnnouncements(limit));
+  async getAnnouncements(limit?: number): Promise<Announcement[]> {
+    const q = limit ? `?limit=${limit}` : "";
+    return this.fetchJson<Announcement[]>(`/api/v1/announcements${q}`, await this.fallback.getAnnouncements(limit));
   }
 
   async getAnnouncement(slug: string): Promise<Announcement | null> {
-    return this.fetchJson<Announcement | null>(`/api/v1/announcements/${encodeURIComponent(slug)}`, await this.fallback.getAnnouncement(slug));
+    return this.fetchJson<Announcement | null>(
+      `/api/v1/announcements/${encodeURIComponent(slug)}`,
+      await this.fallback.getAnnouncement(slug),
+    );
   }
 
-  async getUpcomingEvents(limit = 10): Promise<ChaplaincyEvent[]> {
-    return this.fetchJson<ChaplaincyEvent[]>(`/api/v1/events?limit=${limit}`, await this.fallback.getUpcomingEvents(limit));
+  async getUpcomingEvents(limit?: number): Promise<ChaplaincyEvent[]> {
+    const q = limit ? `?limit=${limit}` : "";
+    return this.fetchJson<ChaplaincyEvent[]>(`/api/v1/events${q}`, await this.fallback.getUpcomingEvents(limit));
   }
 
   async getEvent(slug: string): Promise<ChaplaincyEvent | null> {
@@ -91,15 +93,15 @@ export class ApiDataClient implements DataClient {
   }
 
   async getEcclesiasticalDirectory(): Promise<EcclesiasticalEntry[]> {
-    return this.fetchJson<EcclesiasticalEntry[]>("/api/v1/directory/ecclesiastical", await this.fallback.getEcclesiasticalDirectory());
+    return this.fetchJson<EcclesiasticalEntry[]>("/api/v1/ecclesiastical/directory", await this.fallback.getEcclesiasticalDirectory());
   }
 
   async getLeadership(): Promise<LeadershipEntry[]> {
-    return this.fetchJson<LeadershipEntry[]>("/api/v1/directory/leadership", await this.fallback.getLeadership());
+    return this.fetchJson<LeadershipEntry[]>("/api/v1/leadership", await this.fallback.getLeadership());
   }
 
   async getContact(): Promise<SiteContact> {
-    return this.fetchJson<SiteContact>("/api/v1/settings/contact", await this.fallback.getContact());
+    return this.fetchJson<SiteContact>("/api/v1/contact", await this.fallback.getContact());
   }
 
   async getPublicMassIntentions(date: string): Promise<PublicMassIntention[]> {
@@ -109,7 +111,7 @@ export class ApiDataClient implements DataClient {
     );
   }
 
-  async getPublicPrayerIntentions(limit = 20): Promise<PublicPrayerIntention[]> {
+  async getPublicPrayerIntentions(limit = 30): Promise<PublicPrayerIntention[]> {
     return this.fetchJson<PublicPrayerIntention[]>(
       `/api/v1/intentions/prayer/public?limit=${limit}`,
       await this.fallback.getPublicPrayerIntentions(limit),
@@ -121,7 +123,7 @@ export class ApiDataClient implements DataClient {
   }
 
   async getMassOptions(): Promise<MassOption[]> {
-    return this.fetchJson<MassOption[]>("/api/v1/schedule/mass-options", await this.fallback.getMassOptions());
+    return this.fetchJson<MassOption[]>("/api/v1/schedules/mass-options", await this.fallback.getMassOptions());
   }
 
   async getHeroSlides(): Promise<Slide[]> {
@@ -149,5 +151,9 @@ export class ApiDataClient implements DataClient {
 
   async getAboutHistory(): Promise<string | null> {
     return this.fetchJson<string | null>("/api/v1/settings/about-history", await this.fallback.getAboutHistory());
+  }
+
+  async getChurchAccounts(): Promise<ChurchAccountProject[]> {
+    return this.fetchJson<ChurchAccountProject[]>("/api/v1/settings/accounts", await this.fallback.getChurchAccounts());
   }
 }

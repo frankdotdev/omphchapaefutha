@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDataClient } from "@/lib/data";
 import { PageHead, Awaiting } from "@/components/ui/PageHead";
+import { SocietySupportCard } from "@/components/societies/SocietySupportCard";
+import { Phone, Users } from "lucide-react";
 
 type Props = { params: Promise<{ slug: string }> };
 export const revalidate = 300;
@@ -36,6 +38,7 @@ export default async function SocietyPage({ params }: Props) {
     ["Feast day", s.feastDay],
     ["Meets", s.meetingSchedule],
     ["Venue", s.meetingVenue],
+    ["Executive Contacts", s.executiveContacts],
   ];
   const shownFacts = facts.filter(([, v]) => v);
   const shownSections = SECTIONS.filter(([k]) => s[k]);
@@ -78,7 +81,7 @@ export default async function SocietyPage({ params }: Props) {
               )}
             </div>
 
-            {/* Right Column: Society Badge, Image & Facts Card */}
+            {/* Right Column: Society Badge, Image, Facts & Support Card */}
             <aside
               style={{
                 background: "var(--paper)",
@@ -136,7 +139,17 @@ export default async function SocietyPage({ params }: Props) {
                 </dl>
               )}
 
-              <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1rem", marginTop: "1rem" }}>
+              {/* Bank Account for Society (e.g. CMO or other societies) */}
+              {s.accountNumber && (
+                <SocietySupportCard
+                  societyName={s.shortName || s.name}
+                  bankName={s.bankName || "Bank"}
+                  accountName={s.accountName || s.name}
+                  accountNumber={s.accountNumber}
+                />
+              )}
+
+              <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1rem", marginTop: "1.25rem" }}>
                 <p style={{ fontSize: "0.85rem", color: "var(--muted)", margin: "0 0 0.75rem" }}>
                   Interested in joining this apostolate or devotional group?
                 </p>
@@ -145,7 +158,7 @@ export default async function SocietyPage({ params }: Props) {
                   className="btn secondary"
                   style={{ width: "100%", textAlign: "center", fontSize: "0.88rem", padding: "0.5rem 1rem" }}
                 >
-                  Contact the Chaplaincy
+                  Contact the Chaplaincy Office
                 </Link>
               </div>
             </aside>

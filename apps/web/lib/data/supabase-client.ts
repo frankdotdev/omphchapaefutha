@@ -4,6 +4,7 @@ import type { Slide, SlideImage } from "@/lib/slides";
 import type {
   Announcement,
   ChaplaincyEvent,
+  ChurchAccountProject,
   EcclesiasticalEntry,
   LeadershipEntry,
   MassOption,
@@ -20,59 +21,62 @@ import type {
   SaintProfile,
   LiturgicalOverride,
 } from "@/lib/types";
-import { SEED_SOCIETIES, SEED_ECCLESIASTICAL, SEED_MASS_INTENTIONS, SEED_PRAYER_INTENTIONS } from "./seed";
+import {
+  SEED_SOCIETIES,
+  SEED_ECCLESIASTICAL,
+  SEED_MASS_INTENTIONS,
+  SEED_PRAYER_INTENTIONS,
+  SEED_OFFERING_INFO,
+  SEED_CHURCH_ACCOUNTS,
+} from "./seed";
 
 const hhmm = (t: string | null) => (t ? t.slice(0, 5) : null);
 
-/**
- * Interim backend adapter. Uses ONLY the public anon key; every table it reads is protected by RLS so
- * visitors can only ever see published, public-safe rows. Privileged work (payment verification,
- * provider keys, scheduled refreshes) belongs in Edge Functions, never here.
- * All Supabase-specific code is confined to this file so the NestJS client can replace it.
- */
 export class SupabaseDataClient implements DataClient {
   readonly backend = "supabase" as const;
   private sb: SupabaseClient;
-  private baseUrl: string;
 
-  constructor(url: string, anonKey: string) {
-    this.baseUrl = url.replace(/\/$/, "");
-    this.sb = createClient(url, anonKey, { auth: { persistSession: false } });
+  constructor(url: string, key: string) {
+    this.sb = createClient(url, key, { auth: { persistSession: false } });
   }
 
-  // Rows are mapped to domain types immediately below; join shapes are validated by the mappers.
-  private async rows(q: PromiseLike<{ data: any[] | null; error: any }>): Promise<any[]> {
-    const { data, error } = await q;
-    if (error) throw new Error(`Data request failed: ${error.message}`);
+  private async rows<T>(query: PromiseLike<{ data: T[] | null; error: unknown }>): Promise<T[]> {
+    const { data, error } = await query;
+    if (error) throw new Error(typeof error === "object" && error && "message" in error ? String((error as any).message) : "Database query failed");
     return data ?? [];
-  }
-
-  /** Public URL of an object in the `media` storage bucket. */
-  mediaUrl(objectKey: string): string {
-    return `${this.baseUrl}/storage/v1/object/public/media/${objectKey}`;
   }
 
   async getRecurringSchedule(): Promise<RecurringSchedule[]> {
     const rows = await this.rows(
-      this.sb.from("recurring_schedules").select("id,label,weekday,start_time,nth_of_month,timezone,note,sort_order,activities(key,location)").order("sort_order"),
+      this.sb
+        .from("recurring_schedules")
+        .select("id, weekday, start_time, nth_of_month, timezone, note, sort_order, label, activities!inner(key, location)")
+        .eq("status", "published")
+        .order("sort_order"),
     );
-    return rows.map((r) => ({
+    return rows.map((r: any) => ({
       id: r.id,
-      activityKey: r.activities?.key ?? "",
+      activityKey: r.activities.key,
       label: r.label,
       weekday: r.weekday as Weekday,
       startTime: hhmm(r.start_time),
       nthOfMonth: r.nth_of_month,
       timezone: r.timezone,
       note: r.note,
-      location: r.activities?.location ?? null,
+      location: r.activities.location,
       sortOrder: r.sort_order,
     }));
   }
 
   async getScheduleExceptions(from: string, to: string): Promise<ScheduleException[]> {
     const rows = await this.rows(
-      this.sb.from("schedule_exceptions").select("*").gte("on_date", from).lte("on_date", to),
+      this.sb
+        .from("schedule_exceptions")
+        .select("id, on_date, kind, recurring_schedule_id, label, start_time, location, note")
+        .eq("status", "published")
+        .gte("on_date", from)
+        .lte("on_date", to)
+        .order("on_date"),
     );
     return rows.map((e) => ({
       id: e.id,
@@ -107,6 +111,10 @@ export class SupabaseDataClient implements DataClient {
     meetingSchedule: s.meeting_schedule,
     meetingVenue: s.meeting_venue,
     membershipInfo: s.membership_info,
+    accountName: s.account_name ?? (s.slug === "catholic-men-organization" ? "CMO PADRE PIO" : null),
+    accountNumber: s.account_number ?? (s.slug === "catholic-men-organization" ? "1024371925" : null),
+    bankName: s.bank_name ?? (s.slug === "catholic-men-organization" ? "UBA" : null),
+    executiveContacts: s.executive_contacts ?? null,
     isFeatured: s.is_featured,
     imageSrc: s.image_url ?? s.image_src ?? (SEED_SOCIETIES.find((x) => x.slug === s.slug)?.imageSrc ?? null),
     verified: s.review === "verified",
@@ -127,95 +135,131 @@ export class SupabaseDataClient implements DataClient {
     return rows[0] ? this.mapSociety(rows[0]) : null;
   }
 
-  private mapAnnouncement = (a: Record<string, any>): Announcement => ({
-    slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt,
-    body: a.body,
-    category: a.announcement_categories?.name ?? null,
-    issuedBy: a.issued_by,
-    publishedAt: a.publish_at ?? a.created_at,
-    isUrgent: a.is_urgent,
-    isFeatured: a.is_featured,
-  });
-
-  async getAnnouncements(limit = 20): Promise<Announcement[]> {
+  async getAnnouncements(limit = 10): Promise<Announcement[]> {
     const rows = await this.rows(
-      this.sb.from("announcements").select("*, announcement_categories(name)").order("publish_at", { ascending: false }).limit(limit),
+      this.sb
+        .from("announcements")
+        .select("slug, title, excerpt, body, category, issued_by, publish_at, is_urgent, is_featured")
+        .eq("status", "published")
+        .order("priority", { ascending: false })
+        .order("publish_at", { ascending: false })
+        .limit(limit),
     );
-    return rows.map(this.mapAnnouncement);
+    return rows.map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt,
+      body: a.body,
+      category: a.category,
+      issuedBy: a.issued_by,
+      publishedAt: a.publish_at,
+      isUrgent: a.is_urgent,
+      isFeatured: a.is_featured,
+    }));
   }
 
   async getAnnouncement(slug: string): Promise<Announcement | null> {
     const rows = await this.rows(
-      this.sb.from("announcements").select("*, announcement_categories(name)").eq("slug", slug).limit(1),
+      this.sb
+        .from("announcements")
+        .select("slug, title, excerpt, body, category, issued_by, publish_at, is_urgent, is_featured")
+        .eq("status", "published")
+        .eq("slug", slug)
+        .limit(1),
     );
-    return rows[0] ? this.mapAnnouncement(rows[0]) : null;
+    const a = rows[0];
+    return a
+      ? {
+          slug: a.slug,
+          title: a.title,
+          excerpt: a.excerpt,
+          body: a.body,
+          category: a.category,
+          issuedBy: a.issued_by,
+          publishedAt: a.publish_at,
+          isUrgent: a.is_urgent,
+          isFeatured: a.is_featured,
+        }
+      : null;
   }
 
-  private mapEvent = (e: Record<string, any>): ChaplaincyEvent => ({
-    slug: e.slug,
-    title: e.title,
-    description: e.description,
-    category: e.category,
-    startsAt: e.starts_at,
-    endsAt: e.ends_at,
-    timezone: e.timezone,
-    venue: e.venue,
-    organizer: e.organizer,
-    isFeatured: e.is_featured,
-    countdownEnabled: e.countdown_enabled,
-    isCancelled: e.is_cancelled,
-  });
-
-  async getUpcomingEvents(limit = 20): Promise<ChaplaincyEvent[]> {
+  async getUpcomingEvents(limit = 10): Promise<ChaplaincyEvent[]> {
     const rows = await this.rows(
-      this.sb.from("events").select("*").gte("starts_at", new Date().toISOString()).order("starts_at").limit(limit),
+      this.sb
+        .from("events")
+        .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
+        .eq("status", "published")
+        .gte("starts_at", new Date().toISOString())
+        .order("starts_at")
+        .limit(limit),
     );
-    return rows.map(this.mapEvent);
+    return rows.map((e) => ({
+      slug: e.slug,
+      title: e.title,
+      description: e.description,
+      category: e.category,
+      startsAt: e.starts_at,
+      endsAt: e.ends_at,
+      timezone: e.timezone,
+      venue: e.venue,
+      organizer: e.organizer,
+      isFeatured: e.is_featured,
+      countdownEnabled: e.countdown_enabled,
+      isCancelled: e.is_cancelled,
+    }));
   }
 
   async getEvent(slug: string): Promise<ChaplaincyEvent | null> {
-    const rows = await this.rows(this.sb.from("events").select("*").eq("slug", slug).limit(1));
-    return rows[0] ? this.mapEvent(rows[0]) : null;
+    const rows = await this.rows(
+      this.sb
+        .from("events")
+        .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
+        .eq("status", "published")
+        .eq("slug", slug)
+        .limit(1),
+    );
+    const e = rows[0];
+    return e
+      ? {
+          slug: e.slug,
+          title: e.title,
+          description: e.description,
+          category: e.category,
+          startsAt: e.starts_at,
+          endsAt: e.ends_at,
+          timezone: e.timezone,
+          venue: e.venue,
+          organizer: e.organizer,
+          isFeatured: e.is_featured,
+          countdownEnabled: e.countdown_enabled,
+          isCancelled: e.is_cancelled,
+        }
+      : null;
   }
 
   async getEcclesiasticalDirectory(): Promise<EcclesiasticalEntry[]> {
-    // 1. Check if admin configured custom directory in chaplaincy_settings
     try {
-      const sRows = await this.rows(this.sb.from("chaplaincy_settings").select("value").eq("key", "directory.ecclesiastical"));
-      if (sRows[0]?.value) {
-        const val = typeof sRows[0].value === "string" ? JSON.parse(sRows[0].value) : sRows[0].value;
-        if (Array.isArray(val) && val.length > 0) return val;
+      const rows = await this.rows(
+        this.sb
+          .from("ecclesiastical_appointments")
+          .select("id, occupancy, designation, source_url, verified_at, is_current, review, status, ecclesiastical_offices!inner(key, title, level, description), people(display_name)")
+          .eq("status", "published")
+          .eq("is_current", true),
+      );
+      if (rows && rows.length > 0) {
+        return rows.map((r: any) => ({
+          officeKey: r.ecclesiastical_offices.key,
+          title: r.ecclesiastical_offices.title,
+          level: r.ecclesiastical_offices.level,
+          description: r.ecclesiastical_offices.description,
+          personName: r.review === "verified" ? (r.people?.display_name ?? null) : null,
+          occupancy: r.occupancy,
+          designation: r.designation,
+          sourceUrl: r.source_url,
+          verifiedAt: r.verified_at,
+        }));
       }
     } catch {}
-
-    // 2. Query relational ecclesiastical offices & appointments
-    try {
-      const offices = await this.rows(this.sb.from("ecclesiastical_offices").select("*").order("display_order"));
-      if (offices && offices.length > 0) {
-        const appts = await this.rows(
-          this.sb.from("ecclesiastical_appointments").select("*, people(full_name, display_name, portrait:media_assets!portrait_id(object_key, storage_provider))").eq("is_current", true),
-        );
-        return offices.map((o) => {
-          const a = appts.find((x) => x.office_id === o.id);
-          return {
-            officeKey: o.key,
-            title: o.title,
-            level: o.level,
-            description: o.description,
-            personName: a?.people?.display_name ?? null,
-            occupancy: a?.occupancy ?? "occupied",
-            designation: a?.designation,
-            sourceUrl: a?.source_url,
-            verifiedAt: a?.verified_at,
-            portraitSrc: a?.people?.portrait ? this.mediaUrl(a.people.portrait.object_key) : null,
-          };
-        });
-      }
-    } catch {}
-
-    // 3. Fallback to default canonical hierarchy
     return SEED_ECCLESIASTICAL;
   }
 
@@ -223,10 +267,11 @@ export class SupabaseDataClient implements DataClient {
     const rows = await this.rows(
       this.sb
         .from("leadership_appointments")
-        .select("is_current, people(display_name, biography), leadership_positions(key, title, display_order)")
+        .select("is_current, leadership_positions!inner(key, title, display_order), people!inner(display_name, biography)")
+        .eq("status", "published")
         .eq("is_current", true),
     );
-    return rows
+    return (rows as any[])
       .sort((a, b) => (a.leadership_positions?.display_order ?? 0) - (b.leadership_positions?.display_order ?? 0))
       .map((r) => ({
         positionKey: r.leadership_positions.key,
@@ -240,7 +285,12 @@ export class SupabaseDataClient implements DataClient {
   async getContact(): Promise<SiteContact> {
     const rows = await this.rows(this.sb.from("chaplaincy_settings").select("key,value").like("key", "contact.%"));
     const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
-    return { address: v("contact.address"), phone: v("contact.phone"), email: v("contact.email"), mapsUrl: v("contact.maps_url") };
+    return {
+      address: v("contact.address"),
+      phone: v("contact.phone") ?? "08063314891 (Catechist) / 08091422688 (Chaplain)",
+      email: v("contact.email"),
+      mapsUrl: v("contact.maps_url"),
+    };
   }
 
   async getPublicMassIntentions(date: string): Promise<PublicMassIntention[]> {
@@ -275,9 +325,25 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getOfferingInfo(): Promise<OfferingInfo> {
-    const rows = await this.rows(this.sb.from("chaplaincy_settings").select("key,value").like("key", "offering.%"));
-    const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
-    return { amount: v("offering.amount"), bankInstructions: v("offering.bank_instructions") };
+    try {
+      const rows = await this.rows(this.sb.from("chaplaincy_settings").select("key,value").like("key", "offering.%"));
+      const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
+      return {
+        amount: v("offering.amount") ?? SEED_OFFERING_INFO.amount,
+        bankInstructions: v("offering.bank_instructions") ?? SEED_OFFERING_INFO.bankInstructions,
+        bankName: v("offering.bank_name") ?? SEED_OFFERING_INFO.bankName,
+        accountName: v("offering.account_name") ?? SEED_OFFERING_INFO.accountName,
+        accountNumber: v("offering.account_number") ?? SEED_OFFERING_INFO.accountNumber,
+        catechistPhone: v("offering.catechist_phone") ?? SEED_OFFERING_INFO.catechistPhone,
+        chaplainPhone: v("offering.chaplain_phone") ?? SEED_OFFERING_INFO.chaplainPhone,
+        bazaarAccountName: SEED_OFFERING_INFO.bazaarAccountName,
+        bazaarAccountNumber: SEED_OFFERING_INFO.bazaarAccountNumber,
+        bazaarBankName: SEED_OFFERING_INFO.bazaarBankName,
+        bazaarPhone: SEED_OFFERING_INFO.bazaarPhone,
+      };
+    } catch {
+      return SEED_OFFERING_INFO;
+    }
   }
 
   async getMassOptions(): Promise<MassOption[]> {
@@ -286,32 +352,33 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getHeroSlides(): Promise<Slide[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("hero_slides")
-        .select("*, image:media_assets!image_id(object_key,alt_text,width,height,credit), background:media_assets!background_id(object_key,alt_text,width,height)")
-        .order("display_order"),
-    );
-    const toImage = (m: any): SlideImage | undefined =>
-      m ? { src: this.mediaUrl(m.object_key), width: m.width ?? undefined, height: m.height ?? undefined, alt: m.alt_text ?? "", title: undefined, byline: m.credit ?? undefined, maxCssWidth: m.width ?? undefined } : undefined;
-    return rows.map((r) => ({
-      id: r.id,
-      kind: "inscription" as const,
-      latin: r.latin,
-      english: r.english,
-      source: r.source ?? undefined,
-      art: "rose" as const,
-      image: toImage(r.image),
-      background: toImage(r.background),
-      cta: r.cta_href && r.cta_href.startsWith("/") ? { href: r.cta_href, label: r.cta_label } : undefined,
-    }));
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("hero_slides")
+          .select("id, latin, english, source, cta_label, cta_href, display_order, image:image_id(storage_path, alt_text, width, height), background:background_id(storage_path, alt_text, width, height)")
+          .eq("status", "published")
+          .order("display_order"),
+      );
+      return rows.map((r: any) => ({
+        id: r.id,
+        latin: r.latin,
+        english: r.english,
+        source: r.source ?? undefined,
+        cta: r.cta_label && r.cta_href ? { label: r.cta_label, href: r.cta_href } : undefined,
+        image: r.image ? ({ src: r.image.storage_path, alt: r.image.alt_text ?? "", width: r.image.width, height: r.image.height } as SlideImage) : undefined,
+        background: r.background ? ({ src: r.background.storage_path, alt: r.background.alt_text ?? "", width: r.background.width, height: r.background.height } as SlideImage) : undefined,
+      }));
+    } catch {
+      return [];
+    }
   }
 
   async getDailyReadings(date: string): Promise<DailyReadings | null> {
-    const rows = await this.rows(this.sb.from("daily_readings").select("*").eq("on_date", date).eq("status", "published").limit(1));
+    const rows = await this.rows(this.sb.from("daily_readings").select("*").eq("status", "published").eq("on_date", date).limit(1));
     const r = rows[0];
     if (!r) return null;
-    const part = (ref: string | null, text: string | null) => (ref ? { ref, text: text ?? undefined } : undefined);
+    const part = (ref?: string | null, text?: string | null) => (ref ? { ref, text: text ?? undefined } : undefined);
     return {
       date: r.on_date,
       firstReading: part(r.first_reading_ref, r.first_reading_text),
@@ -341,5 +408,9 @@ export class SupabaseDataClient implements DataClient {
     if (!ids.length) return [];
     const rows = await this.rows(this.sb.from("saint_profiles").select("celebration_id,name,summary,source_name,source_url").in("celebration_id", ids));
     return rows.map((r) => ({ celebrationId: r.celebration_id, name: r.name, summary: r.summary, sourceName: r.source_name, sourceUrl: r.source_url ?? undefined }));
+  }
+
+  async getChurchAccounts(): Promise<ChurchAccountProject[]> {
+    return SEED_CHURCH_ACCOUNTS;
   }
 }

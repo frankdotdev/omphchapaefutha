@@ -11,11 +11,13 @@ export const PRIMARY_NAV: { href: string; label: string }[] = [
   { href: "/mass-intentions", label: "Mass Intentions" },
   { href: "/daily-readings", label: "Readings" },
   { href: "/sacraments", label: "Sacraments" },
+  { href: "/support", label: "Support & Projects" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
 export const MORE_NAV: { href: string; label: string }[] = [
+  { href: "/support", label: "Support & Projects" },
   { href: "/doctrine", label: "Catholic Doctrine" },
   { href: "/societies", label: "Societies" },
   { href: "/prayer-intentions", label: "Prayer" },
@@ -30,6 +32,7 @@ export const NAV: { href: string; label: string }[] = [
   { href: "/mass-schedule", label: "Mass Schedule" },
   { href: "/mass-intentions", label: "Mass Intentions" },
   { href: "/daily-readings", label: "Readings" },
+  { href: "/support", label: "Support & Projects" },
   { href: "/prayer-intentions", label: "Prayer" },
   { href: "/sacraments", label: "Sacraments" },
   { href: "/doctrine", label: "Catholic Doctrine" },

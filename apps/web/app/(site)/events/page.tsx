@@ -2,19 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getDataClient } from "@/lib/data";
 import { PageHead } from "@/components/ui/PageHead";
+import { SubmissionWhatsAppBanner } from "@/components/ui/SubmissionWhatsAppBanner";
 
-export const metadata: Metadata = { title: "Events" };
+export const metadata: Metadata = {
+  title: "Events — Upcoming Liturgical Feasts & Gatherings",
+  description: "Upcoming retreats, solemnities, student programs, and celebrations at Our Mother of Perpetual Help Catholic Chaplaincy, AE-FUTHA.",
+};
+
 export const revalidate = 60;
 
 export default async function EventsPage() {
   const events = await getDataClient().getUpcomingEvents(50);
   return (
     <>
-      <PageHead title="Events" latin="Venite, exsultemus Domino" lede="Upcoming celebrations, retreats and gatherings." />
+      <PageHead title="Events" latin="Venite, exsultemus Domino" lede="Upcoming celebrations, retreats, novenas and gatherings." />
       <section className="section">
         <div className="wrap">
           {events.length === 0 ? (
-            <p className="muted">No upcoming events have been published yet.</p>
+            <p className="muted">No upcoming events have been published yet. Please check back soon.</p>
           ) : (
             <ul className="entries">
               {events.map((e) => (
@@ -31,6 +36,9 @@ export default async function EventsPage() {
               ))}
             </ul>
           )}
+
+          {/* WhatsApp Event Submission Banner */}
+          <SubmissionWhatsAppBanner type="event" />
         </div>
       </section>
     </>

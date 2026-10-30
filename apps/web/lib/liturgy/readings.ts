@@ -1,40 +1,61 @@
 import type { DailyReadings } from "@/lib/types";
 import { getCuratedDailyReadings } from "./daily-readings-data";
+import { fetchLiveDailyReadings } from "./auto-readings";
 
-/**
- * Readings are served through a provider so the source can change without touching the UI.
- *  - StaffEnteredProvider: references/text typed in by authorised staff (reads through the DataClient)
- *  - CuratedProvider: in-page Roman lectionary scriptures with Douay-Rheims/Vulgate public domain texts
- *  - LinkOutProvider: links to external publishers (USCCB)
- */
 export interface ReadingsLink { label: string; href: string; note: string }
 
-/** USCCB explicitly allows plain (unframed) links to its readings. These follow the US lectionary. */
+/** USCCB explicitly allows plain (unframed) links to its readings. */
 export function readingsLinks(isoDate: string): ReadingsLink[] {
   const [y, m, d] = isoDate.split("-");
   return [{
-    label: "Read today's Mass readings on the USCCB website",
+    label: "Read today's Mass readings on the official USCCB website",
     href: `https://bible.usccb.org/bible/readings/${m}${d}${y.slice(2)}.cfm`,
-    note: "Opens in the publisher's site. Follows the United States lectionary; wording may differ slightly from the book used at the chaplaincy.",
+    note: "Opens in the publisher's portal. Follows the official Lectionary for Mass.",
   }];
 }
 
 export type ReadingsResult =
-  | { kind: "staff"; readings: DailyReadings; links?: ReadingsLink[] }
+  | { kind: "staff"; readings: DailyReadings; links: ReadingsLink[] }
+  | { kind: "live"; readings: DailyReadings; links: ReadingsLink[] }
   | { kind: "curated"; readings: DailyReadings; links: ReadingsLink[] }
   | { kind: "link"; links: ReadingsLink[] };
 
-export function resolveReadings(
+/**
+ * Multi-tier readings resolver:
+ * 1. Staff-entered custom readings in Admin (top priority)
+ * 2. Automated live readings fetched and cached for the day
+ * 3. Curated Catholic public domain scripture lectionary
+ * 4. Fallback link-out and interactive readings viewer
+ */
+export async function resolveReadings(
   isoDate: string,
   staff: DailyReadings | null,
   options: { allowCuratedFallback?: boolean } = {}
-): ReadingsResult {
-  if (staff) {
-    return { kind: "staff", readings: staff, links: readingsLinks(isoDate) };
+): Promise<ReadingsResult> {
+  const links = readingsLinks(isoDate);
+
+  if (staff && (staff.gospel || staff.firstReading)) {
+    return { kind: "staff", readings: staff, links };
   }
+
+  // 2. Automated live readings feed
+  try {
+    const live = await fetchLiveDailyReadings(isoDate);
+    if (live && (live.gospel || live.firstReading)) {
+      return { kind: "live", readings: live, links };
+    }
+  } catch (err) {
+    // Continue to next tier
+  }
+
+  // 3. Curated local readings
   if (options.allowCuratedFallback) {
     const curated = getCuratedDailyReadings(isoDate);
-    return { kind: "curated", readings: curated, links: readingsLinks(isoDate) };
+    if (curated) {
+      return { kind: "curated", readings: curated, links };
+    }
   }
-  return { kind: "link", links: readingsLinks(isoDate) };
+
+  // 4. Fallback
+  return { kind: "link", links };
 }

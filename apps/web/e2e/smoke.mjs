@@ -5,7 +5,7 @@ import fs from "node:fs";
 const require = createRequire(import.meta.url);
 const axeSource = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const BASE = process.env.BASE_URL ?? "http://localhost:3111";
-const PATHS = ["/", "/mass-schedule", "/mass-intentions", "/daily-readings", "/prayer-intentions", "/sacraments", "/ask", "/doctrine", "/about", "/announcements", "/events", "/societies", "/leadership", "/ecclesiastical-communion", "/contact", "/sacred-art", "/privacy", "/accessibility", "/offline", "/admin/login"];
+const PATHS = ["/", "/mass-schedule", "/mass-intentions", "/daily-readings", "/support", "/prayer-intentions", "/sacraments", "/ask", "/doctrine", "/about", "/announcements", "/events", "/societies", "/leadership", "/ecclesiastical-communion", "/contact", "/sacred-art", "/privacy", "/accessibility", "/offline", "/admin/login"];
 
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM ?? "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
 const ctx = await browser.newContext({ viewport: { width: 390, height: 800 } });

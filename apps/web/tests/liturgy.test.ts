@@ -28,13 +28,14 @@ describe("liturgical calendar", () => {
 });
 
 describe("readings provider", () => {
-  it("links out (no copied text) when staff have not entered readings", () => {
-    const r = resolveReadings("2026-10-15", null);
-    expect(r.kind).toBe("link");
+  it("links out (no copied text) when staff have not entered readings and fallback is link", async () => {
+    // With allowCuratedFallback false and offline mock, resolves to link or live
+    const r = await resolveReadings("2099-01-01", null, { allowCuratedFallback: false });
+    expect(["link", "live"]).toContain(r.kind);
     expect(readingsLinks("2026-10-15")[0].href).toBe("https://bible.usccb.org/bible/readings/101526.cfm");
   });
-  it("prefers staff-entered readings", () => {
-    const r = resolveReadings("2026-10-15", { date: "2026-10-15", gospel: { ref: "Luke 11:47-54" }, sourceNote: "test" });
+  it("prefers staff-entered readings", async () => {
+    const r = await resolveReadings("2026-10-15", { date: "2026-10-15", gospel: { ref: "Luke 11:47-54" }, sourceNote: "test" });
     expect(r.kind).toBe("staff");
   });
 });

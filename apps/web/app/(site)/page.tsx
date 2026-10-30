@@ -10,6 +10,7 @@ import { formatLongDate, lagosDateString } from "@/lib/time/lagos";
 import { getLiturgicalDay, RANK_LABEL, COLOUR_LABEL } from "@/lib/liturgy/calendar";
 import { applyOverrides } from "@/lib/liturgy/overrides";
 import { getCuratedSaintProfile } from "@/lib/liturgy/saints-data";
+import { AccountCard } from "@/components/giving/AccountCard";
 import { BookOpen, Sparkles } from "lucide-react";
 
 const COLOUR_SWATCH: Record<string, string> = {
@@ -38,6 +39,7 @@ export default async function Home() {
     dbSlides,
     liturgicalBase,
     overrides,
+    accounts,
   ] = await Promise.all([
     db.getRecurringSchedule(),
     db.getScheduleExceptions(today, today),
@@ -48,6 +50,7 @@ export default async function Home() {
     db.getHeroSlides(),
     getLiturgicalDay(today),
     db.getLiturgicalOverrides().catch(() => []),
+    db.getChurchAccounts().catch(() => []),
   ]);
   // The welcome slide always comes first; administrator-managed slides follow, or the defaults if none are published.
   const slides = [SLIDES[0], ...(dbSlides.length ? dbSlides : SLIDES.slice(1))];
@@ -132,7 +135,7 @@ export default async function Home() {
                   <Link
                     href="/daily-readings"
                     className="btn"
-                    style={{ width: "100%", fontSize: "0.92rem", padding: "0.55rem 1rem" }}
+                    style={{ width: "100%", fontSize: "0.92rem", padding: "0.55rem 1rem", textAlign: "center" }}
                   >
                     Read Today&rsquo;s Readings →
                   </Link>
@@ -184,7 +187,7 @@ export default async function Home() {
                   <Link
                     href="/daily-readings#saint"
                     className="btn secondary"
-                    style={{ width: "100%", fontSize: "0.92rem", padding: "0.55rem 1rem" }}
+                    style={{ width: "100%", fontSize: "0.92rem", padding: "0.55rem 1rem", textAlign: "center" }}
                   >
                     Learn About Today&rsquo;s Saint →
                   </Link>
@@ -298,9 +301,9 @@ export default async function Home() {
             </div>
             <div className="vrule" aria-hidden="true" />
             <div>
-              <p className="eyebrow">Mass intentions</p>
+              <p className="eyebrow">Mass intentions · ₦300</p>
               <h3>Have a Mass offered for an intention</h3>
-              <p>Offer a Mass for the living or the faithful departed. You will receive a reference number and can check its progress at any time.</p>
+              <p>Offer a Mass for the living or faithful departed. You can book for a single day, consecutive days (novena), or custom dates.</p>
               <div className="btn-row">
                 <Link className="btn" href="/mass-intentions/offer">Offer a Mass intention</Link>
                 <Link className="btn secondary" href="/mass-intentions">Today&rsquo;s intentions</Link>
@@ -309,6 +312,44 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Church Financial Accounts & Pastoral Projects Section */}
+      {accounts.length > 0 && (
+        <section className="section pattern-light has-inscription" aria-labelledby="accounts-title">
+          <Inscription>Date, et dabitur vobis</Inscription>
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Giving &amp; Pastoral Support</p>
+                <h2 id="accounts-title">Support the Chaplaincy</h2>
+              </div>
+              <Link className="text-link" href="/support">All accounts &amp; projects →</Link>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "1.5rem",
+              }}
+            >
+              {accounts.slice(0, 3).map((acct) => (
+                <AccountCard key={acct.id} project={acct} />
+              ))}
+            </div>
+
+            <div style={{ marginTop: "1.75rem", textAlign: "center" }}>
+              <p className="muted small" style={{ maxWidth: "46rem", margin: "0 auto 1.25rem", lineHeight: 1.5 }}>
+                Official accounts retain the registered title <strong>St. Padre Pio Catholic Chaplaincy</strong> as titled prior to 2023.
+                Your generosity directly supports patient bedside ministry, medical student evangelisation, and hospital pastoral care.
+              </p>
+              <Link href="/support" className="btn secondary">
+                View All Church Projects &amp; Accounts →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {announcements.length > 0 && (
         <section className="section tint" aria-labelledby="ann-title">

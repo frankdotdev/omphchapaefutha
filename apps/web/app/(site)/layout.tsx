@@ -4,6 +4,7 @@ import { RegisterSW } from "@/components/layout/RegisterSW";
 import { NoticeStrip } from "@/components/layout/NoticeStrip";
 import { AskPadreChatbot } from "@/components/ask/AskPadreChatbot";
 import { UrgentNoticeModal } from "@/components/ui/UrgentNoticeModal";
+import { PwaInstallBanner } from "@/components/layout/PwaInstallBanner";
 import { getDataClient } from "@/lib/data";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -12,6 +13,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <a className="skip-link" href="#main">Skip to main content</a>
+      <PwaInstallBanner />
       <NoticeStrip />
       <Header />
       <main id="main">{children}</main>

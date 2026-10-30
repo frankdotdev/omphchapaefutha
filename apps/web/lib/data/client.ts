@@ -2,6 +2,7 @@ import type { Slide } from "@/lib/slides";
 import type {
   Announcement,
   ChaplaincyEvent,
+  ChurchAccountProject,
   EcclesiasticalEntry,
   LeadershipEntry,
   RecurringSchedule,
@@ -54,4 +55,6 @@ export interface DataClient {
   getLiturgicalOverrides(): Promise<LiturgicalOverride[]>;
   /** Chaplaincy history text entered by staff in Settings, or null. */
   getAboutHistory(): Promise<string | null>;
+  /** Verified church accounts and projects for donations and support */
+  getChurchAccounts(): Promise<ChurchAccountProject[]>;
 }

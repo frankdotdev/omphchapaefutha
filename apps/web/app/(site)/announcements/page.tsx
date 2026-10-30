@@ -2,15 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getDataClient } from "@/lib/data";
 import { PageHead } from "@/components/ui/PageHead";
+import { SubmissionWhatsAppBanner } from "@/components/ui/SubmissionWhatsAppBanner";
 
-export const metadata: Metadata = { title: "Announcements" };
+export const metadata: Metadata = {
+  title: "Announcements — Chaplaincy Notices & Pastoral Bulletins",
+  description: "Official weekly announcements and notices from Our Mother of Perpetual Help Catholic Chaplaincy, AE-FUTHA.",
+};
+
 export const revalidate = 60;
 
 export default async function AnnouncementsPage() {
   const items = await getDataClient().getAnnouncements(50);
   return (
     <>
-      <PageHead title="Announcements" latin="Verbum Domini" lede="Official notices from the chaplaincy." />
+      <PageHead title="Announcements" latin="Verbum Domini" lede="Official notices and announcements from the chaplaincy." />
       <section className="section">
         <div className="wrap">
           {items.length === 0 ? (
@@ -31,6 +36,9 @@ export default async function AnnouncementsPage() {
               ))}
             </ul>
           )}
+
+          {/* WhatsApp Submission Banner */}
+          <SubmissionWhatsAppBanner type="announcement" />
         </div>
       </section>
     </>
