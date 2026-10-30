@@ -356,12 +356,13 @@ export class SupabaseDataClient implements DataClient {
       const rows = await this.rows(
         this.sb
           .from("hero_slides")
-          .select("id, latin, english, source, cta_label, cta_href, display_order, image:image_id(storage_path, alt_text, width, height), background:background_id(storage_path, alt_text, width, height)")
+          .select("id, kind, latin, english, source, cta_label, cta_href, display_order, image:image_id(storage_path, alt_text, width, height), background:background_id(storage_path, alt_text, width, height)")
           .eq("status", "published")
           .order("display_order"),
       );
       return rows.map((r: any) => ({
         id: r.id,
+        kind: (r.kind ?? "inscription") as "identity" | "inscription",
         latin: r.latin,
         english: r.english,
         source: r.source ?? undefined,
