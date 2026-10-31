@@ -22,12 +22,17 @@ import type {
   LiturgicalOverride,
 } from "@/lib/types";
 import {
+  SEED_RECURRING,
   SEED_SOCIETIES,
+  SEED_SOCIETY_CATEGORIES,
+  SEED_ANNOUNCEMENTS,
+  SEED_EVENTS,
   SEED_ECCLESIASTICAL,
   SEED_MASS_INTENTIONS,
   SEED_PRAYER_INTENTIONS,
   SEED_OFFERING_INFO,
   SEED_CHURCH_ACCOUNTS,
+  SEED_ABOUT_HISTORY,
 } from "./seed";
 
 const hhmm = (t: string | null) => (t ? t.slice(0, 5) : null);
@@ -47,52 +52,64 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getRecurringSchedule(): Promise<RecurringSchedule[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("recurring_schedules")
-        .select("id, weekday, start_time, nth_of_month, timezone, note, sort_order, label, activities!inner(key, location)")
-        .eq("status", "published")
-        .order("sort_order"),
-    );
-    return rows.map((r: any) => ({
-      id: r.id,
-      activityKey: r.activities.key,
-      label: r.label,
-      weekday: r.weekday as Weekday,
-      startTime: hhmm(r.start_time),
-      nthOfMonth: r.nth_of_month,
-      timezone: r.timezone,
-      note: r.note,
-      location: r.activities.location,
-      sortOrder: r.sort_order,
-    }));
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("recurring_schedules")
+          .select("id, weekday, start_time, nth_of_month, timezone, note, sort_order, label, activities!inner(key, location)")
+          .eq("status", "published")
+          .order("sort_order"),
+      );
+      return rows.map((r: any) => ({
+        id: r.id,
+        activityKey: r.activities.key,
+        label: r.label,
+        weekday: r.weekday as Weekday,
+        startTime: hhmm(r.start_time),
+        nthOfMonth: r.nth_of_month,
+        timezone: r.timezone,
+        note: r.note,
+        location: r.activities.location,
+        sortOrder: r.sort_order,
+      }));
+    } catch {
+      return SEED_RECURRING;
+    }
   }
 
   async getScheduleExceptions(from: string, to: string): Promise<ScheduleException[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("schedule_exceptions")
-        .select("id, on_date, kind, recurring_schedule_id, label, start_time, location, note")
-        .eq("status", "published")
-        .gte("on_date", from)
-        .lte("on_date", to)
-        .order("on_date"),
-    );
-    return rows.map((e) => ({
-      id: e.id,
-      onDate: e.on_date,
-      kind: e.kind,
-      recurringScheduleId: e.recurring_schedule_id,
-      label: e.label,
-      startTime: hhmm(e.start_time),
-      location: e.location,
-      note: e.note,
-    }));
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("schedule_exceptions")
+          .select("id, on_date, kind, recurring_schedule_id, label, start_time, location, note")
+          .eq("status", "published")
+          .gte("on_date", from)
+          .lte("on_date", to)
+          .order("on_date"),
+      );
+      return rows.map((e) => ({
+        id: e.id,
+        onDate: e.on_date,
+        kind: e.kind,
+        recurringScheduleId: e.recurring_schedule_id,
+        label: e.label,
+        startTime: hhmm(e.start_time),
+        location: e.location,
+        note: e.note,
+      }));
+    } catch {
+      return [];
+    }
   }
 
   async getSocietyCategories(): Promise<SocietyCategory[]> {
-    const rows = await this.rows(this.sb.from("society_categories").select("*").order("display_order"));
-    return rows.map((c) => ({ key: c.key, name: c.name, displayOrder: c.display_order }));
+    try {
+      const rows = await this.rows(this.sb.from("society_categories").select("*").order("display_order"));
+      return rows.map((c) => ({ key: c.key, name: c.name, displayOrder: c.display_order }));
+    } catch {
+      return SEED_SOCIETY_CATEGORIES;
+    }
   }
 
   private mapSociety = (s: Record<string, any>): Society => ({
@@ -122,119 +139,144 @@ export class SupabaseDataClient implements DataClient {
   });
 
   async getSocieties(): Promise<Society[]> {
-    const rows = await this.rows(
-      this.sb.from("societies").select("*, society_categories(key)").order("display_order"),
-    );
-    return rows.map(this.mapSociety);
+    try {
+      const rows = await this.rows(
+        this.sb.from("societies").select("*, society_categories(key)").order("display_order"),
+      );
+      return rows.map(this.mapSociety);
+    } catch {
+      return SEED_SOCIETIES;
+    }
   }
 
   async getSociety(slug: string): Promise<Society | null> {
-    const rows = await this.rows(
-      this.sb.from("societies").select("*, society_categories(key)").eq("slug", slug).limit(1),
-    );
-    return rows[0] ? this.mapSociety(rows[0]) : null;
+    try {
+      const rows = await this.rows(
+        this.sb.from("societies").select("*, society_categories(key)").eq("slug", slug).limit(1),
+      );
+      return rows[0] ? this.mapSociety(rows[0]) : null;
+    } catch {
+      return SEED_SOCIETIES.find((s) => s.slug === slug) ?? null;
+    }
   }
 
   async getAnnouncements(limit = 10): Promise<Announcement[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("announcements")
-        .select("slug, title, excerpt, body, category, issued_by, publish_at, is_urgent, is_featured")
-        .eq("status", "published")
-        .order("priority", { ascending: false })
-        .order("publish_at", { ascending: false })
-        .limit(limit),
-    );
-    return rows.map((a) => ({
-      slug: a.slug,
-      title: a.title,
-      excerpt: a.excerpt,
-      body: a.body,
-      category: a.category,
-      issuedBy: a.issued_by,
-      publishedAt: a.publish_at,
-      isUrgent: a.is_urgent,
-      isFeatured: a.is_featured,
-    }));
+    try {
+      // Note: the announcements table does not include a category column in PostgreSQL
+      const rows = await this.rows(
+        this.sb
+          .from("announcements")
+          .select("slug, title, excerpt, body, issued_by, publish_at, is_urgent, is_featured")
+          .eq("status", "published")
+          .order("priority", { ascending: false })
+          .order("publish_at", { ascending: false })
+          .limit(limit),
+      );
+      return rows.map((a: any) => ({
+        slug: a.slug,
+        title: a.title,
+        excerpt: a.excerpt,
+        body: a.body,
+        category: a.category ?? null,
+        issuedBy: a.issued_by,
+        publishedAt: a.publish_at,
+        isUrgent: a.is_urgent,
+        isFeatured: a.is_featured,
+      }));
+    } catch {
+      return limit ? SEED_ANNOUNCEMENTS.slice(0, limit) : SEED_ANNOUNCEMENTS;
+    }
   }
 
   async getAnnouncement(slug: string): Promise<Announcement | null> {
-    const rows = await this.rows(
-      this.sb
-        .from("announcements")
-        .select("slug, title, excerpt, body, category, issued_by, publish_at, is_urgent, is_featured")
-        .eq("status", "published")
-        .eq("slug", slug)
-        .limit(1),
-    );
-    const a = rows[0];
-    return a
-      ? {
-          slug: a.slug,
-          title: a.title,
-          excerpt: a.excerpt,
-          body: a.body,
-          category: a.category,
-          issuedBy: a.issued_by,
-          publishedAt: a.publish_at,
-          isUrgent: a.is_urgent,
-          isFeatured: a.is_featured,
-        }
-      : null;
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("announcements")
+          .select("slug, title, excerpt, body, issued_by, publish_at, is_urgent, is_featured")
+          .eq("status", "published")
+          .eq("slug", slug)
+          .limit(1),
+      );
+      const a = rows[0] as any;
+      return a
+        ? {
+            slug: a.slug,
+            title: a.title,
+            excerpt: a.excerpt,
+            body: a.body,
+            category: a.category ?? null,
+            issuedBy: a.issued_by,
+            publishedAt: a.publish_at,
+            isUrgent: a.is_urgent,
+            isFeatured: a.is_featured,
+          }
+        : null;
+    } catch {
+      return SEED_ANNOUNCEMENTS.find((a) => a.slug === slug) ?? null;
+    }
   }
 
   async getUpcomingEvents(limit = 10): Promise<ChaplaincyEvent[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("events")
-        .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
-        .eq("status", "published")
-        .gte("starts_at", new Date().toISOString())
-        .order("starts_at")
-        .limit(limit),
-    );
-    return rows.map((e) => ({
-      slug: e.slug,
-      title: e.title,
-      description: e.description,
-      category: e.category,
-      startsAt: e.starts_at,
-      endsAt: e.ends_at,
-      timezone: e.timezone,
-      venue: e.venue,
-      organizer: e.organizer,
-      isFeatured: e.is_featured,
-      countdownEnabled: e.countdown_enabled,
-      isCancelled: e.is_cancelled,
-    }));
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("events")
+          .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
+          .eq("status", "published")
+          .gte("starts_at", new Date().toISOString())
+          .order("starts_at")
+          .limit(limit),
+      );
+      return rows.map((e) => ({
+        slug: e.slug,
+        title: e.title,
+        description: e.description,
+        category: e.category,
+        startsAt: e.starts_at,
+        endsAt: e.ends_at,
+        timezone: e.timezone,
+        venue: e.venue,
+        organizer: e.organizer,
+        isFeatured: e.is_featured,
+        countdownEnabled: e.countdown_enabled,
+        isCancelled: e.is_cancelled,
+      }));
+    } catch {
+      return limit ? SEED_EVENTS.slice(0, limit) : SEED_EVENTS;
+    }
   }
 
   async getEvent(slug: string): Promise<ChaplaincyEvent | null> {
-    const rows = await this.rows(
-      this.sb
-        .from("events")
-        .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
-        .eq("status", "published")
-        .eq("slug", slug)
-        .limit(1),
-    );
-    const e = rows[0];
-    return e
-      ? {
-          slug: e.slug,
-          title: e.title,
-          description: e.description,
-          category: e.category,
-          startsAt: e.starts_at,
-          endsAt: e.ends_at,
-          timezone: e.timezone,
-          venue: e.venue,
-          organizer: e.organizer,
-          isFeatured: e.is_featured,
-          countdownEnabled: e.countdown_enabled,
-          isCancelled: e.is_cancelled,
-        }
-      : null;
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("events")
+          .select("slug, title, description, category, starts_at, ends_at, timezone, venue, organizer, is_featured, countdown_enabled, is_cancelled")
+          .eq("status", "published")
+          .eq("slug", slug)
+          .limit(1),
+      );
+      const e = rows[0];
+      return e
+        ? {
+            slug: e.slug,
+            title: e.title,
+            description: e.description,
+            category: e.category,
+            startsAt: e.starts_at,
+            endsAt: e.ends_at,
+            timezone: e.timezone,
+            venue: e.venue,
+            organizer: e.organizer,
+            isFeatured: e.is_featured,
+            countdownEnabled: e.countdown_enabled,
+            isCancelled: e.is_cancelled,
+          }
+        : null;
+    } catch {
+      return SEED_EVENTS.find((e) => e.slug === slug) ?? null;
+    }
   }
 
   async getEcclesiasticalDirectory(): Promise<EcclesiasticalEntry[]> {
@@ -264,33 +306,46 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getLeadership(): Promise<LeadershipEntry[]> {
-    const rows = await this.rows(
-      this.sb
-        .from("leadership_appointments")
-        .select("is_current, leadership_positions!inner(key, title, display_order), people!inner(display_name, biography)")
-        .eq("status", "published")
-        .eq("is_current", true),
-    );
-    return (rows as any[])
-      .sort((a, b) => (a.leadership_positions?.display_order ?? 0) - (b.leadership_positions?.display_order ?? 0))
-      .map((r) => ({
-        positionKey: r.leadership_positions.key,
-        title: r.leadership_positions.title,
-        personName: r.people.display_name,
-        bio: r.people.biography,
-        isCurrent: r.is_current,
-      }));
+    try {
+      const rows = await this.rows(
+        this.sb
+          .from("leadership_appointments")
+          .select("is_current, leadership_positions!inner(key, title, display_order), people!inner(display_name, biography)")
+          .eq("status", "published")
+          .eq("is_current", true),
+      );
+      return (rows as any[])
+        .sort((a, b) => (a.leadership_positions?.display_order ?? 0) - (b.leadership_positions?.display_order ?? 0))
+        .map((r) => ({
+          positionKey: r.leadership_positions.key,
+          title: r.leadership_positions.title,
+          personName: r.people.display_name,
+          bio: r.people.biography,
+          isCurrent: r.is_current,
+        }));
+    } catch {
+      return [];
+    }
   }
 
   async getContact(): Promise<SiteContact> {
-    const rows = await this.rows(this.sb.from("chaplaincy_settings").select("key,value").like("key", "contact.%"));
-    const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
-    return {
-      address: v("contact.address"),
-      phone: v("contact.phone") ?? "08063314891 (Catechist) / 08091422688 (Chaplain)",
-      email: v("contact.email"),
-      mapsUrl: v("contact.maps_url"),
-    };
+    try {
+      const rows = await this.rows(this.sb.from("chaplaincy_settings").select("key,value").like("key", "contact.%"));
+      const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
+      return {
+        address: v("contact.address"),
+        phone: v("contact.phone") ?? "08063314891 (Catechist) / 08091422688 (Chaplain)",
+        email: v("contact.email"),
+        mapsUrl: v("contact.maps_url"),
+      };
+    } catch {
+      return {
+        address: null,
+        phone: "08063314891 (Catechist) / 08091422688 (Chaplain)",
+        email: null,
+        mapsUrl: null,
+      };
+    }
   }
 
   async getPublicMassIntentions(date: string): Promise<PublicMassIntention[]> {
@@ -347,8 +402,17 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getMassOptions(): Promise<MassOption[]> {
-    const rows = await this.rows(this.sb.from("activities").select("id,name").eq("kind", "mass").order("name"));
-    return [{ id: "", name: "Any Mass" }, ...rows.map((r) => ({ id: r.id, name: r.name }))];
+    try {
+      const rows = await this.rows(this.sb.from("activities").select("id,name").eq("kind", "mass").order("name"));
+      return [{ id: "", name: "Any Mass" }, ...rows.map((r) => ({ id: r.id, name: r.name }))];
+    } catch {
+      return [
+        { id: "mass-morning", name: "Morning Mass (06:20)" },
+        { id: "mass-afternoon", name: "Afternoon Mass (15:15)" },
+        { id: "mass-evening", name: "Evening Mass (17:30)" },
+        { id: "", name: "Any Mass" },
+      ];
+    }
   }
 
   async getHeroSlides(): Promise<Slide[]> {
@@ -376,39 +440,55 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getDailyReadings(date: string): Promise<DailyReadings | null> {
-    const rows = await this.rows(this.sb.from("daily_readings").select("*").eq("status", "published").eq("on_date", date).limit(1));
-    const r = rows[0];
-    if (!r) return null;
-    const part = (ref?: string | null, text?: string | null) => (ref ? { ref, text: text ?? undefined } : undefined);
-    return {
-      date: r.on_date,
-      firstReading: part(r.first_reading_ref, r.first_reading_text),
-      psalm: part(r.psalm_ref, r.psalm_text),
-      secondReading: part(r.second_reading_ref, r.second_reading_text),
-      gospel: part(r.gospel_ref, r.gospel_text),
-      translation: r.translation ?? undefined,
-      sourceNote: r.source_note,
-    };
+    try {
+      const rows = await this.rows(this.sb.from("daily_readings").select("*").eq("status", "published").eq("on_date", date).limit(1));
+      const r = rows[0];
+      if (!r) return null;
+      const part = (ref?: string | null, text?: string | null) => (ref ? { ref, text: text ?? undefined } : undefined);
+      return {
+        date: r.on_date,
+        firstReading: part(r.first_reading_ref, r.first_reading_text),
+        psalm: part(r.psalm_ref, r.psalm_text),
+        secondReading: part(r.second_reading_ref, r.second_reading_text),
+        gospel: part(r.gospel_ref, r.gospel_text),
+        translation: r.translation ?? undefined,
+        sourceNote: r.source_note,
+      };
+    } catch {
+      return null;
+    }
   }
 
   async getLiturgicalOverrides(): Promise<LiturgicalOverride[]> {
-    const rows = await this.rows(this.sb.from("liturgical_overrides").select("*").eq("status", "published"));
-    return rows.map((r) => ({
-      id: r.id, date: r.on_date, repeatsYearly: Boolean(r.repeats_yearly), name: r.name, latinName: r.latin_name ?? undefined,
-      rank: r.rank, colour: r.colour ?? undefined, mode: r.mode, note: r.note ?? undefined,
-    }));
+    try {
+      const rows = await this.rows(this.sb.from("liturgical_overrides").select("*").eq("status", "published"));
+      return rows.map((r) => ({
+        id: r.id, date: r.on_date, repeatsYearly: Boolean(r.repeats_yearly), name: r.name, latinName: r.latin_name ?? undefined,
+        rank: r.rank, colour: r.colour ?? undefined, mode: r.mode, note: r.note ?? undefined,
+      }));
+    } catch {
+      return [];
+    }
   }
 
   async getAboutHistory(): Promise<string | null> {
-    const rows = await this.rows(this.sb.from("chaplaincy_settings").select("value").eq("key", "about.history").limit(1));
-    const v = rows[0]?.value;
-    return typeof v === "string" && v.trim() ? v : null;
+    try {
+      const rows = await this.rows(this.sb.from("chaplaincy_settings").select("value").eq("key", "about.history").limit(1));
+      const v = rows[0]?.value;
+      return typeof v === "string" && v.trim() ? v : SEED_ABOUT_HISTORY;
+    } catch {
+      return SEED_ABOUT_HISTORY;
+    }
   }
 
   async getSaintProfiles(ids: string[]): Promise<SaintProfile[]> {
     if (!ids.length) return [];
-    const rows = await this.rows(this.sb.from("saint_profiles").select("celebration_id,name,summary,source_name,source_url").in("celebration_id", ids));
-    return rows.map((r) => ({ celebrationId: r.celebration_id, name: r.name, summary: r.summary, sourceName: r.source_name, sourceUrl: r.source_url ?? undefined }));
+    try {
+      const rows = await this.rows(this.sb.from("saint_profiles").select("celebration_id,name,summary,source_name,source_url").in("celebration_id", ids));
+      return rows.map((r) => ({ celebrationId: r.celebration_id, name: r.name, summary: r.summary, sourceName: r.source_name, sourceUrl: r.source_url ?? undefined }));
+    } catch {
+      return [];
+    }
   }
 
   async getChurchAccounts(): Promise<ChurchAccountProject[]> {
