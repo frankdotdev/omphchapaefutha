@@ -298,7 +298,7 @@ export const SETTING_KEYS: { key: string; label: string; type: "text" | "textare
   { key: "offering.account_name", label: "Chaplaincy Bank Account Name", type: "text", hint: "e.g. St. Padre Pio Catholic Chaplaincy" },
   { key: "offering.account_number", label: "Chaplaincy Bank Account Number", type: "text", hint: "e.g. 3056076559" },
   { key: "offering.catechist_phone", label: "Catechist WhatsApp & Telephone", type: "text", hint: "e.g. 08063314891" },
-  { key: "offering.chaplain_phone", label: "Chaplain WhatsApp & Telephone", type: "text", hint: "e.g. 08091422688" },
+  { key: "offering.chaplain_phone", label: "Chaplain WhatsApp & Telephone", type: "text", hint: "e.g. 0904469505" },
   { key: "offering.bank_instructions", label: "How to give the offering", type: "textarea", hint: "Bank name, account name and number, and any reference to quote. Shown publicly." },
   { key: "bazaar.bank_name", label: "Harvest & Bazaar Bank Name", type: "text", hint: "e.g. FCMB" },
   { key: "bazaar.account_name", label: "Harvest & Bazaar Account Name", type: "text", hint: "e.g. ST PADRE PIO CATHOLIC CHAPLAINCY BAZAAR COMMITTEE" },

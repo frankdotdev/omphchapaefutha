@@ -204,13 +204,13 @@ Kindly let me know if any further details or verification are required. Thank yo
                 <MessageSquare size={14} color="#25D366" /> WhatsApp Catechist (08063314891)
               </a>
               <a
-                href={getWhatsAppUrl("08091422688")}
+                href={getWhatsAppUrl("0904469505")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn secondary"
                 style={{ fontSize: "0.82rem", padding: "0.45rem 0.75rem", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
               >
-                <MessageSquare size={14} color="#128C7E" /> WhatsApp Chaplain (08091422688)
+                <MessageSquare size={14} color="#128C7E" /> WhatsApp Chaplain (0904469505)
               </a>
             </div>
           </div>

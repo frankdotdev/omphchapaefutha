@@ -148,7 +148,7 @@ export interface OfferingInfo {
   accountName?: string | null; // "St. Padre Pio Catholic Chaplaincy"
   accountNumber?: string | null; // "3056076559"
   catechistPhone?: string | null; // "08063314891"
-  chaplainPhone?: string | null; // "08091422688"
+  chaplainPhone?: string | null; // "0904469505"
   bazaarAccountName?: string | null;
   bazaarAccountNumber?: string | null;
   bazaarBankName?: string | null;

@@ -492,12 +492,12 @@ export const SEED_OFFERING_INFO: OfferingInfo = {
   accountName: "St. Padre Pio Catholic Chaplaincy",
   accountNumber: "3056076559",
   catechistPhone: "08063314891",
-  chaplainPhone: "08091422688",
+  chaplainPhone: "0904469505",
   bazaarAccountName: "ST PADRE PIO CATHOLIC CHAPLAINCY BAZAAR COMMITTEE",
   bazaarAccountNumber: "8552777011",
   bazaarBankName: "FCMB",
   bazaarPhone: "08132932726",
-  bankInstructions: "Account Number: 3056076559\nBank: First Bank\nAccount Name: St. Padre Pio Catholic Chaplaincy\nStipend: ₦300 per Mass / day\n\nNote: The chaplaincy was formerly known as St. Padre Pio Catholic Chaplaincy before it was renamed by the late Bishop Peter Nworie in 2023 during the dedication of the Our Mother of Perpetual Help Grotto.\n\nAfter making the transfer, notify the Catechist (08063314891) or Chaplain (08091422688) on WhatsApp with your reference code to confirm and schedule your Mass intention.",
+  bankInstructions: "Account Number: 3056076559\nBank: First Bank\nAccount Name: St. Padre Pio Catholic Chaplaincy\nStipend: ₦300 per Mass / day\n\nNote: The chaplaincy was formerly known as St. Padre Pio Catholic Chaplaincy before it was renamed by the late Bishop Peter Nworie in 2023 during the dedication of the Our Mother of Perpetual Help Grotto.\n\nAfter making the transfer, notify the Catechist (08063314891) or Chaplain (0904469505) on WhatsApp with your reference code to confirm and schedule your Mass intention.",
 };
 
 export const SEED_CHURCH_ACCOUNTS: ChurchAccountProject[] = [
@@ -508,7 +508,7 @@ export const SEED_CHURCH_ACCOUNTS: ChurchAccountProject[] = [
     accountName: "ST PADRE PIO CATHOLIC CHAPLAINCY",
     accountNumber: "3056076559",
     bankName: "FIRST BANK",
-    receiptContact: "08063314891 / 08091422688",
+    receiptContact: "08063314891 / 0904469505",
     isFeaturedHome: true,
     active: true,
   },

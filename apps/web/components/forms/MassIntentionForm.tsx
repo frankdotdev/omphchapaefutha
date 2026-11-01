@@ -45,7 +45,7 @@ export function MassIntentionForm({
   const accountName = offering.accountName || "St. Padre Pio Catholic Chaplaincy";
   const bankName = offering.bankName || "First Bank";
   const catechistPhone = offering.catechistPhone || "08063314891";
-  const chaplainPhone = offering.chaplainPhone || "08091422688";
+  const chaplainPhone = offering.chaplainPhone || "0904469505";
 
   // Calculate dates and total stipend
   const totalDays = bookingMode === "single" ? 1 : bookingMode === "consecutive" ? Math.max(1, daysCount) : Math.max(1, customDates.length);
