@@ -333,15 +333,14 @@ export default async function Home() {
                 gap: "1.5rem",
               }}
             >
-              {accounts.slice(0, 3).map((acct) => (
+              {accounts.filter((a) => a.isFeaturedHome).map((acct) => (
                 <AccountCard key={acct.id} project={acct} />
               ))}
             </div>
 
             <div style={{ marginTop: "1.75rem", textAlign: "center" }}>
-              <p className="muted small" style={{ maxWidth: "46rem", margin: "0 auto 1.25rem", lineHeight: 1.5 }}>
-                Official accounts retain the registered title <strong>St. Padre Pio Catholic Chaplaincy</strong> as titled prior to 2023.
-                Your generosity directly supports patient bedside ministry, medical student evangelisation, and hospital pastoral care.
+              <p className="muted small" style={{ maxWidth: "50rem", margin: "0 auto 1.25rem", lineHeight: 1.55 }}>
+                The Chaplain&rsquo;s account (<strong>JOHN CHIDI OBASI</strong>, First Bank <code>3035331262</code>) is designated strictly for Holy Mass intentions, tithes, and Sunday offerings. The official Chaplaincy account (<strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>, First Bank <code>3056076559</code>) and committee accounts receive funds for pastoral projects and general operations.
               </p>
               <Link href="/support" className="btn secondary">
                 View All Church Projects &amp; Accounts →

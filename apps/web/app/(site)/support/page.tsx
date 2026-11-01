@@ -34,14 +34,14 @@ export default async function SupportPage() {
               catechetical formation, and chapel facilities at AE-FUTHA.
             </p>
 
-            <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderLeft: "4px solid var(--gold)", padding: "1rem 1.25rem", borderRadius: "6px", textAlign: "left" }}>
-              <strong style={{ color: "var(--navy)", display: "flex", alignItems: "center", gap: "0.35rem", marginBottom: "0.25rem" }}>
-                <HelpCircle size={18} color="var(--gold-text)" /> Important Notice Regarding Account Names
+            <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderLeft: "4px solid var(--gold)", padding: "1.2rem 1.4rem", borderRadius: "6px", textAlign: "left" }}>
+              <strong style={{ color: "var(--navy)", display: "flex", alignItems: "center", gap: "0.35rem", marginBottom: "0.4rem" }}>
+                <HelpCircle size={18} color="var(--gold-text)" /> Important Notice Regarding Church Accounts
               </strong>
-              <p className="muted small" style={{ margin: 0, lineHeight: 1.5 }}>
-                Official bank accounts retain the registered title <strong>St. Padre Pio Catholic Chaplaincy</strong>, as
-                incorporated prior to the dedication of our grotto and renaming of the chaplaincy under Our Mother of
-                Perpetual Help by the late Bishop Peter Nworie in 2023. All funds are received directly by the chaplaincy pastoral council.
+              <p className="muted small" style={{ margin: 0, lineHeight: 1.6 }}>
+                • <strong>Mass Intentions, Tithes &amp; Sunday Offerings:</strong> Paid into the Chaplain&rsquo;s dedicated account (<strong>JOHN CHIDI OBASI</strong>, First Bank <code>3035331262</code>).<br />
+                • <strong>General Chaplaincy Operations &amp; Projects:</strong> Paid into the official Chaplaincy account (<strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>, First Bank <code>3056076559</code>).<br />
+                • <strong>Societies &amp; Special Committees:</strong> Harvest &amp; Bazaar and CMO maintain designated committee accounts below.
               </p>
             </div>
           </div>

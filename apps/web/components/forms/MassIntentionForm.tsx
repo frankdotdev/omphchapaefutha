@@ -41,11 +41,11 @@ export function MassIntentionForm({
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedAcct, setCopiedAcct] = useState(false);
 
-  const accountNumber = offering.accountNumber || "3056076559";
-  const accountName = offering.accountName || "St. Padre Pio Catholic Chaplaincy";
+  const accountNumber = offering.accountNumber || "3035331262";
+  const accountName = offering.accountName || "JOHN CHIDI OBASI";
   const bankName = offering.bankName || "First Bank";
   const catechistPhone = offering.catechistPhone || "08063314891";
-  const chaplainPhone = offering.chaplainPhone || "0904469505";
+  const chaplainPhone = offering.chaplainPhone || "09044469505";
 
   // Calculate dates and total stipend
   const totalDays = bookingMode === "single" ? 1 : bookingMode === "consecutive" ? Math.max(1, daysCount) : Math.max(1, customDates.length);
@@ -178,7 +178,7 @@ I have just booked a Mass Intention on the Chaplaincy website:
 • Scheduled Date(s): ${submittedData.datesDescription}
 • Total Offering: ₦${submittedData.totalAmount.toLocaleString()}
 
-I have made the transfer to First Bank (St. Padre Pio Catholic Chaplaincy, ${accountNumber}).
+I have made the transfer to First Bank (${accountName}, ${accountNumber}).
 Kindly find my proof of transfer attached. Please verify and confirm my booking. Thank you!`;
 
     return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
@@ -259,7 +259,7 @@ Kindly find my proof of transfer attached. Please verify and confirm my booking.
           </div>
 
           <p className="muted small" style={{ margin: 0, fontStyle: "italic", fontSize: "0.82rem", lineHeight: 1.45 }}>
-            <strong>Historical Note:</strong> The bank account retains the registered name <em>St. Padre Pio Catholic Chaplaincy</em>, as titled prior to the chaplaincy&rsquo;s dedication under Our Mother of Perpetual Help by the late Bishop Peter Nworie in 2023.
+            <strong>Note:</strong> Official chaplaincy account in the name of the Chaplain (Rev. Fr. John Chidi Obasi). After making the transfer, please click below to send your reference code on WhatsApp for immediate confirmation.
           </p>
         </div>
 

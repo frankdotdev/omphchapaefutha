@@ -334,7 +334,7 @@ export class SupabaseDataClient implements DataClient {
       const v = (k: string) => rows.find((r) => r.key === k)?.value ?? null;
       return {
         address: v("contact.address"),
-        phone: v("contact.phone") ?? "08063314891 (Catechist) / 0904469505 (Chaplain)",
+        phone: v("contact.phone") ?? "08063314891 (Catechist) / 09044469505 (Chaplain)",
         email: v("contact.email"),
         mapsUrl: v("contact.maps_url"),
       };

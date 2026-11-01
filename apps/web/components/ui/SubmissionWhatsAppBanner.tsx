@@ -8,7 +8,7 @@ export function SubmissionWhatsAppBanner({
   type?: "announcement" | "event";
 }) {
   const catechistPhone = "08063314891";
-  const chaplainPhone = "0904469505";
+  const chaplainPhone = "09044469505";
 
   const isEvent = type === "event";
 
@@ -54,7 +54,7 @@ I would like to submit an announcement for the Sunday bulletin and Chaplaincy we
 Kindly review for pastoral blessing and publication. Thank you!`;
 
   const catechistUrl = `https://wa.me/2348063314891?text=${encodeURIComponent(catechistMsg)}`;
-  const chaplainUrl = `https://wa.me/234904469505?text=${encodeURIComponent(chaplainMsg)}`;
+  const chaplainUrl = `https://wa.me/2349044469505?text=${encodeURIComponent(chaplainMsg)}`;
 
   return (
     <div
@@ -103,7 +103,7 @@ Kindly review for pastoral blessing and publication. Thank you!`;
           style={{ background: "#128C7E", borderColor: "#0f766e", color: "#fff", display: "inline-flex", alignItems: "center", gap: "0.45rem", fontSize: "0.88rem", padding: "0.55rem 1rem" }}
         >
           <MessageSquare size={16} />
-          Submit to Chaplain (0904469505)
+          Submit to Chaplain (09044469505)
         </a>
       </div>
     </div>

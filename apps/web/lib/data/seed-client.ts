@@ -68,7 +68,7 @@ export class SeedDataClient implements DataClient {
   }
   async getContact() {
     return {
-      phone: "08063314891 (Catechist) / 0904469505 (Chaplain)",
+      phone: "08063314891 (Catechist) / 09044469505 (Chaplain)",
       email: "info@omph-aefutha.catholic.ng",
       address: "Our Mother of Perpetual Help Catholic Chaplaincy, Alex Ekwueme Federal University Teaching Hospital, Abakaliki (AE-FUTHA), Ebonyi State, Nigeria",
     };

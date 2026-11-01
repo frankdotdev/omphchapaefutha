@@ -145,10 +145,10 @@ export interface OfferingInfo {
   amount: string | null; // e.g. "₦300 per day / Mass"
   bankInstructions: string | null;
   bankName?: string | null; // "First Bank"
-  accountName?: string | null; // "St. Padre Pio Catholic Chaplaincy"
-  accountNumber?: string | null; // "3056076559"
+  accountName?: string | null; // "JOHN CHIDI OBASI"
+  accountNumber?: string | null; // "3035331262"
   catechistPhone?: string | null; // "08063314891"
-  chaplainPhone?: string | null; // "0904469505"
+  chaplainPhone?: string | null; // "09044469505"
   bazaarAccountName?: string | null;
   bazaarAccountNumber?: string | null;
   bazaarBankName?: string | null;
