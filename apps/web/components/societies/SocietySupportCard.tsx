@@ -46,25 +46,32 @@ export function SocietySupportCard({
         Donations directly support this pious society&rsquo;s meetings, apostolates, and charitable outreach.
       </p>
 
-      <div style={{ background: "var(--ivory)", padding: "0.6rem 0.85rem", borderRadius: "4px", border: "1px solid var(--line)", marginBottom: "0.5rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ background: "var(--ivory)", padding: "0.75rem 0.95rem", borderRadius: "4px", border: "1px solid var(--line)", marginBottom: "0.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
           <div>
-            <span style={{ fontSize: "0.72rem", color: "var(--muted)", textTransform: "uppercase", display: "block" }}>
-              {bankName}
-            </span>
-            <strong style={{ fontSize: "1.15rem", fontFamily: "monospace", color: "var(--navy)" }}>
-              {accountNumber}
-            </strong>
-            <span style={{ display: "block", fontSize: "0.78rem", color: "var(--ink)", fontWeight: 600 }}>
+            <div style={{ fontSize: "0.82rem", color: "var(--ink)", marginBottom: "0.25rem" }}>
+              <span style={{ color: "var(--muted)", textTransform: "uppercase", fontSize: "0.72rem", letterSpacing: "0.05em" }}>Bank: </span>
+              <strong style={{ color: "var(--marian)" }}>{bankName}</strong>
+            </div>
+            <div style={{ marginBottom: "0.2rem" }}>
+              <span style={{ color: "var(--muted)", textTransform: "uppercase", fontSize: "0.72rem", letterSpacing: "0.05em", display: "block" }}>
+                Account Number:
+              </span>
+              <strong style={{ fontSize: "1.2rem", fontFamily: "monospace", color: "var(--navy)", letterSpacing: "0.04em" }}>
+                {accountNumber}
+              </strong>
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "var(--ink)", fontWeight: 600 }}>
+              <span style={{ color: "var(--muted)", fontWeight: 400 }}>Account Name: </span>
               {accountName}
-            </span>
+            </div>
           </div>
 
           <button
             type="button"
             onClick={copyAcct}
             className="btn secondary small"
-            style={{ padding: "0.3rem 0.6rem", fontSize: "0.78rem" }}
+            style={{ padding: "0.35rem 0.65rem", fontSize: "0.78rem" }}
           >
             {copied ? <><Check size={13} color="green" /> Copied!</> : <><Copy size={13} /> Copy</>}
           </button>

@@ -112,31 +112,37 @@ export class SupabaseDataClient implements DataClient {
     }
   }
 
-  private mapSociety = (s: Record<string, any>): Society => ({
-    slug: s.slug,
-    name: s.name,
-    shortName: s.short_name,
-    categoryKey: s.society_categories?.key ?? "",
-    summary: s.summary,
-    mission: s.mission,
-    spirituality: s.spirituality,
-    movementHistory: s.movement_history,
-    localHistory: s.local_history,
-    patron: s.patron,
-    feastDay: s.feast_day,
-    activities: s.activities,
-    meetingSchedule: s.meeting_schedule,
-    meetingVenue: s.meeting_venue,
-    membershipInfo: s.membership_info,
-    accountName: s.account_name ?? (s.slug === "catholic-men-organization" ? "CMO PADRE PIO" : null),
-    accountNumber: s.account_number ?? (s.slug === "catholic-men-organization" ? "1024371925" : null),
-    bankName: s.bank_name ?? (s.slug === "catholic-men-organization" ? "UBA" : null),
-    executiveContacts: s.executive_contacts ?? null,
-    isFeatured: s.is_featured,
-    imageSrc: s.image_url ?? s.image_src ?? (SEED_SOCIETIES.find((x) => x.slug === s.slug)?.imageSrc ?? null),
-    verified: s.review === "verified",
-    published: s.status === "published",
-  });
+  private mapSociety = (s: Record<string, any>): Society => {
+    const seed = SEED_SOCIETIES.find((x) => x.slug === s.slug);
+    const isCwo = s.slug === "catholic-women-organization";
+    return {
+      slug: s.slug,
+      name: isCwo && seed ? seed.name : (s.name ?? seed?.name ?? ""),
+      shortName: s.short_name ?? seed?.shortName ?? null,
+      categoryKey: s.society_categories?.key ?? seed?.categoryKey ?? "",
+      summary: isCwo && seed?.summary ? seed.summary : (s.summary ?? seed?.summary ?? null),
+      mission: s.mission ?? seed?.mission ?? null,
+      spirituality: s.spirituality ?? seed?.spirituality ?? null,
+      movementHistory: s.movement_history ?? seed?.movementHistory ?? null,
+      localHistory: s.local_history ?? seed?.localHistory ?? null,
+      patron: s.patron ?? seed?.patron ?? null,
+      feastDay: s.feast_day ?? seed?.feastDay ?? null,
+      activities: isCwo && seed?.activities ? seed.activities : (s.activities ?? seed?.activities ?? null),
+      meetingSchedule: s.meeting_schedule ?? seed?.meetingSchedule ?? null,
+      meetingVenue: s.meeting_venue ?? seed?.meetingVenue ?? null,
+      membershipInfo: s.membership_info ?? seed?.membershipInfo ?? null,
+      membershipCount: s.membership_count ?? seed?.membershipCount ?? null,
+      president: s.president ?? seed?.president ?? null,
+      accountName: s.account_name ?? seed?.accountName ?? null,
+      accountNumber: s.account_number ?? seed?.accountNumber ?? null,
+      bankName: s.bank_name ?? seed?.bankName ?? null,
+      executiveContacts: s.executive_contacts ?? seed?.executiveContacts ?? null,
+      isFeatured: s.is_featured ?? seed?.isFeatured ?? false,
+      imageSrc: s.image_url ?? s.image_src ?? seed?.imageSrc ?? null,
+      verified: s.review === "verified" || Boolean(seed?.verified),
+      published: s.status === "published" || Boolean(seed?.published),
+    };
+  };
 
   async getSocieties(): Promise<Society[]> {
     try {

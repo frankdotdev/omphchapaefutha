@@ -181,14 +181,32 @@ export const SEED_SOCIETIES: Society[] = [
     bankName: "UBA",
     executiveContacts: "Catechist: 08063314891 / CMO Secretariat",
   }),
-  soc("organizations", "catholic-women-organization", "Catholic Women Organization", "CWO", {
-    summary: "The Catholic Women Organization (CWO) unites Catholic mothers and women in the chaplaincy, serving as a beacon of maternal care, faith formation, and charitable outreach.",
-    mission: "To foster spiritual growth, maternal responsibility, and active evangelisation among Catholic women, strengthening family life and supporting the Church's pastoral mission.",
+  soc("organizations", "catholic-women-organization", "Catholic Women Organisation, Our Mother of Perpetual Help Chaplaincy AEFUTHA 1", "CWO", {
+    summary: "The Catholic Women Organisation (CWO), Our Mother of Perpetual Help Chaplaincy AEFUTHA 1, unites 154 Catholic mothers and women in the chaplaincy as a beacon of maternal care, faith formation, and charitable service.",
+    mission: "To foster spiritual growth, maternal responsibility, and active evangelisation among Catholic women, strengthening Christian family life and supporting the pastoral mission of the chaplaincy.",
     spirituality: "Centred on the Blessed Virgin Mary, especially in her humble obedience, maternal love, and fidelity at the foot of the Cross, as well as the charity of Saint Anne.",
     movementHistory: "Established in Nigeria in the 1960s and affiliated nationally with the National Council of Catholic Women Organisations (NCCWO) and internationally with the World Union of Catholic Women's Organisations (WUCWO, founded in 1910).",
     patron: "Our Lady of Good Counsel and Saint Anne",
     feastDay: "26 April (Our Lady of Good Counsel); 26 July (Saints Joachim and Anne)",
-    activities: "Celebrating annual Mothering Sunday celebrations, family life seminars, visiting the sick and orphaned, supporting seminarians and religious, and organising charitable welfare projects.",
+    meetingSchedule: "Every 1st Saturday of the month (with CWO Uniform)",
+    membershipCount: 154,
+    membershipInfo: "Active Registered Membership: 154 mothers. Open to Catholic mothers and women of Our Mother of Perpetual Help Chaplaincy, AEFUTHA 1.",
+    president: "Mrs Chinwe Lucy OBIEKWE",
+    executiveContacts: "President: Mrs Chinwe Lucy OBIEKWE — 08036736319",
+    activities: `1. MEETING: Every 1st Saturday of the month with CWO Uniform.
+
+2. THANKSGIVING: Every 1st Sunday of the month in the two Masses with Dedication Uniform and white blouse.
+
+3. AUGUST MEETING: As decided by the Executives, with CWO Uniform.
+
+4. UKA NNE: As fixed by the Church. Activities as decided by the EXCO, but for Sunday Mass, CWO Uniform.
+
+5. HARVEST AND BAZAAR: Cooking and selling by the mothers or as decided by the Committee of the year. Uniform as decided by the EXCO.`,
+    bankName: "FCMB",
+    accountNumber: "7666084017",
+    accountName: "Catholic Women Organisation St Padre Pio Chaplaincy Abakaliki",
+    verified: true,
+    isFeatured: true,
   }),
   soc("organizations", "catholic-youth-organization-of-nigeria", "Catholic Youth Organization of Nigeria", "CYON", {
     summary: "CYON is the official association for Catholic youths and young adults, fostering spiritual formation, moral uprightness, and active apostolic zeal.",
@@ -542,6 +560,17 @@ export const SEED_CHURCH_ACCOUNTS: ChurchAccountProject[] = [
     accountNumber: "1024371925",
     bankName: "UBA",
     receiptContact: "08063314891",
+    isFeaturedHome: true,
+    active: true,
+  },
+  {
+    id: "acct-cwo",
+    title: "Catholic Women Organisation (CWO)",
+    purpose: "Maternal apostolate fund for CWO activities, Uka Nne (Mothering Sunday), monthly thanksgiving, and charitable outreach at OMPH Chaplaincy AEFUTHA 1.",
+    accountName: "Catholic Women Organisation St Padre Pio Chaplaincy Abakaliki",
+    accountNumber: "7666084017",
+    bankName: "FCMB",
+    receiptContact: "08036736319",
     isFeaturedHome: true,
     active: true,
   },

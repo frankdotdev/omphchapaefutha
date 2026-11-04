@@ -53,16 +53,21 @@ export function AccountCard({ project }: { project: ChurchAccountProject }) {
         </p>
 
         {/* Account Details Box */}
-        <div style={{ background: "var(--ivory)", border: "1px solid var(--line)", padding: "0.9rem 1.1rem", borderRadius: "6px", marginBottom: "1rem" }}>
+        <div style={{ background: "var(--ivory)", border: "1px solid var(--line)", padding: "0.95rem 1.15rem", borderRadius: "6px", marginBottom: "1rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
             <div>
+              <div style={{ fontSize: "0.85rem", color: "var(--ink)", marginBottom: "0.25rem" }}>
+                <span style={{ fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Bank: </span>
+                <strong style={{ color: "var(--marian)" }}>{project.bankName}</strong>
+              </div>
               <span style={{ fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block" }}>
-                Account Number
+                Account Number:
               </span>
               <strong style={{ fontSize: "1.4rem", fontFamily: "monospace", letterSpacing: "0.06em", color: "var(--navy)" }}>
                 {project.accountNumber}
               </strong>
-              <span style={{ display: "block", fontSize: "0.85rem", color: "var(--ink)", fontWeight: 600, marginTop: "0.15rem" }}>
+              <span style={{ display: "block", fontSize: "0.85rem", color: "var(--ink)", fontWeight: 600, marginTop: "0.2rem" }}>
+                <span style={{ color: "var(--muted)", fontWeight: 400 }}>Account Name: </span>
                 {project.accountName}
               </span>
             </div>

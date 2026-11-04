@@ -39,9 +39,9 @@ export default async function SupportPage() {
                 <HelpCircle size={18} color="var(--gold-text)" /> Important Notice Regarding Church Accounts
               </strong>
               <p className="muted small" style={{ margin: 0, lineHeight: 1.6 }}>
-                • <strong>Mass Intentions, Tithes &amp; Sunday Offerings:</strong> Paid into the Chaplain&rsquo;s dedicated account (<strong>JOHN CHIDI OBASI</strong>, First Bank <code>3035331262</code>).<br />
-                • <strong>General Chaplaincy Operations &amp; Projects:</strong> Paid into the official Chaplaincy account (<strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>, First Bank <code>3056076559</code>).<br />
-                • <strong>Societies &amp; Special Committees:</strong> Harvest &amp; Bazaar and CMO maintain designated committee accounts below.
+                • <strong>Mass Intentions, Tithes &amp; Sunday Offerings:</strong> Paid into the Chaplain&rsquo;s dedicated account (<strong>Bank: First Bank</strong> · Account No: <code>3035331262</code> · Account Name: <strong>JOHN CHIDI OBASI</strong>).<br />
+                • <strong>General Chaplaincy Operations &amp; Projects:</strong> Paid into the official Chaplaincy account (<strong>Bank: First Bank</strong> · Account No: <code>3056076559</code> · Account Name: <strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>).<br />
+                • <strong>Societies &amp; Special Committees:</strong> Harvest &amp; Bazaar (<strong>Bank: FCMB</strong>), CWO (<strong>Bank: FCMB</strong>), and CMO (<strong>Bank: UBA</strong>) maintain designated accounts below.
               </p>
             </div>
           </div>

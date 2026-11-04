@@ -54,6 +54,8 @@ export interface Society {
   meetingSchedule?: string | null;
   meetingVenue?: string | null;
   membershipInfo?: string | null;
+  membershipCount?: number | null;
+  president?: string | null;
   accountName?: string | null;
   accountNumber?: string | null;
   bankName?: string | null;

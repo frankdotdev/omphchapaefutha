@@ -6,9 +6,10 @@ import { resolveReadings } from "@/lib/liturgy/readings";
 import { getCuratedSaintProfile } from "@/lib/liturgy/saints-data";
 import { addDays, formatLongDate } from "@/lib/time/lagos";
 import { ReadingsWidget } from "@/components/liturgy/ReadingsWidget";
+import { LiveReadingsSection } from "@/components/liturgy/LiveReadingsSection";
 import { PageHead } from "@/components/ui/PageHead";
 import type { DailyReadings } from "@/lib/types";
-import { BookOpen, Sparkles, Calendar } from "lucide-react";
+import { Sparkles, Calendar } from "lucide-react";
 
 const COLOUR_SWATCH: Record<string, string> = {
   WHITE: "#fff",
@@ -19,27 +20,6 @@ const COLOUR_SWATCH: Record<string, string> = {
   GOLD: "#c9a24a",
   BLACK: "#111"
 };
-
-function Reading({ title, part }: { title: string; part?: { ref: string; text?: string } }) {
-  if (!part) return null;
-  return (
-    <article className="reading" style={{ marginBottom: "2rem", background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid var(--line)", boxShadow: "0 2px 10px rgba(0,0,0,0.03)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "1px solid var(--line)", paddingBottom: "0.5rem", marginBottom: "1rem" }}>
-        <h3 style={{ margin: 0, fontSize: "1.25rem", color: "var(--navy)" }}>{title}</h3>
-        <span className="reading-ref" style={{ fontWeight: 700, color: "var(--gold-text)", fontSize: "0.95rem" }}>{part.ref}</span>
-      </div>
-      {part.text ? (
-        part.text.split(/\n{2,}/).map((p, i) => (
-          <p key={i} style={{ fontSize: "1.02rem", lineHeight: 1.65, color: "var(--ink)", margin: "0 0 1rem" }}>
-            {p}
-          </p>
-        ))
-      ) : (
-        <p className="muted">Scripture text available via the lectionary link below.</p>
-      )}
-    </article>
-  );
-}
 
 export async function DayView({ date, isToday }: { date: string; isToday: boolean }) {
   const client = getDataClient();
@@ -214,53 +194,17 @@ export async function DayView({ date, isToday }: { date: string; isToday: boolea
           )}
 
           {/* Mass Readings Section */}
-          <section aria-labelledby="readings" style={{ marginTop: "2rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", borderBottom: "2px solid var(--gold)", paddingBottom: "0.5rem" }}>
-              <h2 id="readings" style={{ margin: 0, display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--navy)" }}>
-                <BookOpen size={22} style={{ color: "var(--marian)" }} />
-                Daily Mass Readings
-              </h2>
-              {result.kind === "live" && (
-                <span style={{ fontSize: "0.75rem", background: "var(--paper)", border: "1px solid var(--line)", padding: "0.2rem 0.5rem", borderRadius: "4px", color: "var(--navy)", fontWeight: 600 }}>
-                  Live Daily Feed
-                </span>
-              )}
-            </div>
+          <LiveReadingsSection
+            date={date}
+            initialKind={result.kind}
+            initialReadings={result.kind !== "link" ? result.readings : null}
+            links={result.links}
+          />
 
-            {result.kind === "staff" || result.kind === "live" || result.kind === "curated" ? (
-              <>
-                <Reading title="First Reading" part={result.readings.firstReading ?? undefined} />
-                <Reading title="Responsorial Psalm" part={result.readings.psalm ?? undefined} />
-                <Reading title="Second Reading" part={result.readings.secondReading ?? undefined} />
-                <Reading title="Holy Gospel" part={result.readings.gospel ?? undefined} />
-                
-                <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: "6px", padding: "0.85rem 1rem", marginTop: "1rem" }}>
-                  <p className="muted small" style={{ margin: 0 }}>
-                    {result.readings.translation ? `${result.readings.translation}. ` : ""}{result.readings.sourceNote}
-                  </p>
-                  {result.links && result.links.length > 0 && (
-                    <p className="muted small" style={{ marginTop: "0.4rem", marginBottom: 0 }}>
-                      Official Lectionary Portal: <a href={result.links[0].href} target="_blank" rel="noopener noreferrer">{result.links[0].label}</a>
-                    </p>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <p>The readings for this day can be read directly via the official portal below:</p>
-                <ul className="entries">
-                  {result.links.map((l) => (
-                    <li key={l.href}><div><h3><a href={l.href} rel="noopener noreferrer">{l.label}</a></h3><p className="muted">{l.note}</p></div></li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {/* Interactive Widget Available For Extra Convenience */}
-            <div style={{ marginTop: "2.5rem" }}>
-              <ReadingsWidget />
-            </div>
-          </section>
+          {/* Interactive Widget Available For Extra Convenience */}
+          <div style={{ marginTop: "2.5rem" }}>
+            <ReadingsWidget />
+          </div>
 
           <p className="muted small" style={{ marginTop: "3rem" }}>Calendar: General Roman Calendar. Celebrations proper to Nigeria, the Diocese of Abakaliki or the chaplaincy are celebrated as appointed.</p>
         </div>

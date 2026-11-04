@@ -188,8 +188,8 @@ export default async function MassIntentionsPage({ searchParams }: Props) {
             <div style={{ marginBottom: "2rem" }}>
               <Awaiting>
                 <strong>How it works:</strong> Bookings carry a stipend of <strong>₦300 per day / Mass</strong>.
-                Upon submission, you receive an instant Reference Tracking Code. You will transfer to First Bank (St. Padre Pio Catholic Chaplaincy)
-                and click the WhatsApp button to notify the Catechist or Chaplain directly. Your intention is reviewed and scheduled immediately.
+                Upon submission, you receive an instant Reference Tracking Code. Transfer the stipend to <strong>Bank: First Bank · Account Number: 3035331262 · Account Name: JOHN CHIDI OBASI</strong>,
+                then click the WhatsApp button to notify the Catechist (08063314891) or Chaplain (09044469505) directly.
               </Awaiting>
             </div>
 

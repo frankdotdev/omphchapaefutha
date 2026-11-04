@@ -24,7 +24,7 @@ const SECTIONS: [keyof import("@/lib/types").Society, string][] = [
   ["spirituality", "Catholic identity and spirituality"],
   ["movementHistory", "History of the wider movement"],
   ["localHistory", "History at the chaplaincy"],
-  ["activities", "Activities and apostolate"],
+  ["activities", "Major activities and apostolate"],
   ["membershipInfo", "Membership"],
 ];
 
@@ -34,11 +34,13 @@ export default async function SocietyPage({ params }: Props) {
   if (!s || !s.published) notFound();
 
   const facts: [string, string | null | undefined][] = [
-    ["Patron", s.patron],
-    ["Feast day", s.feastDay],
+    ["Membership", s.membershipCount ? `${s.membershipCount} Members` : null],
+    ["President", s.president],
+    ["Executive Contact", s.executiveContacts],
     ["Meets", s.meetingSchedule],
     ["Venue", s.meetingVenue],
-    ["Executive Contacts", s.executiveContacts],
+    ["Patron", s.patron],
+    ["Feast day", s.feastDay],
   ];
   const shownFacts = facts.filter(([, v]) => v);
   const shownSections = SECTIONS.filter(([k]) => s[k]);

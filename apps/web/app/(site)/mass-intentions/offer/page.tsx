@@ -65,9 +65,7 @@ export default async function OfferPage() {
             </h2>
             <div style={{ marginBottom: "1.75rem" }}>
               <Awaiting>
-                <strong>How it works.</strong> After you submit, you will receive a reference tracking number. The chaplaincy
-                office reviews and schedules the intention upon verification of the stipend.
-                Your telephone and email remain strictly private.
+                <strong>How it works.</strong> Bookings carry a stipend of <strong>₦300 per day / Mass</strong>. After you submit, you will receive a reference tracking number. Transfer the stipend to <strong>Bank: First Bank · Account Number: 3035331262 · Account Name: JOHN CHIDI OBASI</strong>, then send your reference code on WhatsApp to the Catechist (08063314891) or Chaplain (09044469505). Your telephone and email remain strictly private.
               </Awaiting>
             </div>
             <MassIntentionForm options={options} offering={offering} />

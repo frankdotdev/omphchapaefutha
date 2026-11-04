@@ -9,6 +9,7 @@ import { CrossDivider, Inscription, RoseWindow } from "@/components/art/Art";
 import { formatLongDate, lagosDateString } from "@/lib/time/lagos";
 import { getLiturgicalDay, RANK_LABEL, COLOUR_LABEL } from "@/lib/liturgy/calendar";
 import { applyOverrides } from "@/lib/liturgy/overrides";
+import { resolveReadings } from "@/lib/liturgy/readings";
 import { getCuratedSaintProfile } from "@/lib/liturgy/saints-data";
 import { AccountCard } from "@/components/giving/AccountCard";
 import { BookOpen, Sparkles } from "lucide-react";
@@ -40,6 +41,7 @@ export default async function Home() {
     liturgicalBase,
     overrides,
     accounts,
+    staffReadings,
   ] = await Promise.all([
     db.getRecurringSchedule(),
     db.getScheduleExceptions(today, today),
@@ -51,7 +53,10 @@ export default async function Home() {
     getLiturgicalDay(today),
     db.getLiturgicalOverrides().catch(() => []),
     db.getChurchAccounts().catch(() => []),
+    db.getDailyReadings(today).catch(() => null),
   ]);
+  const todayReadingsRes = await resolveReadings(today, staffReadings, { allowCuratedFallback: true });
+  const todayReadings = todayReadingsRes.kind !== "link" ? todayReadingsRes.readings : null;
   // The welcome slide always comes first; administrator-managed slides follow, or the defaults if none are published.
   const slides = [SLIDES[0], ...(dbSlides.length ? dbSlides : SLIDES.slice(1))];
   const entries = resolveSchedule(today, recurring, exceptions);
@@ -126,9 +131,29 @@ export default async function Home() {
                   <p className="eyebrow" style={{ fontSize: "0.78rem", margin: "0 0 0.85rem", color: "var(--gold-text)" }}>
                     {day.season}{day.sundayCycle ? ` · ${day.sundayCycle}` : ""}
                   </p>
-                  <p className="muted" style={{ fontSize: "0.9rem", lineHeight: 1.5, margin: "0 0 1.25rem" }}>
-                    Listen to God&rsquo;s Word appointed for today in the sacred liturgy, with the Responsorial Psalm and Gospel.
-                  </p>
+                  {todayReadings && (todayReadings.firstReading || todayReadings.gospel) ? (
+                    <div style={{ background: "var(--ivory)", border: "1px solid var(--line)", borderRadius: "6px", padding: "0.65rem 0.85rem", marginBottom: "1rem", fontSize: "0.85rem", color: "var(--ink)" }}>
+                      {todayReadings.firstReading && (
+                        <div style={{ marginBottom: "0.2rem" }}>
+                          <strong style={{ color: "var(--navy)" }}>1st Reading:</strong> {todayReadings.firstReading.ref}
+                        </div>
+                      )}
+                      {todayReadings.psalm && (
+                        <div style={{ marginBottom: "0.2rem" }}>
+                          <strong style={{ color: "var(--navy)" }}>Psalm:</strong> {todayReadings.psalm.ref}
+                        </div>
+                      )}
+                      {todayReadings.gospel && (
+                        <div>
+                          <strong style={{ color: "var(--navy)" }}>Gospel:</strong> {todayReadings.gospel.ref}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="muted" style={{ fontSize: "0.9rem", lineHeight: 1.5, margin: "0 0 1.25rem" }}>
+                      Listen to God&rsquo;s Word appointed for today in the sacred liturgy, with the Responsorial Psalm and Gospel.
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -339,8 +364,8 @@ export default async function Home() {
             </div>
 
             <div style={{ marginTop: "1.75rem", textAlign: "center" }}>
-              <p className="muted small" style={{ maxWidth: "50rem", margin: "0 auto 1.25rem", lineHeight: 1.55 }}>
-                The Chaplain&rsquo;s account (<strong>JOHN CHIDI OBASI</strong>, First Bank <code>3035331262</code>) is designated strictly for Holy Mass intentions, tithes, and Sunday offerings. The official Chaplaincy account (<strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>, First Bank <code>3056076559</code>) and committee accounts receive funds for pastoral projects and general operations.
+              <p className="muted small" style={{ maxWidth: "52rem", margin: "0 auto 1.25rem", lineHeight: 1.55 }}>
+                The Chaplain&rsquo;s account (<strong>Bank: First Bank</strong> · Account No: <code>3035331262</code> · Name: <strong>JOHN CHIDI OBASI</strong>) is designated strictly for Holy Mass intentions, tithes, and Sunday offerings. The official Chaplaincy account (<strong>Bank: First Bank</strong> · Account No: <code>3056076559</code> · Name: <strong>ST. PADRE PIO CATHOLIC CHAPLAINCY</strong>) and society accounts receive funds for pastoral projects and general operations.
               </p>
               <Link href="/support" className="btn secondary">
                 View All Church Projects &amp; Accounts →
