@@ -2,12 +2,17 @@ import type { Metadata } from "next";
 import { getDataClient } from "@/lib/data";
 import { PageHead, Awaiting } from "@/components/ui/PageHead";
 import { Communion } from "@/components/ui/Communion";
+import { VaticanNewsWidget } from "@/components/home/VaticanNewsWidget";
+import { fetchVaticanNewsFeed } from "@/lib/vatican/feed";
 
 export const metadata: Metadata = { title: "In Communion with the Church" };
 export const revalidate = 300;
 
 export default async function CommunionPage() {
-  const eccl = await getDataClient().getEcclesiasticalDirectory();
+  const [eccl, vaticanNews] = await Promise.all([
+    getDataClient().getEcclesiasticalDirectory(),
+    fetchVaticanNewsFeed(6).catch(() => []),
+  ]);
   const pending = eccl.some((e) => !e.verifiedAt);
 
   return (
@@ -46,6 +51,12 @@ export default async function CommunionPage() {
           <div>
             <Communion entries={eccl} />
           </div>
+        </div>
+      </section>
+
+      <section className="section pattern-light" aria-label="Vatican News and Papal Video Updates">
+        <div className="wrap">
+          <VaticanNewsWidget items={vaticanNews} />
         </div>
       </section>
     </>

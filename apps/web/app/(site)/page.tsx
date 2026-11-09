@@ -12,6 +12,8 @@ import { applyOverrides } from "@/lib/liturgy/overrides";
 import { resolveReadings } from "@/lib/liturgy/readings";
 import { getCuratedSaintProfile } from "@/lib/liturgy/saints-data";
 import { AccountCard } from "@/components/giving/AccountCard";
+import { VaticanNewsWidget } from "@/components/home/VaticanNewsWidget";
+import { fetchVaticanNewsFeed } from "@/lib/vatican/feed";
 import { BookOpen, Sparkles } from "lucide-react";
 
 const COLOUR_SWATCH: Record<string, string> = {
@@ -42,6 +44,7 @@ export default async function Home() {
     overrides,
     accounts,
     staffReadings,
+    vaticanNews,
   ] = await Promise.all([
     db.getRecurringSchedule(),
     db.getScheduleExceptions(today, today),
@@ -54,6 +57,7 @@ export default async function Home() {
     db.getLiturgicalOverrides().catch(() => []),
     db.getChurchAccounts().catch(() => []),
     db.getDailyReadings(today).catch(() => null),
+    fetchVaticanNewsFeed(3).catch(() => []),
   ]);
   const todayReadingsRes = await resolveReadings(today, staffReadings, { allowCuratedFallback: true });
   const todayReadings = todayReadingsRes.kind !== "link" ? todayReadingsRes.readings : null;
@@ -416,6 +420,14 @@ export default async function Home() {
             </div>
           </div>
           <Communion entries={eccl} />
+        </div>
+      </section>
+
+      {/* Vatican News Official Video Widget Section (Pope Leo XIV Initiative) */}
+      <section className="section pattern-light has-inscription" aria-labelledby="vatican-widget-title">
+        <Inscription>Ubi Petrus, ibi Ecclesia</Inscription>
+        <div className="wrap">
+          <VaticanNewsWidget items={vaticanNews} />
         </div>
       </section>
 
