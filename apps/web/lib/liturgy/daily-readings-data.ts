@@ -6,6 +6,86 @@ import type { DailyReadings } from "@/lib/types";
  * so worshippers can read the Word of God directly on the chaplaincy website.
  */
 export const CURATED_DAILY_READINGS: Record<string, DailyReadings> = {
+  // November 11, 2026 (Wednesday of the 32nd Week in Ordinary Time, Year II / St. Martin of Tours)
+  // Matching directly: The Daily Missal (Paulines Publications Africa) · Page 1449
+  "2026-11-11": {
+    date: "2026-11-11",
+    translation: "The Daily Missal (Paulines Publications Africa) · Approved for Nigeria by CBCN (RSV-CE / Revised Grail Psalms 2010)",
+    sourceNote: "The Daily Missal, Year II (Paulines Publications Africa, Imprimatur: Archbishop Felix Alaba Job, President, Catholic Bishops' Conference of Nigeria).",
+    firstReading: {
+      ref: "Titus 3:1-7",
+      text: "Beloved: Remind everyone to be submissive to rulers and authorities, to be obedient, to be ready for any honest work, to speak evil of no one, to avoid quarrelling, to be gentle, and to show perfect courtesy towards all men.\n\nFor we ourselves were once foolish, disobedient, led astray, slaves to various passions and pleasures, passing our days in malice and envy, hated by men and hating one another; but when the goodness and loving kindness of God our Saviour appeared, he saved us, not because of deeds done by us in righteousness, but in virtue of his own mercy, by the washing of regeneration and renewal in the Holy Spirit, which he poured out upon us richly through Jesus Christ our Saviour, so that we might be justified by his grace and become heirs in hope of eternal life.\n\nThe word of the Lord. (Thanks be to God)",
+    },
+    psalm: {
+      ref: "Psalm 23:1-3a, 3b-4, 5, 6",
+      text: "R. The Lord is my shepherd; there is nothing I shall want.\n\nThe LORD is my shepherd; there is nothing I shall want.\nFresh and green are the pastures where he gives me repose.\nNear restful waters he leads me; he revives my soul.\n\nR. The Lord is my shepherd; there is nothing I shall want.\n\nHe guides me along the right path, for the sake of his name.\nThough I should walk in the valley of the shadow of death, no evil would I fear, for you are with me.\nYour crook and your staff will give me comfort.\n\nR. The Lord is my shepherd; there is nothing I shall want.\n\nYou have prepared a table before me in the sight of my foes.\nMy head you have anointed with oil; my cup is overflowing.\n\nR. The Lord is my shepherd; there is nothing I shall want.\n\nSurely goodness and mercy shall follow me all the days of my life.\nIn the LORD’s own house shall I dwell for length of days unending.\n\nR. The Lord is my shepherd; there is nothing I shall want.",
+    },
+    gospel: {
+      ref: "Luke 17:11-19",
+      text: "On the way to Jerusalem Jesus was passing along between Samaria and Galilee. And as he entered a village, he was met by ten lepers, who stood at a distance and lifted up their voices and said, \"Jesus, Master, have mercy on us.\"\n\nWhen he saw them he said to them, \"Go and show yourselves to the priests.\" And as they went they were cleansed.\n\nThen one of them, when he saw that he was healed, turned back, praising God with a loud voice; and he fell on his face at Jesus' feet, giving him thanks. Now he was a Samaritan.\n\nThen said Jesus, \"Were not ten cleansed? Where are the nine? Was no one found to return and give praise to God except this foreigner?\" And he said to him, \"Rise and go your way; your faith has made you well.\"\n\nThe Gospel of the Lord. (Praise to you, Lord Jesus Christ)",
+    },
+  },
+
+  // November 12, 2026 (Thursday of the 32nd Week in Ordinary Time, Year II / St. Josaphat)
+  "2026-11-12": {
+    date: "2026-11-12",
+    translation: "The Daily Missal (Paulines Publications Africa) · Approved for Nigeria by CBCN (RSV-CE / Revised Grail Psalms 2010)",
+    sourceNote: "The Daily Missal, Year II (Paulines Publications Africa, Imprimatur: Archbishop Felix Alaba Job, President, Catholic Bishops' Conference of Nigeria).",
+    firstReading: {
+      ref: "Philemon 7-20",
+      text: "Beloved: I have derived much joy and comfort from your love, my brother, because the hearts of the saints have been refreshed through you. Accordingly, though I am bold enough in Christ to command you to do what is required, yet for love's sake I prefer to appeal to you—I, Paul, an ambassador and now a prisoner also for Christ Jesus—I appeal to you for my child, Onesimus, whose father I have become in my imprisonment. (Formerly he was useless to you, but now he is indeed useful to you and to me.) I am sending him back to you, sending my very heart. Yes, brother, I want some benefit from you in the Lord. Refresh my heart in Christ.\n\nThe word of the Lord. (Thanks be to God)",
+    },
+    psalm: {
+      ref: "Psalm 146:7, 8-9a, 9bc-10",
+      text: "R. Blessed is he whose help is the God of Jacob.\n\nIt is the Lord who preserves fidelity forever, who does justice to those who are oppressed.\nIt is he who gives bread to the hungry, the Lord who sets prisoners free.\n\nR. Blessed is he whose help is the God of Jacob.\n\nThe Lord who opens the eyes of the blind, the Lord who raises up those who are bowed down.\nIt is the Lord who loves the just, the Lord who protects the stranger.\n\nR. Blessed is he whose help is the God of Jacob.\n\nThe Lord upholds the orphan and the widow, but stumbles the path of the wicked.\nThe Lord will reign forever, the God of Zion from age to age.\n\nR. Blessed is he whose help is the God of Jacob.",
+    },
+    gospel: {
+      ref: "Luke 17:20-25",
+      text: "At that time: Being asked by the Pharisees when the kingdom of God was coming, Jesus answered them, \"The kingdom of God is not coming with signs to be observed; nor will they say, 'Lo, here it is!' or 'There!' for behold, the kingdom of God is in the midst of you.\"\n\nAnd he said to the disciples, \"The days are coming when you will desire to see one of the days of the Son of man, and you will not see it. And they will say to you, 'Lo, there!' or 'Lo, here!' Do not go, do not follow them. For as the lightning flashes and lights up the sky from one side to the other, so will the Son of man be in his day. But first he must suffer many things and be rejected by this generation.\"\n\nThe Gospel of the Lord. (Praise to you, Lord Jesus Christ)",
+    },
+  },
+
+  // November 13, 2026 (Friday of the 32nd Week in Ordinary Time, Year II / St. Frances Xavier Cabrini)
+  "2026-11-13": {
+    date: "2026-11-13",
+    translation: "The Daily Missal (Paulines Publications Africa) · Approved for Nigeria by CBCN (RSV-CE / Revised Grail Psalms 2010)",
+    sourceNote: "The Daily Missal, Year II (Paulines Publications Africa, Imprimatur: Archbishop Felix Alaba Job, President, Catholic Bishops' Conference of Nigeria).",
+    firstReading: {
+      ref: "2 John 4-9",
+      text: "I rejoiced greatly to find some of your children following the truth, just as we have been commanded by the Father. And now I beg you, lady, not as though I were writing you a new commandment, but the one we have had from the beginning, that we love one another. And this is love, that we follow his commandments; this is the commandment, as you have heard from the beginning, that you follow love. For many deceivers have gone out into the world, men who will not acknowledge the coming of Jesus Christ in the flesh; such a one is the deceiver and the antichrist.\n\nThe word of the Lord. (Thanks be to God)",
+    },
+    psalm: {
+      ref: "Psalm 119:1, 2, 10, 11, 17, 18",
+      text: "R. Blessed are they who walk in the law of the Lord.\n\nBlessed are they whose way is blameless, who walk in the law of the Lord!\nBlessed are they who observe his decrees, who seek him with all their heart!\n\nR. Blessed are they who walk in the law of the Lord.\n\nWith all my heart I seek you; let me not stray from your commands.\nWithin my heart I treasure your promise, that I may not sin against you.\n\nR. Blessed are they who walk in the law of the Lord.\n\nBe good to your servant, that I may live and keep your words.\nOpen my eyes, that I may consider the wonders of your law.\n\nR. Blessed are they who walk in the law of the Lord.",
+    },
+    gospel: {
+      ref: "Luke 17:26-37",
+      text: "At that time, Jesus said to his disciples: \"As it was in the days of Noah, so will it be in the days of the Son of man. They ate, they drank, they married, they were given in marriage, until the day when Noah entered the ark, and the flood came and destroyed them all. Likewise as it was in the days of Lot—they ate, they drank, they bought, they sold, they planted, they built, but on the day when Lot went out from Sodom fire and brimstone rained from heaven and destroyed them all—so will it be on the day when the Son of man is revealed.\n\nWhoever seeks to gain his life will lose it, but whoever loses his life will preserve it.\"\n\nThe Gospel of the Lord. (Praise to you, Lord Jesus Christ)",
+    },
+  },
+
+  // November 15, 2026 (Thirty-Third Sunday in Ordinary Time, Year B)
+  "2026-11-15": {
+    date: "2026-11-15",
+    translation: "The Daily Missal (Paulines Publications Africa) · Approved for Nigeria by CBCN (RSV-CE / Revised Grail Psalms 2010)",
+    sourceNote: "The Daily Missal, Year B (Paulines Publications Africa, Imprimatur: Archbishop Felix Alaba Job, President, Catholic Bishops' Conference of Nigeria).",
+    firstReading: {
+      ref: "Daniel 12:1-3",
+      text: "\"At that time shall arise Michael, the great prince who has charge of your people. And there shall be a time of trouble, such as never has been since there was a nation till that time; but at that time your people shall be delivered, every one whose name shall be found written in the book. And many of those who sleep in the dust of the earth shall awake, some to everlasting life, and some to shame and everlasting contempt. And those who are wise shall shine like the brightness of the firmament; and those who turn many to righteousness, like the stars for ever and ever.\"\n\nThe word of the Lord. (Thanks be to God)",
+    },
+    psalm: {
+      ref: "Psalm 16:5, 8, 9-10, 11",
+      text: "R. Preserve me, God, I take refuge in you.\n\nO Lord, it is you who are my portion and cup; you yourself who secure my lot.\nI keep the Lord always before me; with him at my right hand, I shall not be moved.\n\nR. Preserve me, God, I take refuge in you.\n\nAnd so, my heart rejoices, my soul is glad; even my flesh shall rest in hope.\nFor you will not leave my soul among the dead, nor let your beloved one see decay.\n\nR. Preserve me, God, I take refuge in you.\n\nYou will show me the path of life, the fullness of joy in your presence,\nat your right hand, bliss for ever.\n\nR. Preserve me, God, I take refuge in you.",
+    },
+    secondReading: {
+      ref: "Hebrews 10:11-14, 18",
+      text: "Every priest stands daily at his service, offering repeatedly the same sacrifices, which can never take away sins. But when Christ had offered for all time a single sacrifice for sins, he sat down at the right hand of God, then to wait until his enemies should be made a stool for his feet. For by a single offering he has perfected for all time those who are sanctified. Where there is forgiveness of these, there is no longer any offering for sin.\n\nThe word of the Lord. (Thanks be to God)",
+    },
+    gospel: {
+      ref: "Mark 13:24-32",
+      text: "At that time: Jesus said to his disciples: \"In those days, after that tribulation, the sun will be darkened, and the moon will not give its light, and the stars will be falling from heaven, and the powers in the heavens will be shaken. And then they will see the Son of man coming in clouds with great power and glory. And then he will send out the angels, and gather his elect from the four winds, from the ends of the earth to the ends of heaven.\n\n\"From the fig tree learn its lesson: as soon as its branch becomes tender and puts forth its leaves, you know that summer is near. So also, when you see these things taking place, you know that he is near, at the very gates. Truly, I say to you, this generation will not pass away before all these things take place. Heaven and earth will pass away, but my words will not pass away.\n\n\"But of that day or that hour no one knows, not even the angels in heaven, nor the Son, but only the Father.\"\n\nThe Gospel of the Lord. (Praise to you, Lord Jesus Christ)",
+    },
+  },
   // October 15 (Saint Teresa of Ávila / 28th Week in Ordinary Time)
   "2026-10-15": {
     date: "2026-10-15",

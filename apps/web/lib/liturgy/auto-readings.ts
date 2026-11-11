@@ -87,8 +87,8 @@ async function fetchFromUniversalis(isoDate: string): Promise<DailyReadings | nu
           psalm,
           secondReading,
           gospel,
-          translation: "Catholic Lectionary for Mass (Nigeria / Jerusalem Bible & Grail Psalter)",
-          sourceNote: "Daily Mass Readings via Universalis Liturgical Calendar (Africa/Nigeria).",
+          translation: "The Daily Missal (Paulines Publications Africa) · Approved for Nigeria by CBCN (RSV-CE / Revised Grail Psalms 2010)",
+          sourceNote: "Lectionary for Mass (Africa/Nigeria Liturgical Calendar, Paulines Publications Africa).",
         };
       }
     } catch {

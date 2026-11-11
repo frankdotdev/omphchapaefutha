@@ -28,7 +28,8 @@ pnpm build
 
 ## Core Features
 
-### 1. Liturgical Life & Automatic Daily Readings (`/daily-readings`)
+### 1. Liturgical Life, Scripture Translation & Automatic Daily Readings (`/daily-readings`)
+- **Approved Bible & Missal Edition:** Follows *The Daily Missal* (Paulines Publications Africa, ISBN 9966-08-579-3) containing the *New English Translation of The Roman Missal 2010* granted *recognitio* for Nigeria (Prot. N. 1021/10/L) by the Holy See, *Revised Standard Version Catholic Edition (RSV-CE)* for Sacred Scripture, *The Revised Grail Psalms (2010)*, and Imprimatur by Most Rev. Felix Alaba Job (President, Catholic Bishops' Conference of Nigeria - CBCN).
 - **Liturgical Calendar (`romcal`):** Automatically computes the liturgical season, Sunday/weekday cycle, vestment colour swatch, liturgical rank, and feast days in the `Africa/Lagos` timezone.
 - **Multi-Provider Live Lectionary Sync (`apps/web/lib/liturgy/auto-readings.ts`):**
   1. **Staff Overrides:** Custom readings published via `/admin` take top priority.
@@ -36,6 +37,27 @@ pnpm build
   3. **Evangelizo Catholic Feed API v2:** Secondary live scripture provider.
   4. **USCCB Daily Lectionary:** Tertiary live parser + client-side browser hydration (`LiveReadingsSection.tsx`).
 - **Saint of the Day:** Displays verified biographies, feast ranks, and Latin titles for the day's liturgical celebration.
+
+### 2. Order of Mass (Ordo Missae) in English, Igbo & Latin (`/order-of-mass`)
+- **Trilingual Ordo Missae:** Complete liturgical texts covering the Introductory Rites, Penitential Act / Confiteor, Kyrie, Gloria, Liturgy of the Word, Nicene and Apostles' Creed, Offertory & *Orate Fratres*, Preface dialogues, Sanctus, Consecration / Institution Narrative, Memorial Acclamation, Great Amen, The Lord's Prayer (*Our Father / Pater Noster / Nna Anyị Nọ N'eligwe*), Sign of Peace, Agnus Dei (*Lamb of God / Nwa Atụrụ nke Chineke*), and Dismissal.
+- **Interactive Language Modes:** Switch seamlessly between English + Igbo, English + Latin, Trilingual, English only, Igbo only, and Latin only.
+
+### 3. Mass Hymns & Choir Master Broadcast Portal (`/hymns`)
+- **Complete Hymn Catalog:** Categorized collection of Catholic hymns across English, Igbo, and Latin covering Entrance, Kyrie, Gloria, Credo, Offertory, Sanctus, Memorial Acclamation, Agnus Dei, Communion, Thanksgiving, and Dismissal/Marian anthems (including the chaplaincy's patronal hymn *Great Mother of Perpetual Help* and popular Igbo liturgical chants such as *Otuto Diri Chineke*, *K'Anyị Nyenụ Ya Ekele*, *Chineke Nna Nara Aja Anyị*, and *Di Nsọ*).
+- **Choir Master Daily Planner:** Dedicated space where the Choir Master can assign and curate hymns for every part of the Mass for each day. Parishioners can follow the lyrics live on their mobile phones.
+
+### 4. Church Projector Mode (`/projector`)
+- **Dedicated Sanctuary Display:** Edge-to-edge, distraction-free display for church projectors with zero website headers or navigation bars.
+- **High-Contrast Themes:** Optimized for church projector optics — *Sanctuary Dark* (`#000000` with gold headings and crisp white text to prevent glare), *Daylight Crisp* (white with black text), and *Liturgical Amber*.
+- **Variable Font Scaler (`A-` / `A+`):** Responsive typography up to `60px` for crystal-clear readability from any pew in the church.
+- **Hardware Remote / Clicker Navigation:** Supports wireless presentation clickers and keyboard shortcuts:
+  - `Space` / `→` / `PageDown`: Next slide / prayer / hymn verse
+  - `←` / `PageUp`: Previous slide / prayer / hymn verse
+  - `1`: Today's Mass Readings (RSV-CE / Grail Psalms)
+  - `2`: Order of Mass (English / Igbo / Latin)
+  - `3`: Mass Hymns & Choir Lyrics
+  - `4`: Today's Mass Intentions
+  - `F`: Toggle Fullscreen
 
 ### 2. Mass Schedule & Exceptions (`/mass-schedule`)
 - Full weekly and Sunday timetable for Masses, Eucharistic Adoration, Benediction, Confessions, Catechism, and Infant Baptism (every 3rd Saturday).

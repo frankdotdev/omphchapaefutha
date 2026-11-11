@@ -14,7 +14,7 @@ import { getCuratedSaintProfile } from "@/lib/liturgy/saints-data";
 import { AccountCard } from "@/components/giving/AccountCard";
 import { VaticanNewsWidget } from "@/components/home/VaticanNewsWidget";
 import { fetchVaticanNewsFeed } from "@/lib/vatican/feed";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, ScrollText, Music, Tv } from "lucide-react";
 
 const COLOUR_SWATCH: Record<string, string> = {
   WHITE: "#fff",
@@ -222,6 +222,81 @@ export default async function Home() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            {/* Liturgical Action Bar: Order of Mass, Hymns & Projector */}
+            <div
+              style={{
+                marginTop: "1.5rem",
+                padding: "1rem 1.25rem",
+                background: "#fff",
+                border: "1px solid var(--line)",
+                borderRadius: "8px",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: "1rem",
+                alignItems: "center",
+              }}
+            >
+              <Link
+                href="/order-of-mass"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  textDecoration: "none",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                }}
+              >
+                <div style={{ background: "rgba(24, 59, 99, 0.08)", color: "var(--navy)", padding: "0.6rem", borderRadius: "8px", display: "flex" }}>
+                  <ScrollText size={20} />
+                </div>
+                <div>
+                  <strong style={{ display: "block", color: "var(--navy)", fontSize: "0.95rem" }}>Order of Mass (Ordo Missae)</strong>
+                  <span style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Trilingual: English, Igbo &amp; Latin</span>
+                </div>
+              </Link>
+
+              <Link
+                href="/hymns"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  textDecoration: "none",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                }}
+              >
+                <div style={{ background: "rgba(201, 162, 74, 0.12)", color: "var(--gold-text)", padding: "0.6rem", borderRadius: "8px", display: "flex" }}>
+                  <Music size={20} />
+                </div>
+                <div>
+                  <strong style={{ display: "block", color: "var(--navy)", fontSize: "0.95rem" }}>Mass Hymns &amp; Choir</strong>
+                  <span style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Entrance, Kyrie, Gloria, Offertory &amp; more</span>
+                </div>
+              </Link>
+
+              <Link
+                href="/projector"
+                className="btn btn-outline"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "0.65rem 1rem",
+                  fontSize: "0.9rem",
+                  borderColor: "var(--gold)",
+                  color: "var(--navy)",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                }}
+              >
+                <Tv size={18} style={{ color: "var(--gold-text)" }} />
+                <span>Church Projector Mode →</span>
+              </Link>
             </div>
           </div>
         </section>

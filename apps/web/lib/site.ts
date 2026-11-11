@@ -10,13 +10,17 @@ export const PRIMARY_NAV: { href: string; label: string }[] = [
   { href: "/mass-schedule", label: "Mass Schedule" },
   { href: "/mass-intentions", label: "Mass Intentions" },
   { href: "/daily-readings", label: "Readings" },
-  { href: "/sacraments", label: "Sacraments" },
+  { href: "/order-of-mass", label: "Order of Mass" },
+  { href: "/hymns", label: "Hymns" },
   { href: "/support", label: "Support & Projects" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
 export const MORE_NAV: { href: string; label: string }[] = [
+  { href: "/projector", label: "Projector Mode" },
+  { href: "/order-of-mass", label: "Order of Mass" },
+  { href: "/hymns", label: "Hymns & Choir" },
   { href: "/support", label: "Support & Projects" },
   { href: "/doctrine", label: "Catholic Doctrine" },
   { href: "/societies", label: "Societies" },
@@ -32,6 +36,9 @@ export const NAV: { href: string; label: string }[] = [
   { href: "/mass-schedule", label: "Mass Schedule" },
   { href: "/mass-intentions", label: "Mass Intentions" },
   { href: "/daily-readings", label: "Readings" },
+  { href: "/order-of-mass", label: "Order of Mass" },
+  { href: "/hymns", label: "Hymns" },
+  { href: "/projector", label: "Projector Mode" },
   { href: "/support", label: "Support & Projects" },
   { href: "/prayer-intentions", label: "Prayer" },
   { href: "/sacraments", label: "Sacraments" },
