@@ -34,7 +34,7 @@ export default async function SupportPage() {
               catechetical formation, and chapel facilities at AE-FUTHA.
             </p>
 
-            <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderLeft: "4px solid var(--gold)", padding: "1.2rem 1.4rem", borderRadius: "6px", textAlign: "left" }}>
+            <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderTop: "3px solid var(--gold)", padding: "1.2rem 1.4rem", borderRadius: "6px", textAlign: "left" }}>
               <strong style={{ color: "var(--navy)", display: "flex", alignItems: "center", gap: "0.35rem", marginBottom: "0.4rem" }}>
                 <HelpCircle size={18} color="var(--gold-text)" /> Important Notice Regarding Church Accounts
               </strong>
@@ -52,7 +52,7 @@ export default async function SupportPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
               gap: "2rem",
               marginTop: "2.5rem",
               marginBottom: "3.5rem",

@@ -121,7 +121,7 @@ export function ChoirPlanner({ initialDate }: { initialDate: string }) {
   }
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "2rem", alignItems: "start" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "2rem", alignItems: "start", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
       {/* LEFT COLUMN: THE MASS HYMN ROSTER (CHOIR MASTER SELECTOR) */}
       <div>
         <div style={{ background: "var(--paper)", border: "2px solid var(--gold)", borderRadius: "8px", padding: "1.25rem", marginBottom: "1.5rem" }}>

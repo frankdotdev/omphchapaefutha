@@ -98,7 +98,7 @@ export default async function Home() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
                 gap: "1.5rem",
               }}
             >
@@ -233,7 +233,7 @@ export default async function Home() {
                 border: "1px solid var(--line)",
                 borderRadius: "8px",
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))",
                 gap: "1rem",
                 alignItems: "center",
               }}
@@ -330,7 +330,7 @@ export default async function Home() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
                 gap: "1.5rem",
               }}
             >
@@ -433,7 +433,7 @@ export default async function Home() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
                 gap: "1.5rem",
               }}
             >

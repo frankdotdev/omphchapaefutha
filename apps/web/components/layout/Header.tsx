@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { MORE_NAV, NAV, PRIMARY_NAV, SITE } from "@/lib/site";
-import { LangSwitcher } from "./LangSwitcher";
+
 import { useLang } from "./useLang";
 
 export function Header() {
@@ -109,7 +109,7 @@ export function Header() {
           </ul>
         </nav>
         <div className="header-actions">
-          <LangSwitcher />
+          
           <button
             ref={btnRef}
             type="button"
