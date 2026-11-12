@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { parseBulkAnnouncements } from "@/lib/announcements/parser";
-import { SEED_ANNOUNCEMENTS } from "@/lib/data/seed";
 import type { Announcement } from "@/lib/types";
 import {
   Megaphone,
@@ -14,59 +13,114 @@ import {
   RotateCcw,
   Copy,
   ExternalLink,
+  Clock,
+  Archive,
+  Database,
   Send,
-  AlertCircle,
+  Loader2,
 } from "lucide-react";
 
 const STORAGE_KEY = "omph_bulk_announcements_raw_v1";
 
-const SAMPLE_BULK_INPUT = `1. CWO MONTHLY GENERAL MEETING
-All mothers of the Catholic Women Organisation (CWO) are reminded of our monthly meeting this Saturday at 9:00 AM at the Chaplaincy Hall. Please come in your official CWO uniform. New mothers are warmly welcome.
-Issued by: Catholic Women Organisation (CWO)
-
-2. SACRAMENT OF INFANT BAPTISM
-The Sacrament of Infant Baptism for this month will be celebrated on the third Saturday at 10:00 AM. Parents and godparents must attend the preparatory catechesis on Friday evening at 5:00 PM. Registration is ongoing with the Catechist.
+const SAMPLE_BULK_INPUT = `1. Infant baptism will be on 21st of November that's third Saturday. Register with catechist.
 Issued by: Chaplaincy Catechetical Commission
 
-3. HARVEST & BAZAAR LEVY SUBMISSIONS
-All statutory bodies (CMO, CWO, CYON), pious societies, and zonal units are requested to submit their progress reports and harvest levy envelopes to the Harvest Planning Committee after this Mass.
-Issued by: Harvest & Bazaar Committee
+2. The Catholic Nurses of Abakaliki Diocese will hold their 2026 annual retreat on 14th November (Saturday) with a Holy Mass by 9:30 am at the chaplaincy.
+Issued by: Catholic Nurses Guild
 
-4. YOUTH FELLOWSHIP & ACADEMIC RETREAT
-The Catholic Youth Organization of Nigeria (CYON) and NFCS will host their joint monthly academic prayer retreat this Sunday at 4:00 PM. All students preparing for university exams are encouraged to attend.
-Issued by: CYON & NFCS`;
+3. Our family planting and seed sowing is still on.
+Issued by: Harvest & Sowing Committee
+
+4. There will be Chaplaincy Pastoral Council meeting on Wednesday at 4:30 pm.
+Issued by: Chaplaincy Pastoral Council`;
 
 export function CatechistBulkAnnouncements() {
   const [rawText, setRawText] = useState<string>("");
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [durationDays, setDurationDays] = useState<number>(7);
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
+  const [publishSuccess, setPublishSuccess] = useState<{
+    count: number;
+    expiresAt: string;
+  } | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
+  const [archiveStats, setArchiveStats] = useState<any>(null);
 
-  // Load saved draft on mount
+  // Load saved draft and live status on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setRawText(saved);
-      } else {
-        setRawText(SAMPLE_BULK_INPUT);
-      }
-    } catch {
-      setRawText(SAMPLE_BULK_INPUT);
-    }
+    // 1. Try fetching from server API
+    fetch("/api/admin/announcements")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) {
+          if (data.rawDraft) {
+            setRawText(data.rawDraft);
+          } else {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            setRawText(saved || SAMPLE_BULK_INPUT);
+          }
+          if (data.durationDays) {
+            setDurationDays(data.durationDays);
+          }
+          if (data.stats) {
+            setArchiveStats(data.stats);
+          }
+        }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        setRawText(saved || SAMPLE_BULK_INPUT);
+      });
   }, []);
 
   const parsedAnnouncements: Announcement[] = useMemo(() => {
     return parseBulkAnnouncements(rawText);
   }, [rawText]);
 
-  const handleSave = () => {
+  const handlePublish = async () => {
+    if (parsedAnnouncements.length === 0) {
+      alert("Please enter at least one announcement before publishing.");
+      return;
+    }
+
+    setIsPublishing(true);
+    setPublishSuccess(null);
+
     try {
+      // 1. Client backup
       localStorage.setItem(STORAGE_KEY, rawText);
       localStorage.setItem("omph_announcements_parsed_v1", JSON.stringify(parsedAnnouncements));
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3500);
-    } catch (e) {
+
+      // 2. Publish to Server API (ensures it physically appears on website & projector)
+      const res = await fetch("/api/admin/announcements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rawText,
+          durationDays,
+          announcements: parsedAnnouncements,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to publish");
+      }
+
+      setPublishSuccess({
+        count: data.count || parsedAnnouncements.length,
+        expiresAt: data.expiresAt || new Date(Date.now() + durationDays * 86400000).toISOString(),
+      });
+
+      // Refresh archive stats
+      fetch("/api/admin/purge-archive")
+        .then((r) => r.json())
+        .then((d) => setArchiveStats(d.stats))
+        .catch(() => {});
+    } catch (e: any) {
       console.error(e);
+      alert(`Error publishing announcements: ${e.message}`);
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -85,7 +139,10 @@ export function CatechistBulkAnnouncements() {
       `*SUNDAY ANNOUNCEMENTS & PARISH BULLETIN*`,
       `Date: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`,
       "━━━━━━━━━━━━━━━━━━━━━━━━━",
-      ...parsedAnnouncements.map((a, i) => `*${i + 1}. ${a.title.toUpperCase()}*\n${a.body}\n_(Issued by: ${a.issuedBy || "Chaplaincy Secretariat"})_\n`),
+      ...parsedAnnouncements.map(
+        (a, i) =>
+          `*${i + 1}. ${a.title.toUpperCase()}*\n${a.body}\n_(Issued by: ${a.issuedBy || "Chaplaincy Secretariat"})_\n`,
+      ),
       "━━━━━━━━━━━━━━━━━━━━━━━━━",
       "For inquiries, contact the Catechist: 08063314891 or Chaplain: 09044469505",
     ].join("\n");
@@ -96,7 +153,7 @@ export function CatechistBulkAnnouncements() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", width: "100%", maxWidth: "100%", overflowX: "hidden", boxSizing: "border-box" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", width: "100%", maxWidth: "100%", overflowX: "hidden", boxSizing: "border-box" }}>
       {/* Overview Banner */}
       <div
         style={{
@@ -128,32 +185,87 @@ export function CatechistBulkAnnouncements() {
             <h1 style={{ margin: "0.35rem 0 0.5rem", fontSize: "clamp(1.35rem, 3.5vw, 1.85rem)", color: "#fff" }}>
               Sunday Announcements Manager
             </h1>
-            <p style={{ margin: 0, color: "#cbd5e1", maxWidth: "42rem", fontSize: "0.92rem", lineHeight: 1.5 }}>
-              Enter or paste all notices for the Sunday bulletin in the box below. The system automatically
-              formats them for both the <strong>Church Projector</strong> and the <strong>Website</strong>.
+            <p style={{ margin: 0, color: "#cbd5e1", maxWidth: "44rem", fontSize: "0.92rem", lineHeight: 1.5 }}>
+              Type or paste all announcements in the single box below. Choose the public display duration, then click{" "}
+              <strong>Publish Live to Website &amp; Projector</strong>.
             </p>
           </div>
 
           <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
             <Link
-              href="/projector?tab=announcements"
+              href="/announcements"
+              target="_blank"
               className="btn"
               style={{
-                background: "var(--gold)",
-                color: "#183b63",
-                fontWeight: 700,
+                background: "var(--paper)",
+                color: "var(--navy)",
+                fontWeight: 600,
+                fontSize: "0.85rem",
+                padding: "0.55rem 1rem",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.4rem",
-                padding: "0.55rem 1.1rem",
-                fontSize: "0.85rem",
               }}
             >
-              <Tv size={16} /> Projector View →
+              <ExternalLink size={15} /> View Live on Website →
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Success Notification Banner */}
+      {publishSuccess && (
+        <div
+          style={{
+            background: "#f0fdf4",
+            border: "1.5px solid #86efac",
+            borderRadius: "8px",
+            padding: "1.25rem 1.5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+            boxShadow: "0 4px 14px rgba(22, 101, 52, 0.08)",
+          }}
+        >
+          <div>
+            <strong style={{ color: "#166534", fontSize: "1.05rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <CheckCircle2 size={20} color="#16a34a" /> Successfully Published {publishSuccess.count} Announcements!
+            </strong>
+            <p style={{ margin: "0.25rem 0 0", color: "#1e3a29", fontSize: "0.9rem" }}>
+              These announcements are now live on the public website and church projector. They will remain displayed until{" "}
+              <strong>
+                {new Date(publishSuccess.expiresAt).toLocaleDateString("en-GB", {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </strong>
+              , after which they will be automatically moved to the archive.
+            </p>
+          </div>
+
+          <Link
+            href="/announcements"
+            target="_blank"
+            className="btn"
+            style={{
+              background: "#16a34a",
+              borderColor: "#16a34a",
+              color: "#fff",
+              fontSize: "0.88rem",
+              padding: "0.5rem 1.1rem",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            <ExternalLink size={16} /> Open Public Announcements Page →
+          </Link>
+        </div>
+      )}
 
       {/* Main Grid: Input Box on Left, Live Parsed Preview on Right */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "1.5rem", width: "100%", boxSizing: "border-box" }}>
@@ -174,7 +286,7 @@ export function CatechistBulkAnnouncements() {
               <FileText size={18} /> Type / Paste All Announcements
             </label>
             <span style={{ fontSize: "0.8rem", color: "var(--muted)" }}>
-              {parsedAnnouncements.length} announcement{parsedAnnouncements.length === 1 ? "" : "s"} detected
+              {parsedAnnouncements.length} notice{parsedAnnouncements.length === 1 ? "" : "s"} detected
             </span>
           </div>
 
@@ -209,6 +321,45 @@ Baptism will take place on the 3rd Saturday..."
             }}
           />
 
+          {/* Public Display Duration Selector */}
+          <div style={{ marginTop: "1.25rem", padding: "1rem", background: "var(--ivory)", borderRadius: "8px", border: "1px solid var(--line)" }}>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, color: "var(--navy)", marginBottom: "0.4rem" }}>
+              <Clock size={15} style={{ verticalAlign: "middle", marginRight: "0.35rem", color: "var(--gold-text)" }} />
+              Public Display Duration (Auto-Archiving Rule):
+            </label>
+            <p style={{ margin: "0 0 0.6rem", fontSize: "0.78rem", color: "var(--muted)" }}>
+              After this duration, the announcements will automatically expire and be archived from public view.
+            </p>
+
+            <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+              {[
+                { days: 7, label: "7 Days (1 Week - Default)" },
+                { days: 14, label: "14 Days (2 Weeks)" },
+                { days: 21, label: "21 Days (3 Weeks)" },
+                { days: 30, label: "30 Days (1 Month)" },
+              ].map((opt) => (
+                <button
+                  key={opt.days}
+                  type="button"
+                  onClick={() => setDurationDays(opt.days)}
+                  style={{
+                    fontSize: "0.8rem",
+                    padding: "0.35rem 0.65rem",
+                    borderRadius: "4px",
+                    border: "1px solid",
+                    borderColor: durationDays === opt.days ? "var(--marian)" : "var(--line)",
+                    background: durationDays === opt.days ? "var(--marian)" : "#fff",
+                    color: durationDays === opt.days ? "#fff" : "var(--navy)",
+                    fontWeight: durationDays === opt.days ? 700 : 500,
+                    cursor: "pointer",
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1.25rem", flexWrap: "wrap", gap: "0.75rem" }}>
             <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -233,19 +384,29 @@ Baptism will take place on the 3rd Saturday..."
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <button
                 type="button"
-                onClick={handleSave}
+                onClick={handlePublish}
+                disabled={isPublishing || parsedAnnouncements.length === 0}
                 className="btn"
                 style={{
-                  background: isSaved ? "#16a34a" : "var(--navy)",
+                  background: isPublishing ? "var(--muted)" : "var(--navy)",
                   color: "#fff",
-                  fontSize: "0.9rem",
-                  padding: "0.55rem 1.25rem",
+                  fontSize: "0.95rem",
+                  padding: "0.6rem 1.4rem",
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "0.4rem",
+                  gap: "0.45rem",
+                  fontWeight: 700,
                 }}
               >
-                <CheckCircle2 size={16} /> {isSaved ? "Saved Successfully!" : "Save & Format All"}
+                {isPublishing ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Publishing...
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} /> Publish Live to Website &amp; Projector
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -345,36 +506,32 @@ Baptism will take place on the 3rd Saturday..."
             </div>
           )}
 
-          {/* Direct Launch to Projector Card */}
+          {/* Database Space & 90-Day Retention Notice */}
           <div
             style={{
-              background: "var(--ivory)",
-              border: "1.5px solid var(--gold)",
+              background: "#f8fafc",
+              border: "1px solid #cbd5e1",
               borderRadius: "8px",
-              padding: "1.25rem",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "1rem",
+              padding: "1rem 1.25rem",
+              fontSize: "0.85rem",
+              color: "#334155",
             }}
           >
-            <div>
-              <strong style={{ display: "block", color: "var(--navy)", fontSize: "0.95rem" }}>
-                Ready for Church Service?
-              </strong>
-              <span style={{ fontSize: "0.82rem", color: "var(--muted)" }}>
-                Display these {parsedAnnouncements.length} announcements on the church projector with high-contrast text.
-              </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontWeight: 700, color: "var(--navy)", marginBottom: "0.3rem" }}>
+              <Database size={16} color="var(--gold-text)" />
+              Database Retention Policy (Saving Space)
             </div>
-
-            <Link
-              href="/projector?tab=announcements"
-              className="btn"
-              style={{ fontSize: "0.85rem", padding: "0.5rem 1rem", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
-            >
-              <Tv size={15} /> Open Projector Screen →
-            </Link>
+            <p style={{ margin: 0, lineHeight: 1.45 }}>
+              All announcements, concluded Mass intentions, past events, and 9-day prayer requests are automatically archived.
+              Archived records older than <strong>90 days</strong> are automatically cleared to optimize database storage.
+            </p>
+            {archiveStats && (
+              <div style={{ marginTop: "0.5rem", fontSize: "0.78rem", color: "#64748b", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+                <span>Active Notices: <strong>{archiveStats.activeAnnouncements}</strong></span>
+                <span>Archived Notices: <strong>{archiveStats.archivedAnnouncements}</strong></span>
+                <span>Pending 90-day Purge: <strong>{archiveStats.pendingPurgeCount}</strong></span>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -312,9 +312,10 @@ export const SETTING_KEYS: { key: string; label: string; type: "text" | "textare
 /** Admin navigation. `permission` hides links the signed-in user cannot use. */
 export const ADMIN_NAV: { href: string; label: string; permission: string }[] = [
   { href: "/admin", label: "Dashboard", permission: "" },
+  { href: "/admin/announcements", label: "Announcements Manager", permission: "" },
   { href: "/admin/intentions", label: "Mass intentions", permission: "intentions.manage" },
   { href: "/admin/prayers", label: "Prayer requests", permission: "prayer.moderate" },
-  ...RESOURCES.map((r) => ({ href: `/admin/${r.key}`, label: r.title, permission: r.permission })),
+  ...RESOURCES.filter((r) => r.key !== "announcements").map((r) => ({ href: `/admin/${r.key}`, label: r.title, permission: r.permission })),
   { href: "/admin/media", label: "Media", permission: "media.manage" },
   { href: "/admin/settings", label: "Settings", permission: "settings.manage" },
 ];

@@ -25,15 +25,17 @@ import {
   SEED_RECURRING,
   SEED_SOCIETIES,
   SEED_SOCIETY_CATEGORIES,
-  SEED_ANNOUNCEMENTS,
   SEED_EVENTS,
   SEED_ECCLESIASTICAL,
-  SEED_MASS_INTENTIONS,
-  SEED_PRAYER_INTENTIONS,
   SEED_OFFERING_INFO,
   SEED_CHURCH_ACCOUNTS,
   SEED_ABOUT_HISTORY,
 } from "./seed";
+import {
+  getLiveAnnouncements,
+  getLiveMassIntentions,
+  getLivePrayerIntentions,
+} from "./server-store";
 
 const hhmm = (t: string | null) => (t ? t.slice(0, 5) : null);
 
@@ -190,7 +192,7 @@ export class SupabaseDataClient implements DataClient {
         isFeatured: a.is_featured,
       }));
     } catch {
-      return limit ? SEED_ANNOUNCEMENTS.slice(0, limit) : SEED_ANNOUNCEMENTS;
+      return getLiveAnnouncements(limit);
     }
   }
 
@@ -249,7 +251,8 @@ export class SupabaseDataClient implements DataClient {
         isCancelled: e.is_cancelled,
       }));
     } catch {
-      return limit ? SEED_EVENTS.slice(0, limit) : SEED_EVENTS;
+      const active = SEED_EVENTS.filter((e) => new Date(e.endsAt || e.startsAt).getTime() >= Date.now());
+      return limit ? active.slice(0, limit) : active;
     }
   }
 
@@ -378,7 +381,7 @@ export class SupabaseDataClient implements DataClient {
         }));
       }
     } catch {}
-    return SEED_MASS_INTENTIONS.filter((m) => m.scheduledDate === targetDate || (!m.scheduledDate && targetDate === today));
+    return getLiveMassIntentions(targetDate);
   }
 
   async getPublicPrayerIntentions(limit = 30): Promise<PublicPrayerIntention[]> {
@@ -390,7 +393,7 @@ export class SupabaseDataClient implements DataClient {
         return rows.map((r) => ({ id: r.id, body: r.body, category: r.category, displayName: r.display_name }));
       }
     } catch {}
-    return SEED_PRAYER_INTENTIONS.slice(0, limit);
+    return getLivePrayerIntentions(limit);
   }
 
   async getOfferingInfo(): Promise<OfferingInfo> {

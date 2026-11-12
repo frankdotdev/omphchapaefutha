@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   description: "View daily intentions offered at Holy Mass and book a Mass intention for thanksgiving, repose of souls, or healing.",
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Props = { searchParams: Promise<{ date?: string }> };
 

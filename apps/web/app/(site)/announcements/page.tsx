@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   description: "Official weekly announcements and notices from Our Mother of Perpetual Help Catholic Chaplaincy, AE-FUTHA.",
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AnnouncementsPage() {
   const items = await getDataClient().getAnnouncements(50);

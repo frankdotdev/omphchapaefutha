@@ -5,17 +5,19 @@ import {
   SEED_SOCIETIES,
   SEED_SOCIETY_CATEGORIES,
   SEED_ABOUT_HISTORY,
-  SEED_ANNOUNCEMENTS,
   SEED_EVENTS,
-  SEED_PRAYER_INTENTIONS,
-  SEED_MASS_INTENTIONS,
   SEED_OFFERING_INFO,
   SEED_CHURCH_ACCOUNTS,
 } from "./seed";
-import type { PublicMassIntention } from "@/lib/types";
+import type { PublicMassIntention, Announcement, PublicPrayerIntention } from "@/lib/types";
 import { addDays, lagosDateString } from "@/lib/time/lagos";
+import {
+  getLiveAnnouncements,
+  getLiveMassIntentions,
+  getLivePrayerIntentions,
+} from "./server-store";
 
-/** Read-only client over owner-supplied seed data with live storage bridge for local development/offline. */
+/** Production-ready client with live storage bridge for real data, time limits & archiving. */
 export class SeedDataClient implements DataClient {
   readonly backend = "seed" as const;
   async getRecurringSchedule() { return SEED_RECURRING; }
@@ -40,7 +42,17 @@ export class SeedDataClient implements DataClient {
     const list = await this.getSocieties();
     return list.find((s) => s.slug === slug) ?? null;
   }
-  async getAnnouncements(limit?: number) {
+
+  async getAnnouncements(limit?: number): Promise<Announcement[]> {
+    // 1. Check real published announcements from server store
+    try {
+      const live = getLiveAnnouncements(limit);
+      if (live && live.length > 0) {
+        return live;
+      }
+    } catch {}
+
+    // 2. Browser fallback for immediate preview
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("omph_announcements_parsed_v1");
@@ -52,54 +64,74 @@ export class SeedDataClient implements DataClient {
         }
       } catch {}
     }
-    return limit ? SEED_ANNOUNCEMENTS.slice(0, limit) : SEED_ANNOUNCEMENTS;
+
+    return [];
   }
+
   async getAnnouncement(slug?: string) {
     const list = await this.getAnnouncements();
     return list.find((a) => a.slug === slug) ?? null;
   }
+
   async getUpcomingEvents(limit?: number) {
-    const now = Date.now() - 24 * 60 * 60 * 1000;
-    const activeEvents = SEED_EVENTS.filter((e) => new Date(e.startsAt).getTime() >= now);
+    // Rule: events disappear after the event date/time has passed
+    const now = Date.now();
+    const activeEvents = SEED_EVENTS.filter((e) => {
+      const eventTime = new Date(e.endsAt || e.startsAt).getTime();
+      return eventTime >= now;
+    });
     return limit ? activeEvents.slice(0, limit) : activeEvents;
   }
+
   async getEvent(slug?: string) {
     const events = await this.getUpcomingEvents();
     return events.find((e) => e.slug === slug) ?? null;
   }
+
   async getEcclesiasticalDirectory() {
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("omph_communion_directory");
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
         }
       } catch {}
     }
     return SEED_ECCLESIASTICAL;
   }
-  async getLeadership() {
-    return [];
-  }
+
+  async getLeadership() { return []; }
   async getContact() {
     return {
+      address: "Our Mother of Perpetual Help Catholic Chaplaincy, Alex Ekwueme Federal University Teaching Hospital (AE-FUTHA 1), Abakaliki, Ebonyi State, Nigeria.",
       phone: "08063314891 (Catechist) / 09044469505 (Chaplain)",
-      email: "info@omph-aefutha.catholic.ng",
-      address: "Our Mother of Perpetual Help Catholic Chaplaincy, Alex Ekwueme Federal University Teaching Hospital, Abakaliki (AE-FUTHA), Ebonyi State, Nigeria",
+      email: null,
+      mapsUrl: null,
     };
   }
+
   async getPublicMassIntentions(date?: string): Promise<PublicMassIntention[]> {
     const today = lagosDateString();
     const targetDate = date || today;
 
-    // Archiving rule: once a day is in the past, its intentions are archived and not displayed publicly
+    // Strict Archiving Rule: past dates are archived and NEVER displayed publicly
     if (targetDate < today) {
       return [];
     }
 
-    const realBookings: PublicMassIntention[] = [];
+    // 1. Try real server-store bookings
+    try {
+      const live = getLiveMassIntentions(targetDate);
+      if (live && live.length > 0) {
+        return live;
+      }
+    } catch {}
 
+    // 2. Try browser localStorage if on client
+    const realBookings: PublicMassIntention[] = [];
     if (typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem("omph_mass_intentions_store");
@@ -109,7 +141,6 @@ export class SeedDataClient implements DataClient {
 
           for (let idx = 0; idx < entries.length; idx++) {
             const i = entries[idx];
-            // Filter by active booking statuses
             if (["approved", "completed", "confirmed", "payment_review", "pending_payment"].includes(i.status)) {
               const startDate = i.preferredDate || i.scheduledDate || "";
               const numDays = i.numberOfDays || (i.dates ? i.dates.length : 1);
@@ -124,9 +155,8 @@ export class SeedDataClient implements DataClient {
                 }
               }
 
-              // Archiving rule: after the intention has passed its last day, it is archived and not displayed publicly
-              const isPastIntention = today > lastDay;
-              if (isPastIntention) {
+              // Archiving rule: after last day, it is archived and not displayed publicly
+              if (today > lastDay) {
                 continue;
               }
 
@@ -147,7 +177,7 @@ export class SeedDataClient implements DataClient {
                   listOrder: idx + 1,
                   text: i.text,
                   displayName: i.displayName || "Parishioner",
-                  status: isPastIntention ? "archived" : "confirmed",
+                  status: "confirmed",
                   numberOfDays: numDays,
                 });
               }
@@ -161,29 +191,44 @@ export class SeedDataClient implements DataClient {
       return realBookings;
     }
 
-    // Only fallback to active seed intentions if viewing today and zero real bookings exist
-    if (targetDate === today) {
-      return SEED_MASS_INTENTIONS.map((m) => ({ ...m, scheduledDate: today }));
-    }
-
+    // Never show old mock intentions! If no bookings exist for today, return []
     return [];
   }
-  async getPublicPrayerIntentions(limit = 20) {
-    let all = [...SEED_PRAYER_INTENTIONS];
+
+  async getPublicPrayerIntentions(limit = 20): Promise<PublicPrayerIntention[]> {
+    // 1. Try real server-store prayers (filtered strictly to 9 days)
+    try {
+      const live = getLivePrayerIntentions(limit);
+      if (live && live.length > 0) {
+        return live;
+      }
+    } catch {}
+
+    // 2. Check browser localStorage
     if (typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem("omph_prayer_requests");
         if (raw) {
           const items = JSON.parse(raw);
-          all = [...items, ...all];
+          const now = Date.now();
+          const active = items.filter((p: any) => {
+            const created = p.createdAt ? new Date(p.createdAt).getTime() : now;
+            return now - created <= 9 * 86400000;
+          });
+          if (active.length > 0) {
+            return active.slice(0, limit);
+          }
         }
       } catch {}
     }
-    return all.slice(0, limit);
+
+    return [];
   }
+
   async getOfferingInfo() {
     return SEED_OFFERING_INFO;
   }
+
   async getMassOptions() {
     return [
       { id: "mass-morning", name: "Morning Mass (06:20)" },
@@ -192,6 +237,7 @@ export class SeedDataClient implements DataClient {
       { id: "", name: "Any Mass" },
     ];
   }
+
   async getHeroSlides() { return []; }
   async getDailyReadings(_date?: string) { return null; }
   async getSaintProfiles(_ids?: string[]) { return []; }

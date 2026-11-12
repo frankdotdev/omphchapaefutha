@@ -4,7 +4,8 @@ import { getDataClient } from "@/lib/data";
 import { PageHead } from "@/components/ui/PageHead";
 
 type Props = { params: Promise<{ slug: string }> };
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

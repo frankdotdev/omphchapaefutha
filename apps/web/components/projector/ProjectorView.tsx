@@ -73,35 +73,56 @@ export function ProjectorView() {
   // Hydrate real actual intentions, announcements, and events
   useEffect(() => {
     // 1. Fetch real active Mass Intentions for today
-    getDataClient()
-      .getPublicMassIntentions(todayDate)
-      .then((res) => {
-        if (Array.isArray(res)) {
-          setTodayIntentions(res);
+    fetch(`/api/mass-intentions?date=${todayDate}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.intentions) {
+          setTodayIntentions(d.intentions);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        getDataClient()
+          .getPublicMassIntentions(todayDate)
+          .then((res) => {
+            if (Array.isArray(res)) setTodayIntentions(res);
+          })
+          .catch(() => {});
+      });
 
     // 2. Fetch real active upcoming events
     getDataClient()
       .getUpcomingEvents()
       .then((res) => {
         if (Array.isArray(res) && res.length > 0) {
-          const now = Date.now() - 24 * 60 * 60 * 1000;
-          setEvents(res.filter((e) => new Date(e.startsAt).getTime() >= now));
+          const now = Date.now();
+          setEvents(res.filter((e) => new Date(e.endsAt || e.startsAt).getTime() >= now));
         }
       })
       .catch(() => {});
 
     // 3. Fetch real announcements
-    getDataClient()
-      .getAnnouncements()
-      .then((res) => {
-        if (Array.isArray(res) && res.length > 0) {
-          setAnnouncements(res);
+    fetch("/api/admin/announcements")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.announcements && d.announcements.length > 0) {
+          setAnnouncements(d.announcements);
+        } else {
+          getDataClient()
+            .getAnnouncements()
+            .then((res) => {
+              if (Array.isArray(res) && res.length > 0) setAnnouncements(res);
+            })
+            .catch(() => {});
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        getDataClient()
+          .getAnnouncements()
+          .then((res) => {
+            if (Array.isArray(res) && res.length > 0) setAnnouncements(res);
+          })
+          .catch(() => {});
+      });
   }, [todayDate]);
 
   const activeHymn = useMemo(() => {

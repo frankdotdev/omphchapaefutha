@@ -88,6 +88,19 @@ class LocalSubmissionsClient implements SubmissionClient {
       contact: i.privateContact,
     };
     this.saveStored(stored);
+
+    // Sync to Server API so it physically shows on the site & projector
+    try {
+      fetch("/api/mass-intentions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...i,
+          reference,
+        }),
+      }).catch(() => {});
+    } catch {}
+
     return { reference };
   }
 
@@ -130,6 +143,14 @@ class LocalSubmissionsClient implements SubmissionClient {
         localStorage.setItem(key, JSON.stringify(cur));
       } catch {}
     }
+
+    try {
+      fetch("/api/prayer-intentions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(i),
+      }).catch(() => {});
+    } catch {}
   }
 }
 
