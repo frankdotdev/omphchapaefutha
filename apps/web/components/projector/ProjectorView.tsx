@@ -664,13 +664,13 @@ export function ProjectorView() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
                 <div>
                   <span style={{ textTransform: "uppercase", fontSize: "0.95rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700 }}>
-                    {currentOrderPart.category.toUpperCase().replace("-", " ")} · PART {orderPartIdx + 1} OF {ORDER_OF_MASS.length}
+                    {currentOrderPart.categoryLabel.toUpperCase()} · PART {orderPartIdx + 1} OF {ORDER_OF_MASS.length}
                   </span>
                   <h1 style={{ fontSize: `${Math.round(fontSizePx * 1.15)}px`, margin: "0.2rem 0 0", color: themeStyles.heading }}>
-                    {currentOrderPart.titleEn}
+                    {currentOrderPart.title}
                   </h1>
                   <div style={{ fontSize: `${Math.round(fontSizePx * 0.7)}px`, color: "#94a3b8", fontStyle: "italic" }}>
-                    {currentOrderPart.titleIg} · {currentOrderPart.titleLa}
+                    {currentOrderPart.igboTitle} · {currentOrderPart.latinTitle}
                   </div>
                 </div>
 
@@ -709,78 +709,102 @@ export function ProjectorView() {
               )}
 
               <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                {currentOrderPart.dialogues.map((dlg, idx) => {
-                  const isPriest = dlg.speaker === "Priest";
-                  const speakerColor = isPriest ? themeStyles.dialoguePriest : themeStyles.dialoguePeople;
+                {currentOrderPart.items.map((item) => (
+                  <div
+                    key={item.id}
+                    style={{
+                      padding: "1.25rem 1.5rem",
+                      background: themeStyles.cardBg,
+                      border: `1px solid ${themeStyles.border}`,
+                      borderRadius: "8px",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.75rem", borderBottom: `1px dashed ${themeStyles.border}`, paddingBottom: "0.4rem" }}>
+                      <h3 style={{ margin: 0, fontSize: `${Math.round(fontSizePx * 0.75)}px`, color: themeStyles.gold }}>
+                        {item.title}
+                      </h3>
+                      {item.rubric && (
+                        <span style={{ fontSize: `${Math.round(fontSizePx * 0.5)}px`, color: "#f87171", fontStyle: "italic" }}>
+                          {item.rubric}
+                        </span>
+                      )}
+                    </div>
 
-                  return (
                     <div
-                      key={idx}
                       style={{
-                        padding: "0.85rem 1.25rem",
-                        background: isPriest ? "transparent" : themeStyles.cardBg,
-                        borderLeft: `5px solid ${speakerColor}`,
-                        borderRadius: "4px",
+                        display: "grid",
+                        gridTemplateColumns:
+                          langChoice === "all"
+                            ? "1fr 1fr 1fr"
+                            : ["en_ig", "en_la"].includes(langChoice)
+                            ? "1fr 1fr"
+                            : "1fr",
+                        gap: "1.5rem",
                       }}
                     >
-                      <div style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: speakerColor, marginBottom: "0.35rem" }}>
-                        {dlg.speaker}:
-                      </div>
-
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns:
-                            langChoice === "all"
-                              ? "1fr 1fr 1fr"
-                              : ["en_ig", "en_la"].includes(langChoice)
-                              ? "1fr 1fr"
-                              : "1fr",
-                          gap: "1.5rem",
-                        }}
-                      >
-                        {(langChoice === "all" || langChoice.includes("en")) && (
-                          <div>
-                            {langChoice !== "en" && (
-                              <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
-                                ENGLISH
-                              </div>
-                            )}
-                            <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, whiteSpace: "pre-line" }}>
-                              {dlg.english}
+                      {(langChoice === "all" || langChoice.includes("en")) && (
+                        <div>
+                          {langChoice !== "en" && (
+                            <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
+                              ENGLISH
                             </div>
-                          </div>
-                        )}
-
-                        {(langChoice === "all" || langChoice.includes("ig")) && (
-                          <div style={{ borderLeft: langChoice === "all" || langChoice === "en_ig" ? `1px solid ${themeStyles.border}` : "none", paddingLeft: "1rem" }}>
-                            {langChoice !== "ig" && (
-                              <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
-                                IGBO (ASỤSỤ IGBO)
-                              </div>
-                            )}
-                            <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, whiteSpace: "pre-line", color: "#38bdf8" }}>
-                              {dlg.igbo}
+                          )}
+                          {item.english.celebrant && (
+                            <div style={{ marginBottom: "0.5rem", fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: themeStyles.dialoguePriest }}>
+                              <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block" }}>Priest:</strong>
+                              {item.english.celebrant}
                             </div>
+                          )}
+                          <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: themeStyles.dialoguePeople, fontWeight: 700, whiteSpace: "pre-line" }}>
+                            <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block", color: themeStyles.gold }}>People:</strong>
+                            {item.english.people}
                           </div>
-                        )}
+                        </div>
+                      )}
 
-                        {(langChoice === "all" || langChoice.includes("la")) && (
-                          <div style={{ borderLeft: `1px solid ${themeStyles.border}`, paddingLeft: "1rem" }}>
-                            {langChoice !== "la" && (
-                              <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
-                                LATIN (LATINA)
-                              </div>
-                            )}
-                            <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, fontStyle: "italic", whiteSpace: "pre-line", color: "#e2e8f0" }}>
-                              {dlg.latin}
+                      {(langChoice === "all" || langChoice.includes("ig")) && (
+                        <div style={{ borderLeft: langChoice === "all" || langChoice === "en_ig" ? `1px solid ${themeStyles.border}` : "none", paddingLeft: "1rem" }}>
+                          {langChoice !== "ig" && (
+                            <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
+                              IGBO (ASỤSỤ IGBO)
                             </div>
+                          )}
+                          {item.igbo.celebrant && (
+                            <div style={{ marginBottom: "0.5rem", fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: themeStyles.dialoguePriest }}>
+                              <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block" }}>Ụkọchukwu:</strong>
+                              {item.igbo.celebrant}
+                            </div>
+                          )}
+                          <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: "#38bdf8", fontWeight: 700, whiteSpace: "pre-line" }}>
+                            <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block", color: themeStyles.gold }}>Ọgbakọ:</strong>
+                            {item.igbo.people}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
+
+                      {(langChoice === "all" || langChoice.includes("la")) && (
+                        <div style={{ borderLeft: `1px solid ${themeStyles.border}`, paddingLeft: "1rem" }}>
+                          {langChoice !== "la" && (
+                            <div style={{ fontSize: "0.75rem", color: themeStyles.gold, fontWeight: 700, marginBottom: "0.2rem" }}>
+                              LATIN (LATINA)
+                            </div>
+                          )}
+                          {item.latin.celebrant && (
+                            <div style={{ marginBottom: "0.5rem", fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: themeStyles.dialoguePriest }}>
+                              <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block" }}>Sacerdos:</strong>
+                              {item.latin.celebrant}
+                            </div>
+                          )}
+                          <div style={{ fontSize: `${fontSizePx}px`, lineHeight: 1.45, color: "#e2e8f0", fontStyle: "italic", fontWeight: 700, whiteSpace: "pre-line" }}>
+                            <strong style={{ fontSize: `${Math.round(fontSizePx * 0.6)}px`, textTransform: "uppercase", display: "block", color: themeStyles.gold }}>Populus:</strong>
+                            {item.latin.people}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </div>
 
