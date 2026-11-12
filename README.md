@@ -51,13 +51,23 @@ pnpm build
 - **High-Contrast Themes:** Optimized for church projector optics — *Sanctuary Dark* (`#000000` with gold headings and crisp white text to prevent glare), *Daylight Crisp* (white with black text), and *Liturgical Amber*.
 - **Variable Font Scaler (`A-` / `A+`):** Responsive typography up to `60px` for crystal-clear readability from any pew in the church.
 - **Hardware Remote / Clicker Navigation:** Supports wireless presentation clickers and keyboard shortcuts:
-  - `Space` / `→` / `PageDown`: Next slide / prayer / hymn verse
-  - `←` / `PageUp`: Previous slide / prayer / hymn verse
+  - `Space` / `→` / `PageDown`: Next slide / prayer / notice / event / hymn verse
+  - `←` / `PageUp`: Previous slide / prayer / notice / event / hymn verse
   - `1`: Today's Mass Readings (RSV-CE / Grail Psalms)
   - `2`: Order of Mass (English / Igbo / Latin)
   - `3`: Mass Hymns & Choir Lyrics
   - `4`: Today's Mass Intentions
+  - `5`: Sunday Announcements & Notices (Full slide-by-slide view)
+  - `6`: Upcoming Chaplaincy Events & Calendar
   - `F`: Toggle Fullscreen
+
+### 5. Catechist Single-Box Announcements Tool (`/announcements/bulk`)
+- **Single-Box Typing:** Rather than entering announcements one-by-one into separate forms, the Catechist types or pastes all notices for Sunday Mass into a single text area (e.g., numbered `1. TITLE`, `2. TITLE`, or separated by blank lines).
+- **Intelligent Parser (`apps/web/lib/announcements/parser.ts`):** Automatically extracts the title, detects issuing body (CWO, CMO, CYON, FECAMDS, Catechetical Commission, etc.), urgency flags, dates, and paragraph breaks.
+- **Dual Destination Publishing:**
+  - Formats cleanly as individual presentation slides for the **Church Projector** (`/projector?tab=announcements`).
+  - Publishes to the public website **Announcements Page** (`/announcements`).
+  - Generates a 1-click formatted bulletin for **WhatsApp Broadcasts**.
 
 ### 2. Mass Schedule & Exceptions (`/mass-schedule`)
 - Full weekly and Sunday timetable for Masses, Eucharistic Adoration, Benediction, Confessions, Catechism, and Infant Baptism (every 3rd Saturday).

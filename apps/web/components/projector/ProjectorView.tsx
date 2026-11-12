@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { ORDER_OF_MASS, type OrderOfMassPart } from "@/lib/liturgy/order-of-mass";
 import { CATHOLIC_HYMNS, type Hymn } from "@/lib/hymns/data";
 import { CURATED_DAILY_READINGS } from "@/lib/liturgy/daily-readings-data";
+import { SEED_ANNOUNCEMENTS, SEED_EVENTS } from "@/lib/data/seed";
+import type { Announcement, ChaplaincyEvent } from "@/lib/types";
 import { lagosDateString, formatLongDate } from "@/lib/time/lagos";
 import {
   Maximize,
@@ -21,10 +23,14 @@ import {
   ScrollText,
   HeartHandshake,
   ArrowLeft,
-  Volume2,
+  Megaphone,
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
 } from "lucide-react";
 
-type ProjectorTab = "readings" | "order" | "hymns" | "intentions";
+type ProjectorTab = "readings" | "order" | "hymns" | "intentions" | "announcements" | "events";
 type ThemeMode = "sanctuary" | "daylight" | "amber";
 type LangChoice = "en_ig" | "en_la" | "all" | "en" | "ig" | "la";
 
@@ -52,6 +58,29 @@ export function ProjectorView() {
   const [selectedHymnId, setSelectedHymnId] = useState<string>(initialHymnId);
   const [hymnVerseIdx, setHymnVerseIdx] = useState<number>(0);
 
+  // Announcements Slide State
+  const [announcements, setAnnouncements] = useState<Announcement[]>(SEED_ANNOUNCEMENTS);
+  const [announcementIdx, setAnnouncementIdx] = useState<number>(0);
+
+  // Events Slide State
+  const [events, setEvents] = useState<ChaplaincyEvent[]>(SEED_EVENTS);
+  const [eventIdx, setEventIdx] = useState<number>(0);
+
+  // Hydrate custom draft announcements from Catechist bulk box if present in localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("omph_announcements_parsed_v1");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setAnnouncements(parsed);
+        }
+      }
+    } catch {
+      // Fallback to SEED_ANNOUNCEMENTS
+    }
+  }, []);
+
   const activeHymn = useMemo(() => {
     return CATHOLIC_HYMNS.find((h) => h.id === selectedHymnId) || CATHOLIC_HYMNS[0];
   }, [selectedHymnId]);
@@ -64,24 +93,24 @@ export function ProjectorView() {
     if (readings.firstReading) {
       list.push({
         title: "First Reading",
-        ref: readings.firstReading.ref,
-        content: readings.firstReading.text,
+        ref: readings.firstReading.ref || "",
+        content: readings.firstReading.text || "",
       });
     }
 
     if (readings.psalm) {
       list.push({
         title: "Responsorial Psalm",
-        ref: readings.psalm.ref,
-        content: readings.psalm.text,
+        ref: readings.psalm.ref || "",
+        content: readings.psalm.text || "",
       });
     }
 
     if (readings.secondReading) {
       list.push({
         title: "Second Reading",
-        ref: readings.secondReading.ref,
-        content: readings.secondReading.text,
+        ref: readings.secondReading.ref || "",
+        content: readings.secondReading.text || "",
       });
     }
 
@@ -89,8 +118,8 @@ export function ProjectorView() {
       list.push({
         title: "The Holy Gospel",
         subtitle: "The Lord be with you — And with your spirit",
-        ref: readings.gospel.ref,
-        content: readings.gospel.text,
+        ref: readings.gospel.ref || "",
+        content: readings.gospel.text || "",
       });
     }
 
@@ -118,6 +147,10 @@ export function ProjectorView() {
       setOrderPartIdx((curr) => Math.max(0, curr - 1));
     } else if (activeTab === "hymns") {
       setHymnVerseIdx((curr) => Math.max(0, curr - 1));
+    } else if (activeTab === "announcements") {
+      setAnnouncementIdx((curr) => Math.max(0, curr - 1));
+    } else if (activeTab === "events") {
+      setEventIdx((curr) => Math.max(0, curr - 1));
     }
   }, [activeTab]);
 
@@ -130,8 +163,12 @@ export function ProjectorView() {
       if (activeHymn) {
         setHymnVerseIdx((curr) => Math.min(activeHymn.verses.length - 1, curr + 1));
       }
+    } else if (activeTab === "announcements") {
+      setAnnouncementIdx((curr) => Math.min(announcements.length - 1, curr + 1));
+    } else if (activeTab === "events") {
+      setEventIdx((curr) => Math.min(events.length - 1, curr + 1));
     }
-  }, [activeTab, readingSlides.length, activeHymn]);
+  }, [activeTab, readingSlides.length, activeHymn, announcements.length, events.length]);
 
   // Keyboard navigation & remote clicker listener
   useEffect(() => {
@@ -157,6 +194,10 @@ export function ProjectorView() {
         setActiveTab("hymns");
       } else if (e.key === "4") {
         setActiveTab("intentions");
+      } else if (e.key === "5") {
+        setActiveTab("announcements");
+      } else if (e.key === "6") {
+        setActiveTab("events");
       }
     };
 
@@ -204,6 +245,8 @@ export function ProjectorView() {
   }, [theme]);
 
   const currentOrderPart = ORDER_OF_MASS[orderPartIdx] || ORDER_OF_MASS[0];
+  const currentAnnouncement = announcements[announcementIdx] || announcements[0];
+  const currentEvent = events[eventIdx] || events[0];
 
   return (
     <div
@@ -268,20 +311,20 @@ export function ProjectorView() {
           </span>
         </div>
 
-        {/* Tab Switchers */}
-        <div style={{ display: "flex", gap: "0.35rem", background: "#1e293b", padding: "0.25rem", borderRadius: "6px" }}>
+        {/* Tab Switchers: 1 to 6 */}
+        <div style={{ display: "flex", gap: "0.3rem", background: "#1e293b", padding: "0.25rem", borderRadius: "6px", flexWrap: "wrap" }}>
           <button
             onClick={() => setActiveTab("readings")}
             style={{
-              padding: "0.4rem 0.85rem",
-              fontSize: "0.82rem",
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
               borderRadius: "4px",
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               display: "inline-flex",
               alignItems: "center",
-              gap: "0.35rem",
+              gap: "0.3rem",
               background: activeTab === "readings" ? "#eab308" : "transparent",
               color: activeTab === "readings" ? "#000" : "#cbd5e1",
             }}
@@ -292,15 +335,15 @@ export function ProjectorView() {
           <button
             onClick={() => setActiveTab("order")}
             style={{
-              padding: "0.4rem 0.85rem",
-              fontSize: "0.82rem",
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
               borderRadius: "4px",
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               display: "inline-flex",
               alignItems: "center",
-              gap: "0.35rem",
+              gap: "0.3rem",
               background: activeTab === "order" ? "#eab308" : "transparent",
               color: activeTab === "order" ? "#000" : "#cbd5e1",
             }}
@@ -311,15 +354,15 @@ export function ProjectorView() {
           <button
             onClick={() => setActiveTab("hymns")}
             style={{
-              padding: "0.4rem 0.85rem",
-              fontSize: "0.82rem",
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
               borderRadius: "4px",
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               display: "inline-flex",
               alignItems: "center",
-              gap: "0.35rem",
+              gap: "0.3rem",
               background: activeTab === "hymns" ? "#eab308" : "transparent",
               color: activeTab === "hymns" ? "#000" : "#cbd5e1",
             }}
@@ -330,20 +373,58 @@ export function ProjectorView() {
           <button
             onClick={() => setActiveTab("intentions")}
             style={{
-              padding: "0.4rem 0.85rem",
-              fontSize: "0.82rem",
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
               borderRadius: "4px",
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               display: "inline-flex",
               alignItems: "center",
-              gap: "0.35rem",
+              gap: "0.3rem",
               background: activeTab === "intentions" ? "#eab308" : "transparent",
               color: activeTab === "intentions" ? "#000" : "#cbd5e1",
             }}
           >
             <HeartHandshake size={14} /> [4] Intentions
+          </button>
+
+          <button
+            onClick={() => setActiveTab("announcements")}
+            style={{
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
+              borderRadius: "4px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.3rem",
+              background: activeTab === "announcements" ? "#eab308" : "transparent",
+              color: activeTab === "announcements" ? "#000" : "#cbd5e1",
+            }}
+          >
+            <Megaphone size={14} /> [5] Notices
+          </button>
+
+          <button
+            onClick={() => setActiveTab("events")}
+            style={{
+              padding: "0.4rem 0.75rem",
+              fontSize: "0.8rem",
+              borderRadius: "4px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.3rem",
+              background: activeTab === "events" ? "#eab308" : "transparent",
+              color: activeTab === "events" ? "#000" : "#cbd5e1",
+            }}
+          >
+            <Calendar size={14} /> [6] Events
           </button>
         </div>
 
@@ -448,7 +529,6 @@ export function ProjectorView() {
         {/* ========================================================= */}
         {activeTab === "readings" && (
           <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
-            {/* Header info */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem" }}>
                 <div>
@@ -469,14 +549,12 @@ export function ProjectorView() {
                 </div>
               </div>
 
-              {/* Subtitle / Acclamation if present */}
               {readingSlides[readingSlide]?.subtitle && (
                 <div style={{ fontSize: `${Math.round(fontSizePx * 0.85)}px`, color: themeStyles.gold, fontStyle: "italic", marginBottom: "1rem" }}>
                   {readingSlides[readingSlide].subtitle}
                 </div>
               )}
 
-              {/* Scripture Text Body */}
               <div
                 style={{
                   fontSize: `${fontSizePx}px`,
@@ -487,7 +565,6 @@ export function ProjectorView() {
                   fontFamily: "'Merriweather', 'Georgia', serif",
                 }}
               >
-                {/* Highlight Psalm response prominently */}
                 {readingSlides[readingSlide]?.title.includes("Psalm") ? (
                   <div>
                     {readingSlides[readingSlide].content.split("\n\n").map((stanza, idx) => {
@@ -517,7 +594,6 @@ export function ProjectorView() {
               </div>
             </div>
 
-            {/* Bottom Nav Controls */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}` }}>
               <button
                 onClick={handlePrev}
@@ -585,7 +661,6 @@ export function ProjectorView() {
         {activeTab === "order" && currentOrderPart && (
           <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
             <div>
-              {/* Header with language filter */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
                 <div>
                   <span style={{ textTransform: "uppercase", fontSize: "0.95rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700 }}>
@@ -599,7 +674,6 @@ export function ProjectorView() {
                   </div>
                 </div>
 
-                {/* Language Select buttons */}
                 <div style={{ display: "flex", gap: "0.3rem", background: "#1e293b", padding: "0.25rem", borderRadius: "6px" }}>
                   {(["en_ig", "en_la", "all", "en", "ig", "la"] as LangChoice[]).map((mode) => (
                     <button
@@ -628,14 +702,12 @@ export function ProjectorView() {
                 </div>
               </div>
 
-              {/* Rubric notice */}
               {currentOrderPart.rubric && (
                 <div style={{ fontSize: `${Math.round(fontSizePx * 0.55)}px`, fontStyle: "italic", color: "#f87171", marginBottom: "1rem" }}>
                   ❖ {currentOrderPart.rubric}
                 </div>
               )}
 
-              {/* Liturgical Dialogue Lines */}
               <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                 {currentOrderPart.dialogues.map((dlg, idx) => {
                   const isPriest = dlg.speaker === "Priest";
@@ -655,7 +727,6 @@ export function ProjectorView() {
                         {dlg.speaker}:
                       </div>
 
-                      {/* Multilingual Display Grid */}
                       <div
                         style={{
                           display: "grid",
@@ -668,7 +739,6 @@ export function ProjectorView() {
                           gap: "1.5rem",
                         }}
                       >
-                        {/* English */}
                         {(langChoice === "all" || langChoice.includes("en")) && (
                           <div>
                             {langChoice !== "en" && (
@@ -682,7 +752,6 @@ export function ProjectorView() {
                           </div>
                         )}
 
-                        {/* Igbo */}
                         {(langChoice === "all" || langChoice.includes("ig")) && (
                           <div style={{ borderLeft: langChoice === "all" || langChoice === "en_ig" ? `1px solid ${themeStyles.border}` : "none", paddingLeft: "1rem" }}>
                             {langChoice !== "ig" && (
@@ -696,7 +765,6 @@ export function ProjectorView() {
                           </div>
                         )}
 
-                        {/* Latin */}
                         {(langChoice === "all" || langChoice.includes("la")) && (
                           <div style={{ borderLeft: `1px solid ${themeStyles.border}`, paddingLeft: "1rem" }}>
                             {langChoice !== "la" && (
@@ -716,7 +784,6 @@ export function ProjectorView() {
               </div>
             </div>
 
-            {/* Bottom Stepper Controls */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}` }}>
               <button
                 onClick={handlePrev}
@@ -770,7 +837,6 @@ export function ProjectorView() {
         {activeTab === "hymns" && (
           <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
             <div>
-              {/* Top Hymn Selector */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
                 <div>
                   <span style={{ textTransform: "uppercase", fontSize: "0.9rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700 }}>
@@ -786,7 +852,6 @@ export function ProjectorView() {
                   )}
                 </div>
 
-                {/* Quick hymn dropdown */}
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <label htmlFor="hymn-select" style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
                     Select Hymn:
@@ -816,7 +881,6 @@ export function ProjectorView() {
                 </div>
               </div>
 
-              {/* Refrain / Chorus if exists */}
               {activeHymn?.refrain && (
                 <div
                   style={{
@@ -836,7 +900,6 @@ export function ProjectorView() {
                 </div>
               )}
 
-              {/* Active Verse Display */}
               <div
                 style={{
                   background: themeStyles.cardBg,
@@ -865,7 +928,6 @@ export function ProjectorView() {
               </div>
             </div>
 
-            {/* Verse Navigation */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}` }}>
               <button
                 onClick={handlePrev}
@@ -946,7 +1008,6 @@ export function ProjectorView() {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                {/* Morning Mass Intentions */}
                 <div
                   style={{
                     background: themeStyles.cardBg,
@@ -971,7 +1032,6 @@ export function ProjectorView() {
                   </ul>
                 </div>
 
-                {/* Afternoon Mass Intentions */}
                 <div
                   style={{
                     background: themeStyles.cardBg,
@@ -998,9 +1058,284 @@ export function ProjectorView() {
               </div>
             </div>
 
-            {/* Bottom info */}
             <div style={{ textAlign: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}`, fontSize: "0.9rem", color: "#94a3b8" }}>
               Mass intentions can be booked via the chaplaincy portal or with the Catechist (08063314891).
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 5: PARISH ANNOUNCEMENTS (Catechist Bulk Output)     */}
+        {/* ========================================================= */}
+        {activeTab === "announcements" && currentAnnouncement && (
+          <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
+            <div>
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem" }}>
+                <div>
+                  <span style={{ textTransform: "uppercase", fontSize: "0.95rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <Megaphone size={16} /> CHAPLAINCY NOTICES · {currentAnnouncement.issuedBy || "Chaplaincy Council"}
+                  </span>
+                  <h1 style={{ fontSize: `${Math.round(fontSizePx * 1.25)}px`, margin: "0.25rem 0 0", color: themeStyles.heading }}>
+                    {currentAnnouncement.title}
+                  </h1>
+                </div>
+
+                <div style={{ textAlign: "right" }}>
+                  <span style={{ fontSize: "1.1rem", fontWeight: 700, color: themeStyles.gold }}>
+                    Notice {announcementIdx + 1} of {announcements.length}
+                  </span>
+                  <div style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
+                    [Space / Clicker to advance]
+                  </div>
+                </div>
+              </div>
+
+              {/* Body Card */}
+              <div
+                style={{
+                  background: themeStyles.cardBg,
+                  border: `2px solid ${currentAnnouncement.isUrgent ? "#dc2626" : themeStyles.border}`,
+                  borderRadius: "12px",
+                  padding: "2.5rem",
+                  boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+                }}
+              >
+                {currentAnnouncement.isUrgent && (
+                  <div style={{ display: "inline-block", background: "#dc2626", color: "#fff", fontWeight: 800, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", padding: "0.25rem 0.75rem", borderRadius: "4px", marginBottom: "1.25rem" }}>
+                    ⚠️ URGENT PARISH NOTICE
+                  </div>
+                )}
+
+                <div
+                  style={{
+                    fontSize: `${fontSizePx}px`,
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-line",
+                    fontFamily: "'Merriweather', 'Georgia', serif",
+                    textAlign: "justify",
+                  }}
+                >
+                  {currentAnnouncement.body}
+                </div>
+              </div>
+            </div>
+
+            {/* Stepper Footer */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}` }}>
+              <button
+                onClick={handlePrev}
+                disabled={announcementIdx === 0}
+                style={{
+                  padding: "0.6rem 1.4rem",
+                  fontSize: "1rem",
+                  borderRadius: "6px",
+                  background: announcementIdx === 0 ? "transparent" : themeStyles.cardBg,
+                  color: announcementIdx === 0 ? "#64748b" : themeStyles.text,
+                  border: `1px solid ${themeStyles.border}`,
+                  cursor: announcementIdx === 0 ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                <ChevronLeft size={20} /> Previous Notice
+              </button>
+
+              <div style={{ display: "flex", gap: "0.45rem" }}>
+                {announcements.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setAnnouncementIdx(idx)}
+                    style={{
+                      width: "14px",
+                      height: "14px",
+                      borderRadius: "50%",
+                      border: "none",
+                      cursor: "pointer",
+                      background: idx === announcementIdx ? themeStyles.gold : "#475569",
+                    }}
+                    title={`Notice ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNext}
+                disabled={announcementIdx === announcements.length - 1}
+                style={{
+                  padding: "0.6rem 1.4rem",
+                  fontSize: "1rem",
+                  borderRadius: "6px",
+                  background: announcementIdx === announcements.length - 1 ? "transparent" : themeStyles.gold,
+                  color: announcementIdx === announcements.length - 1 ? "#64748b" : "#000",
+                  fontWeight: 700,
+                  border: "none",
+                  cursor: announcementIdx === announcements.length - 1 ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                Next Notice <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================= */}
+        {/* TAB 6: UPCOMING EVENTS PROJECTION                        */}
+        {/* ========================================================= */}
+        {activeTab === "events" && currentEvent && (
+          <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
+            <div>
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem" }}>
+                <div>
+                  <span style={{ textTransform: "uppercase", fontSize: "0.95rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700, display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <Calendar size={16} /> CHAPLAINCY CALENDAR · {currentEvent.category || "Event"}
+                  </span>
+                  <h1 style={{ fontSize: `${Math.round(fontSizePx * 1.25)}px`, margin: "0.25rem 0 0", color: themeStyles.heading }}>
+                    {currentEvent.title}
+                  </h1>
+                </div>
+
+                <div style={{ textAlign: "right" }}>
+                  <span style={{ fontSize: "1.1rem", fontWeight: 700, color: themeStyles.gold }}>
+                    Event {eventIdx + 1} of {events.length}
+                  </span>
+                  <div style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
+                    [Space / Clicker to advance]
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Metadata Highlights */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "1rem",
+                  marginBottom: "1.75rem",
+                }}
+              >
+                <div style={{ background: themeStyles.cardBg, border: `1px solid ${themeStyles.border}`, borderRadius: "8px", padding: "1rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <Clock size={24} color={themeStyles.gold} />
+                  <div>
+                    <div style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "#94a3b8", fontWeight: 700 }}>Date &amp; Time</div>
+                    <div style={{ fontSize: "1rem", fontWeight: 700, color: themeStyles.heading }}>
+                      {new Date(currentEvent.startsAt).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Lagos" })}
+                    </div>
+                  </div>
+                </div>
+
+                {currentEvent.venue && (
+                  <div style={{ background: themeStyles.cardBg, border: `1px solid ${themeStyles.border}`, borderRadius: "8px", padding: "1rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <MapPin size={24} color={themeStyles.gold} />
+                    <div>
+                      <div style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "#94a3b8", fontWeight: 700 }}>Venue</div>
+                      <div style={{ fontSize: "1rem", fontWeight: 700, color: themeStyles.heading }}>
+                        {currentEvent.venue}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {currentEvent.organizer && (
+                  <div style={{ background: themeStyles.cardBg, border: `1px solid ${themeStyles.border}`, borderRadius: "8px", padding: "1rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <Users size={24} color={themeStyles.gold} />
+                    <div>
+                      <div style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "#94a3b8", fontWeight: 700 }}>Organizer</div>
+                      <div style={{ fontSize: "1rem", fontWeight: 700, color: themeStyles.heading }}>
+                        {currentEvent.organizer}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Event Description Card */}
+              {currentEvent.description && (
+                <div
+                  style={{
+                    background: themeStyles.cardBg,
+                    border: `1px solid ${themeStyles.border}`,
+                    borderRadius: "12px",
+                    padding: "2rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: `${fontSizePx}px`,
+                      lineHeight: 1.6,
+                      whiteSpace: "pre-line",
+                      fontFamily: "'Merriweather', 'Georgia', serif",
+                    }}
+                  >
+                    {currentEvent.description}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Stepper Footer */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}` }}>
+              <button
+                onClick={handlePrev}
+                disabled={eventIdx === 0}
+                style={{
+                  padding: "0.6rem 1.4rem",
+                  fontSize: "1rem",
+                  borderRadius: "6px",
+                  background: eventIdx === 0 ? "transparent" : themeStyles.cardBg,
+                  color: eventIdx === 0 ? "#64748b" : themeStyles.text,
+                  border: `1px solid ${themeStyles.border}`,
+                  cursor: eventIdx === 0 ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                <ChevronLeft size={20} /> Previous Event
+              </button>
+
+              <div style={{ display: "flex", gap: "0.45rem" }}>
+                {events.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setEventIdx(idx)}
+                    style={{
+                      width: "14px",
+                      height: "14px",
+                      borderRadius: "50%",
+                      border: "none",
+                      cursor: "pointer",
+                      background: idx === eventIdx ? themeStyles.gold : "#475569",
+                    }}
+                    title={`Event ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNext}
+                disabled={eventIdx === events.length - 1}
+                style={{
+                  padding: "0.6rem 1.4rem",
+                  fontSize: "1rem",
+                  borderRadius: "6px",
+                  background: eventIdx === events.length - 1 ? "transparent" : themeStyles.gold,
+                  color: eventIdx === events.length - 1 ? "#64748b" : "#000",
+                  fontWeight: 700,
+                  border: "none",
+                  cursor: eventIdx === events.length - 1 ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                Next Event <ChevronRight size={20} />
+              </button>
             </div>
           </div>
         )}
@@ -1020,7 +1355,7 @@ export function ProjectorView() {
         }}
       >
         <div>
-          Keyboard Clicker: <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>Space</kbd> / <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>→</kbd> Next · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>←</kbd> Prev · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>1-4</kbd> Mode · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>F</kbd> Fullscreen
+          Keyboard Clicker: <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>Space</kbd> / <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>→</kbd> Next · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>←</kbd> Prev · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>1-6</kbd> Mode · <kbd style={{ background: "#334155", color: "#fff", padding: "0.1rem 0.35rem", borderRadius: "3px" }}>F</kbd> Fullscreen
         </div>
         <div>
           Our Mother of Perpetual Help Catholic Chaplaincy, AE-FUTHA
