@@ -1,7 +1,5 @@
-import fs from "fs";
-import path from "path";
 import { lagosDateString, addDays } from "@/lib/time/lagos";
-import type { Announcement, PublicMassIntention, PublicPrayerIntention, ChaplaincyEvent } from "@/lib/types";
+import type { Announcement, PublicMassIntention, PublicPrayerIntention } from "@/lib/types";
 
 export interface StoredAnnouncement {
   id: string;
@@ -56,40 +54,10 @@ interface ServerStoreData {
   lastPurgedAt?: string;
 }
 
-// In-memory cache for speed across warm serverless invocations
-let memoryStore: ServerStoreData | null = null;
+const GLOBAL_STORE_KEY = "__omph_unified_store_v1__";
+const CLIENT_STORAGE_KEY = "omph_server_store_backup_v1";
 
-function getStoreFilePath(): string {
-  // Use /tmp on Vercel/serverless environments, local .data directory in development
-  const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-  if (isVercel) {
-    return path.join("/tmp", "omph_store.json");
-  }
-  const localDir = path.join(process.cwd(), ".data");
-  if (!fs.existsSync(localDir)) {
-    try {
-      fs.mkdirSync(localDir, { recursive: true });
-    } catch {}
-  }
-  return path.join(localDir, "omph_store.json");
-}
-
-function loadStore(): ServerStoreData {
-  if (memoryStore) {
-    return memoryStore;
-  }
-
-  const filePath = getStoreFilePath();
-  try {
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath, "utf-8");
-      memoryStore = JSON.parse(content);
-      return memoryStore!;
-    }
-  } catch (err) {
-    console.error("Error reading server store:", err);
-  }
-
+function getInitialStore(): ServerStoreData {
   const defaultDraft = `1. Infant baptism will be on 21st of November that's third Saturday. Register with catechist.
 Issued by: Chaplaincy Catechetical Commission
 
@@ -106,7 +74,7 @@ Issued by: Chaplaincy Pastoral Council`;
   const publishedAt = now.toISOString();
   const expiresAt = new Date(now.getTime() + 7 * 86400000).toISOString();
 
-  memoryStore = {
+  return {
     announcements: [
       {
         id: "ann-init-1",
@@ -174,16 +142,36 @@ Issued by: Chaplaincy Pastoral Council`;
     rawAnnouncementDraft: defaultDraft,
     announcementDurationDays: 7,
   };
-  return memoryStore;
+}
+
+function loadStore(): ServerStoreData {
+  const g = globalThis as any;
+  if (!g[GLOBAL_STORE_KEY]) {
+    // Try client localStorage if in browser
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(CLIENT_STORAGE_KEY);
+        if (stored) {
+          g[GLOBAL_STORE_KEY] = JSON.parse(stored);
+        }
+      } catch {}
+    }
+
+    if (!g[GLOBAL_STORE_KEY]) {
+      g[GLOBAL_STORE_KEY] = getInitialStore();
+    }
+  }
+  return g[GLOBAL_STORE_KEY];
 }
 
 function saveStore(store: ServerStoreData): void {
-  memoryStore = store;
-  const filePath = getStoreFilePath();
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(store, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Error writing server store:", err);
+  const g = globalThis as any;
+  g[GLOBAL_STORE_KEY] = store;
+
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(CLIENT_STORAGE_KEY, JSON.stringify(store));
+    } catch {}
   }
 }
 
