@@ -26,6 +26,7 @@ import {
   SEED_SOCIETIES,
   SEED_SOCIETY_CATEGORIES,
   SEED_EVENTS,
+  SEED_ANNOUNCEMENTS,
   SEED_ECCLESIASTICAL,
   SEED_OFFERING_INFO,
   SEED_CHURCH_ACCOUNTS,
@@ -221,7 +222,8 @@ export class SupabaseDataClient implements DataClient {
           }
         : null;
     } catch {
-      return SEED_ANNOUNCEMENTS.find((a) => a.slug === slug) ?? null;
+      const live = getLiveAnnouncements();
+      return live.find((a) => a.slug === slug) ?? null;
     }
   }
 
