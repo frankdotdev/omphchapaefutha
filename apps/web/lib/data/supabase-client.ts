@@ -347,7 +347,7 @@ export class SupabaseDataClient implements DataClient {
     } catch {
       return {
         address: null,
-        phone: "08063314891 (Catechist) / 0904469505 (Chaplain)",
+        phone: "08063314891 (Catechist) / 09044469505 (Chaplain)",
         email: null,
         mapsUrl: null,
       };
@@ -355,9 +355,17 @@ export class SupabaseDataClient implements DataClient {
   }
 
   async getPublicMassIntentions(date: string): Promise<PublicMassIntention[]> {
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Lagos" });
+    const targetDate = date || today;
+
+    // Archiving rule: once a day is in the past, its intentions are archived and not displayed publicly
+    if (targetDate < today) {
+      return [];
+    }
+
     try {
       const rows = await this.rows(
-        this.sb.from("public_mass_intentions").select("*").eq("scheduled_date", date).order("list_order"),
+        this.sb.from("public_mass_intentions").select("*").eq("scheduled_date", targetDate).order("list_order"),
       );
       if (rows && rows.length > 0) {
         return rows.map((r) => ({
@@ -370,7 +378,7 @@ export class SupabaseDataClient implements DataClient {
         }));
       }
     } catch {}
-    return SEED_MASS_INTENTIONS.filter((m) => m.scheduledDate === date || !m.scheduledDate);
+    return SEED_MASS_INTENTIONS.filter((m) => m.scheduledDate === targetDate || (!m.scheduledDate && targetDate === today));
   }
 
   async getPublicPrayerIntentions(limit = 30): Promise<PublicPrayerIntention[]> {

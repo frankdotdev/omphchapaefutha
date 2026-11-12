@@ -7,7 +7,8 @@ import { ORDER_OF_MASS, type OrderOfMassPart } from "@/lib/liturgy/order-of-mass
 import { CATHOLIC_HYMNS, type Hymn } from "@/lib/hymns/data";
 import { CURATED_DAILY_READINGS } from "@/lib/liturgy/daily-readings-data";
 import { SEED_ANNOUNCEMENTS, SEED_EVENTS } from "@/lib/data/seed";
-import type { Announcement, ChaplaincyEvent } from "@/lib/types";
+import { getDataClient } from "@/lib/data";
+import type { Announcement, ChaplaincyEvent, PublicMassIntention } from "@/lib/types";
 import { lagosDateString, formatLongDate } from "@/lib/time/lagos";
 import {
   Maximize,
@@ -66,20 +67,42 @@ export function ProjectorView() {
   const [events, setEvents] = useState<ChaplaincyEvent[]>(SEED_EVENTS);
   const [eventIdx, setEventIdx] = useState<number>(0);
 
-  // Hydrate custom draft announcements from Catechist bulk box if present in localStorage
+  // Today's Mass Intentions State (Real Altar Intentions)
+  const [todayIntentions, setTodayIntentions] = useState<PublicMassIntention[]>([]);
+
+  // Hydrate real actual intentions, announcements, and events
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("omph_announcements_parsed_v1");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setAnnouncements(parsed);
+    // 1. Fetch real active Mass Intentions for today
+    getDataClient()
+      .getPublicMassIntentions(todayDate)
+      .then((res) => {
+        if (Array.isArray(res)) {
+          setTodayIntentions(res);
         }
-      }
-    } catch {
-      // Fallback to SEED_ANNOUNCEMENTS
-    }
-  }, []);
+      })
+      .catch(() => {});
+
+    // 2. Fetch real active upcoming events
+    getDataClient()
+      .getUpcomingEvents()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) {
+          const now = Date.now() - 24 * 60 * 60 * 1000;
+          setEvents(res.filter((e) => new Date(e.startsAt).getTime() >= now));
+        }
+      })
+      .catch(() => {});
+
+    // 3. Fetch real announcements
+    getDataClient()
+      .getAnnouncements()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) {
+          setAnnouncements(res);
+        }
+      })
+      .catch(() => {});
+  }, [todayDate]);
 
   const activeHymn = useMemo(() => {
     return CATHOLIC_HYMNS.find((h) => h.id === selectedHymnId) || CATHOLIC_HYMNS[0];
@@ -517,7 +540,7 @@ export function ProjectorView() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "2rem 3.5rem",
+          padding: "clamp(1rem, 3vw, 2.5rem)",
           maxWidth: "1400px",
           width: "100%",
           margin: "0 auto",
@@ -736,11 +759,11 @@ export function ProjectorView() {
                         display: "grid",
                         gridTemplateColumns:
                           langChoice === "all"
-                            ? "1fr 1fr 1fr"
+                            ? "repeat(auto-fit, minmax(min(100%, 240px), 1fr))"
                             : ["en_ig", "en_la"].includes(langChoice)
-                            ? "1fr 1fr"
+                            ? "repeat(auto-fit, minmax(min(100%, 280px), 1fr))"
                             : "1fr",
-                        gap: "1.5rem",
+                        gap: "1.25rem",
                       }}
                     >
                       {(langChoice === "all" || langChoice.includes("en")) && (
@@ -1014,7 +1037,7 @@ export function ProjectorView() {
         )}
 
         {/* ========================================================= */}
-        {/* TAB 4: TODAY'S MASS INTENTIONS                           */}
+        {/* TAB 4: TODAY'S MASS INTENTIONS (Real Altar Intentions)    */}
         {/* ========================================================= */}
         {activeTab === "intentions" && (
           <div style={{ width: "100%", display: "flex", flexDirection: "column", minHeight: "70vh", justifyContent: "space-between" }}>
@@ -1027,59 +1050,61 @@ export function ProjectorView() {
                   Mass Intentions for {formatLongDate(todayDate)}
                 </h1>
                 <div style={{ fontSize: "1rem", color: "#94a3b8" }}>
-                  Booked for Morning Mass (06:20 AM) and Afternoon Mass (03:15 PM)
+                  Official altar schedule of intentions celebrated today by the Chaplaincy priests
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+              {todayIntentions.length === 0 ? (
                 <div
                   style={{
                     background: themeStyles.cardBg,
                     border: `1px solid ${themeStyles.border}`,
                     borderRadius: "8px",
-                    padding: "1.5rem",
+                    padding: "3rem 2rem",
+                    textAlign: "center",
                   }}
                 >
-                  <div style={{ fontSize: "1.1rem", fontWeight: 700, color: themeStyles.gold, borderBottom: `1px solid ${themeStyles.border}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
-                    ☀️ Morning Mass — 06:20 AM
-                  </div>
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Thanksgiving:</strong> Obasi family for God's continuous preservation, good health, and divine protection.
-                    </li>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Healing &amp; Recovery:</strong> For all hospitalized patients in AE-FUTHA teaching hospital.
-                    </li>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Repose of Souls:</strong> For the faithful departed of Our Mother of Perpetual Help Chaplaincy.
-                    </li>
-                  </ul>
+                  <p style={{ margin: 0, fontSize: `${Math.round(fontSizePx * 0.8)}px`, color: themeStyles.gold }}>
+                    No public Mass intentions registered for today.
+                  </p>
+                  <p style={{ margin: "0.5rem 0 0", fontSize: `${Math.round(fontSizePx * 0.65)}px`, color: "#94a3b8" }}>
+                    Liturgies are offered for the intentions of the Holy Father and the spiritual welfare of the AE-FUTHA Chaplaincy community.
+                  </p>
                 </div>
-
-                <div
-                  style={{
-                    background: themeStyles.cardBg,
-                    border: `1px solid ${themeStyles.border}`,
-                    borderRadius: "8px",
-                    padding: "1.5rem",
-                  }}
-                >
-                  <div style={{ fontSize: "1.1rem", fontWeight: 700, color: themeStyles.gold, borderBottom: `1px solid ${themeStyles.border}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
-                    🕊️ Afternoon Mass — 03:15 PM
-                  </div>
-                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Divine Intervention:</strong> Special prayer for peace in families, safety on journeys, and university students.
-                    </li>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Birthday Thanksgiving:</strong> Gratitude to God for another year of life and grace.
-                    </li>
-                    <li style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.4 }}>
-                      <strong style={{ color: themeStyles.heading }}>Priestly &amp; Religious Vocations:</strong> For young men and women discerning God's call in the diocese.
-                    </li>
-                  </ul>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 420px), 1fr))", gap: "1.5rem" }}>
+                  {Array.from(new Set(todayIntentions.map((i) => i.activityName || "Holy Mass"))).map((massName) => {
+                    const list = todayIntentions.filter((i) => (i.activityName || "Holy Mass") === massName);
+                    return (
+                      <div
+                        key={massName}
+                        style={{
+                          background: themeStyles.cardBg,
+                          border: `1px solid ${themeStyles.border}`,
+                          borderRadius: "8px",
+                          padding: "1.5rem",
+                        }}
+                      >
+                        <div style={{ fontSize: "1.2rem", fontWeight: 700, color: themeStyles.gold, borderBottom: `1px solid ${themeStyles.border}`, paddingBottom: "0.5rem", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span>✝</span> {massName}
+                        </div>
+                        <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
+                          {list.map((it) => (
+                            <li key={it.id} style={{ fontSize: `${Math.round(fontSizePx * 0.75)}px`, lineHeight: 1.45, borderBottom: `1px dashed ${themeStyles.border}`, paddingBottom: "0.6rem" }}>
+                              <div style={{ color: themeStyles.heading, fontWeight: 700, marginBottom: "0.2rem" }}>
+                                {it.displayName ? `${it.displayName}:` : "Parishioner Intention:"}
+                              </div>
+                              <div style={{ color: themeStyles.text }}>
+                                {it.text}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
+              )}
             </div>
 
             <div style={{ textAlign: "center", marginTop: "2rem", paddingTop: "1rem", borderTop: `1px solid ${themeStyles.border}`, fontSize: "0.9rem", color: "#94a3b8" }}>

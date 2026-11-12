@@ -96,22 +96,24 @@ export function CatechistBulkAnnouncements() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", width: "100%", maxWidth: "100%", overflowX: "hidden", boxSizing: "border-box" }}>
       {/* Overview Banner */}
       <div
         style={{
           background: "linear-gradient(135deg, #183b63 0%, #0e243d 100%)",
           color: "#fff",
-          borderRadius: "12px",
-          padding: "1.75rem 2rem",
-          boxShadow: "0 6px 20px rgba(0,0,0,0.12)",
+          borderRadius: "8px",
+          padding: "clamp(1.25rem, 3vw, 2rem)",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+          boxSizing: "border-box",
+          width: "100%",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
           <div>
             <span
               style={{
-                fontSize: "0.8rem",
+                fontSize: "0.75rem",
                 fontWeight: 700,
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
@@ -121,14 +123,14 @@ export function CatechistBulkAnnouncements() {
                 gap: "0.4rem",
               }}
             >
-              <Megaphone size={16} /> Catechist Announcement Dashboard
+              <Megaphone size={16} /> Admin &amp; Catechist Secretariat
             </span>
-            <h1 style={{ margin: "0.35rem 0 0.5rem", fontSize: "1.85rem", color: "#fff" }}>
-              One-Box Sunday Announcements
+            <h1 style={{ margin: "0.35rem 0 0.5rem", fontSize: "clamp(1.35rem, 3.5vw, 1.85rem)", color: "#fff" }}>
+              Sunday Announcements Manager
             </h1>
-            <p style={{ margin: 0, color: "#cbd5e1", maxWidth: "42rem", fontSize: "0.95rem", lineHeight: 1.5 }}>
-              Type or paste all announcements for next Sunday in the single box below. The system automatically
-              formats, structures, and formats them into clean presentation slides for both the <strong>Church Projector</strong> and the <strong>Website</strong>.
+            <p style={{ margin: 0, color: "#cbd5e1", maxWidth: "42rem", fontSize: "0.92rem", lineHeight: 1.5 }}>
+              Enter or paste all notices for the Sunday bulletin in the box below. The system automatically
+              formats them for both the <strong>Church Projector</strong> and the <strong>Website</strong>.
             </p>
           </div>
 
@@ -143,17 +145,18 @@ export function CatechistBulkAnnouncements() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.4rem",
-                padding: "0.6rem 1.25rem",
+                padding: "0.55rem 1.1rem",
+                fontSize: "0.85rem",
               }}
             >
-              <Tv size={18} /> Broadcast on Projector →
+              <Tv size={16} /> Projector View →
             </Link>
           </div>
         </div>
       </div>
 
       {/* Main Grid: Input Box on Left, Live Parsed Preview on Right */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "2rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "1.5rem", width: "100%", boxSizing: "border-box" }}>
         {/* Left Column: Single Big Box Input */}
         <div
           style={{
@@ -291,10 +294,10 @@ Baptism will take place on the 3rd Saturday..."
                   style={{
                     background: "#fff",
                     border: "1px solid var(--line)",
-                    borderLeft: `5px solid ${item.isUrgent ? "#dc2626" : "var(--navy)"}`,
-                    borderRadius: "8px",
+                    borderTop: item.isUrgent ? "2px solid #dc2626" : "2px solid var(--gold)",
+                    borderRadius: "6px",
                     padding: "1.25rem",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>

@@ -13,6 +13,7 @@ import {
   SEED_CHURCH_ACCOUNTS,
 } from "./seed";
 import type { PublicMassIntention } from "@/lib/types";
+import { addDays, lagosDateString } from "@/lib/time/lagos";
 
 /** Read-only client over owner-supplied seed data with live storage bridge for local development/offline. */
 export class SeedDataClient implements DataClient {
@@ -40,16 +41,31 @@ export class SeedDataClient implements DataClient {
     return list.find((s) => s.slug === slug) ?? null;
   }
   async getAnnouncements(limit?: number) {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("omph_announcements_parsed_v1");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return limit ? parsed.slice(0, limit) : parsed;
+          }
+        }
+      } catch {}
+    }
     return limit ? SEED_ANNOUNCEMENTS.slice(0, limit) : SEED_ANNOUNCEMENTS;
   }
   async getAnnouncement(slug?: string) {
-    return SEED_ANNOUNCEMENTS.find((a) => a.slug === slug) ?? null;
+    const list = await this.getAnnouncements();
+    return list.find((a) => a.slug === slug) ?? null;
   }
   async getUpcomingEvents(limit?: number) {
-    return limit ? SEED_EVENTS.slice(0, limit) : SEED_EVENTS;
+    const now = Date.now() - 24 * 60 * 60 * 1000;
+    const activeEvents = SEED_EVENTS.filter((e) => new Date(e.startsAt).getTime() >= now);
+    return limit ? activeEvents.slice(0, limit) : activeEvents;
   }
   async getEvent(slug?: string) {
-    return SEED_EVENTS.find((e) => e.slug === slug) ?? null;
+    const events = await this.getUpcomingEvents();
+    return events.find((e) => e.slug === slug) ?? null;
   }
   async getEcclesiasticalDirectory() {
     if (typeof window !== "undefined") {
@@ -74,29 +90,83 @@ export class SeedDataClient implements DataClient {
     };
   }
   async getPublicMassIntentions(date?: string): Promise<PublicMassIntention[]> {
-    let all = [...SEED_MASS_INTENTIONS];
+    const today = lagosDateString();
+    const targetDate = date || today;
+
+    // Archiving rule: once a day is in the past, its intentions are archived and not displayed publicly
+    if (targetDate < today) {
+      return [];
+    }
+
+    const realBookings: PublicMassIntention[] = [];
+
     if (typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem("omph_mass_intentions_store");
         if (raw) {
           const store = JSON.parse(raw);
-          const localApproved = Object.values(store)
-            .filter((i: any) => i.status === "approved" || i.status === "completed")
-            .map((i: any, idx: number) => ({
-              id: i.reference || `local-${idx}`,
-              scheduledDate: i.preferredDate || "",
-              activityName: "Morning Mass (06:20)",
-              listOrder: idx + 10,
-              text: i.text,
-              displayName: i.displayName,
-              status: i.status,
-            }));
-          all = [...all, ...localApproved];
+          const entries = Object.values(store) as any[];
+
+          for (let idx = 0; idx < entries.length; idx++) {
+            const i = entries[idx];
+            // Filter by active booking statuses
+            if (["approved", "completed", "confirmed", "payment_review", "pending_payment"].includes(i.status)) {
+              const startDate = i.preferredDate || i.scheduledDate || "";
+              const numDays = i.numberOfDays || (i.dates ? i.dates.length : 1);
+              let lastDay = i.endDate;
+              if (!lastDay) {
+                if (i.dates && i.dates.length > 0) {
+                  lastDay = [...i.dates].sort().pop();
+                } else if (startDate && numDays > 1) {
+                  lastDay = addDays(startDate, numDays - 1);
+                } else {
+                  lastDay = startDate;
+                }
+              }
+
+              // Archiving rule: after the intention has passed its last day, it is archived and not displayed publicly
+              const isPastIntention = today > lastDay;
+              if (isPastIntention) {
+                continue;
+              }
+
+              // Check if intention falls on the targetDate
+              const activeOnTargetDate = i.dates
+                ? i.dates.includes(targetDate)
+                : startDate <= targetDate && targetDate <= lastDay;
+
+              if (activeOnTargetDate) {
+                realBookings.push({
+                  id: i.reference || `real-${idx}`,
+                  scheduledDate: targetDate,
+                  activityName: i.preferredActivityId === "mass-afternoon"
+                    ? "Afternoon Mass (15:15)"
+                    : i.preferredActivityId === "mass-evening"
+                    ? "Evening Mass (17:30)"
+                    : "Morning Mass (06:20)",
+                  listOrder: idx + 1,
+                  text: i.text,
+                  displayName: i.displayName || "Parishioner",
+                  status: isPastIntention ? "archived" : "confirmed",
+                  numberOfDays: numDays,
+                });
+              }
+            }
+          }
         }
       } catch {}
     }
-    if (!date) return all;
-    return all.filter((m) => m.scheduledDate === date || !m.scheduledDate);
+
+    if (realBookings.length > 0) {
+      return realBookings;
+    }
+
+    // Only fallback to active seed intentions if viewing today and zero real bookings exist
+    if (targetDate === today) {
+      return SEED_MASS_INTENTIONS.map((m) => ({ ...m, scheduledDate: today }));
+    }
+
+    return [];
   }
   async getPublicPrayerIntentions(limit = 20) {
     let all = [...SEED_PRAYER_INTENTIONS];

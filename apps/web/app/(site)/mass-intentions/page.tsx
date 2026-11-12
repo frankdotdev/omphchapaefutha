@@ -101,21 +101,23 @@ export default async function MassIntentionsPage({ searchParams }: Props) {
             {isPast && (
               <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: "6px", padding: "0.75rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem", color: "#475569" }}>
                 <Archive size={16} />
-                <strong>Archived:</strong> Holy Mass has already been offered for this date. These intentions are preserved on record.
+                <strong>Archived:</strong> Holy Mass has already been offered for this date. In accordance with chaplaincy policy, past intentions are archived from public view.
               </div>
             )}
 
             {isToday && (
               <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "6px", padding: "0.6rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.88rem", color: "#166534" }}>
                 <Clock size={16} />
-                <strong>Today&rsquo;s Roster:</strong> Scheduled for today&rsquo;s liturgies. After celebration, intentions move automatically to the archive.
+                <strong>Today&rsquo;s Active Roster:</strong> Scheduled for today&rsquo;s liturgies. After this day concludes, intentions move automatically to the archive.
               </div>
             )}
 
             {items.length === 0 ? (
               <div className="card pattern-paper" style={{ padding: "2rem", textAlign: "center", border: "1px dashed var(--line)" }}>
                 <p className="muted" style={{ margin: 0 }}>
-                  No published intentions recorded for this date. You can offer a Mass intention using the form below.
+                  {isPast
+                    ? "Intentions for this past date have completed their liturgical celebration and are preserved in the chaplaincy archive."
+                    : "No published intentions recorded for this date. You can offer a Mass intention using the form below."}
                 </p>
               </div>
             ) : (
