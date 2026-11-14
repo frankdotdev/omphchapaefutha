@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import {
   savePublishedAnnouncements,
   getLiveAnnouncements,
+  getStoredAnnouncementsDetailed,
+  deleteStoredAnnouncement,
+  clearActiveAnnouncements,
   getAnnouncementDraft,
   getDatabaseRetentionStats,
 } from "@/lib/data/server-store";
@@ -12,11 +15,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const announcements = getLiveAnnouncements();
+  const storedItems = getStoredAnnouncementsDetailed();
   const draft = getAnnouncementDraft();
   const stats = getDatabaseRetentionStats();
 
   return NextResponse.json({
     announcements,
+    storedItems,
     rawDraft: draft.rawText,
     durationDays: draft.durationDays,
     stats,
@@ -26,7 +31,18 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { rawText, durationDays = 7, announcements: clientParsed } = body;
+    const { action, id, rawText, durationDays = 7, announcements: clientParsed } = body;
+
+    // Handle delete action via POST as well for maximum client compatibility
+    if (action === "delete" && id) {
+      const deleted = deleteStoredAnnouncement(id);
+      return NextResponse.json({ ok: true, deleted, remaining: getLiveAnnouncements() });
+    }
+
+    if (action === "clear_all") {
+      const cleared = clearActiveAnnouncements();
+      return NextResponse.json({ ok: true, cleared, remaining: [] });
+    }
 
     const itemsToSave =
       Array.isArray(clientParsed) && clientParsed.length > 0
@@ -52,7 +68,6 @@ export async function POST(req: Request) {
     if (sbUrl && sbKey) {
       try {
         const sb = createClient(sbUrl, sbKey, { auth: { persistSession: false } });
-        // Upsert into Supabase announcements table
         for (const item of itemsToSave) {
           await sb.from("announcements").upsert(
             {
@@ -87,5 +102,27 @@ export async function POST(req: Request) {
       { error: err?.message || "Failed to publish announcements" },
       { status: 500 },
     );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    const clearAll = searchParams.get("clearAll") === "true";
+
+    if (clearAll) {
+      const cleared = clearActiveAnnouncements();
+      return NextResponse.json({ ok: true, cleared, remaining: [] });
+    }
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing announcement id or slug" }, { status: 400 });
+    }
+
+    const deleted = deleteStoredAnnouncement(id);
+    return NextResponse.json({ ok: true, deleted, remaining: getLiveAnnouncements() });
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "Failed to delete" }, { status: 500 });
   }
 }

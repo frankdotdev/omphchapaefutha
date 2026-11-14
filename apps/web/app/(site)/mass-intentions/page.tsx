@@ -5,6 +5,7 @@ import { PageHead, Awaiting } from "@/components/ui/PageHead";
 import { addDays, formatLongDate, isValidDateString, lagosDateString } from "@/lib/time/lagos";
 import { MassIntentionForm } from "@/components/forms/MassIntentionForm";
 import { PrintButton } from "@/components/ui/PrintButton";
+import { MassIntentionsListClient } from "@/components/mass-intentions/MassIntentionsListClient";
 import { Archive, Calendar, CheckCircle2, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -31,11 +32,7 @@ export default async function MassIntentionsPage({ searchParams }: Props) {
   const isPast = day < today;
   const isToday = day === today;
 
-  const groups = new Map<string, typeof items>();
-  for (const i of items) {
-    const k = i.activityName ?? "Holy Mass";
-    groups.set(k, [...(groups.get(k) ?? []), i]);
-  }
+
 
   return (
     <>
@@ -98,73 +95,8 @@ export default async function MassIntentionsPage({ searchParams }: Props) {
               )}
             </div>
 
-            {/* Past/Archived Indicator */}
-            {isPast && (
-              <div style={{ background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: "6px", padding: "0.75rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem", color: "#475569" }}>
-                <Archive size={16} />
-                <strong>Archived:</strong> Holy Mass has already been offered for this date. In accordance with chaplaincy policy, past intentions are archived from public view.
-              </div>
-            )}
-
-            {isToday && (
-              <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "6px", padding: "0.6rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.88rem", color: "#166534" }}>
-                <Clock size={16} />
-                <strong>Today&rsquo;s Active Roster:</strong> Scheduled for today&rsquo;s liturgies. After this day concludes, intentions move automatically to the archive.
-              </div>
-            )}
-
-            {items.length === 0 ? (
-              <div className="card pattern-paper" style={{ padding: "2rem", textAlign: "center", border: "1px dashed var(--line)" }}>
-                <p className="muted" style={{ margin: 0 }}>
-                  {isPast
-                    ? "Intentions for this past date have completed their liturgical celebration and are preserved in the chaplaincy archive."
-                    : "No published intentions recorded for this date. You can offer a Mass intention using the form below."}
-                </p>
-              </div>
-            ) : (
-              [...groups.entries()].map(([mass, list]) => (
-                <div key={mass} style={{ marginBottom: "2.25rem" }} className="mass-group-card">
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.85rem", borderBottom: "2px solid var(--gold)", paddingBottom: "0.4rem" }}>
-                    <span style={{ fontSize: "1.2rem", color: "var(--marian)" }}>✝</span>
-                    <h3 style={{ margin: 0, fontSize: "1.3rem", color: "var(--navy)" }}>{mass}</h3>
-                    <span style={{ fontSize: "0.85rem", color: "var(--muted)", marginLeft: "auto" }}>
-                      {list.length} {list.length === 1 ? "Intention" : "Intentions"}
-                    </span>
-                  </div>
-
-                  <ol className="intention-list" style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "0.85rem" }}>
-                    {list.map((i, index) => (
-                      <li
-                        key={i.id}
-                        className="card pattern-paper"
-                        style={{
-                          padding: "1.2rem 1.5rem",
-                          borderRadius: "6px",
-                          border: "1px solid var(--line)",
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "1rem",
-                        }}
-                      >
-                        <span style={{ fontWeight: 700, color: "var(--gold-text)", fontSize: "1.1rem", minWidth: "1.5rem" }}>
-                          {index + 1}.
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <p style={{ margin: 0, fontSize: "1.05rem", lineHeight: 1.5, color: "var(--navy)" }}>
-                            {i.text}
-                          </p>
-                          {i.displayName && (
-                            <div className="by" style={{ marginTop: "0.4rem", fontSize: "0.88rem", color: "var(--muted)" }}>
-                              Offered by: <strong style={{ color: "var(--navy)" }}>{i.displayName}</strong>
-                            </div>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ))
-            )}
+            {/* Intentions List with Live Client Synchronizer */}
+            <MassIntentionsListClient initialItems={items} day={day} today={today} />
           </div>
 
           {/* 2. FORM TO OFFER A MASS INTENTION */}

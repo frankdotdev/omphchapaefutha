@@ -343,6 +343,42 @@ export function getAnnouncementDraft(): { rawText: string; durationDays: number 
   };
 }
 
+export function getStoredAnnouncementsDetailed(): StoredAnnouncement[] {
+  const store = syncAndAutoArchive();
+  return store.announcements;
+}
+
+export function deleteStoredAnnouncement(idOrSlug: string): boolean {
+  const store = loadStore();
+  let found = false;
+  store.announcements = store.announcements.filter((a) => {
+    if (a.id === idOrSlug || a.slug === idOrSlug) {
+      found = true;
+      return false; // permanently delete
+    }
+    return true;
+  });
+  if (found) {
+    saveStore(store);
+  }
+  return found;
+}
+
+export function clearActiveAnnouncements(): number {
+  const store = loadStore();
+  let count = 0;
+  for (const a of store.announcements) {
+    if (a.status === "published") {
+      a.status = "archived";
+      count++;
+    }
+  }
+  if (count > 0) {
+    saveStore(store);
+  }
+  return count;
+}
+
 // -------------------------------------------------------------
 // MASS INTENTIONS
 // -------------------------------------------------------------
@@ -360,9 +396,17 @@ export function getLiveMassIntentions(date: string): PublicMassIntention[] {
   const results: PublicMassIntention[] = [];
 
   for (const m of store.massIntentions) {
-    let lastDay = m.endDate || m.scheduledDate;
-    if (m.dates && m.dates.length > 0) {
-      lastDay = [...m.dates].sort().pop() || m.scheduledDate;
+    const numDays = m.numberOfDays || (m.dates ? m.dates.length : 1);
+    const startDate = m.scheduledDate;
+    let lastDay = m.endDate;
+    if (!lastDay) {
+      if (m.dates && m.dates.length > 0) {
+        lastDay = [...m.dates].sort().pop()!;
+      } else if (numDays > 1) {
+        lastDay = addDays(startDate, numDays - 1);
+      } else {
+        lastDay = startDate;
+      }
     }
 
     // Exclude expired bookings
@@ -370,9 +414,10 @@ export function getLiveMassIntentions(date: string): PublicMassIntention[] {
       continue;
     }
 
-    const fallsOnTargetDate = m.dates
-      ? m.dates.includes(targetDate)
-      : m.scheduledDate <= targetDate && targetDate <= lastDay;
+    // Checks if intention falls on target date (single or multi-day range)
+    const fallsOnTargetDate =
+      (m.dates && m.dates.includes(targetDate)) ||
+      (startDate <= targetDate && targetDate <= lastDay);
 
     if (fallsOnTargetDate) {
       results.push({
@@ -401,15 +446,24 @@ export function saveBookedMassIntention(input: {
   contact?: string;
 }): void {
   const store = syncAndAutoArchive();
+  const numDays = Math.max(1, input.numberOfDays || (input.dates ? input.dates.length : 1));
+  const startDate = input.scheduledDate || lagosDateString();
+
+  let datesList = input.dates && input.dates.length > 0 ? [...input.dates] : [];
+  if (datesList.length === 0) {
+    datesList = Array.from({ length: numDays }, (_, i) => addDays(startDate, i));
+  }
+  const lastDay = input.endDate || (datesList.length > 0 ? [...datesList].sort().pop()! : addDays(startDate, numDays - 1));
+
   const newItem: StoredMassIntention = {
-    id: `intent-${Date.now()}`,
+    id: `intent-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     reference: input.reference,
-    scheduledDate: input.scheduledDate,
-    endDate: input.endDate || null,
-    numberOfDays: input.numberOfDays || 1,
-    dates: input.dates || [input.scheduledDate],
+    scheduledDate: startDate,
+    endDate: lastDay,
+    numberOfDays: numDays,
+    dates: datesList,
     activityName: input.activityName || "Holy Mass",
-    listOrder: store.massIntentions.filter((x) => x.scheduledDate === input.scheduledDate).length + 1,
+    listOrder: store.massIntentions.filter((x) => x.scheduledDate === startDate).length + 1,
     text: input.text,
     displayName: input.displayName || "Parishioner",
     contact: input.contact,
@@ -417,7 +471,12 @@ export function saveBookedMassIntention(input: {
     status: "confirmed",
   };
 
-  store.massIntentions.unshift(newItem);
+  const existingIdx = store.massIntentions.findIndex((x) => x.reference === input.reference);
+  if (existingIdx >= 0) {
+    store.massIntentions[existingIdx] = newItem;
+  } else {
+    store.massIntentions.unshift(newItem);
+  }
   saveStore(store);
 }
 

@@ -9,7 +9,7 @@ import { CURATED_DAILY_READINGS } from "@/lib/liturgy/daily-readings-data";
 import { SEED_ANNOUNCEMENTS, SEED_EVENTS } from "@/lib/data/seed";
 import { getDataClient } from "@/lib/data";
 import type { Announcement, ChaplaincyEvent, PublicMassIntention } from "@/lib/types";
-import { lagosDateString, formatLongDate } from "@/lib/time/lagos";
+import { lagosDateString, formatLongDate, addDays } from "@/lib/time/lagos";
 import {
   Maximize,
   Minimize,
@@ -47,10 +47,20 @@ export function ProjectorView() {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [langChoice, setLangChoice] = useState<LangChoice>(initialLang);
 
-  // Daily Readings Slide State
-  const todayDate = lagosDateString();
-  const readings = CURATED_DAILY_READINGS[todayDate] || CURATED_DAILY_READINGS["2026-11-11"];
+  // Liturgical Broadcast Date State (Selectable for any day/Sunday)
+  const [selectedDate, setSelectedDate] = useState<string>(lagosDateString());
+  const readings = CURATED_DAILY_READINGS[selectedDate] ||
+    CURATED_DAILY_READINGS["2026-11-15"] || // Sunday lectionary
+    CURATED_DAILY_READINGS["2026-11-11"];
   const [readingSlide, setReadingSlide] = useState<number>(0);
+
+  // Helper to jump to next Sunday
+  const getNextSunday = (dateStr: string): string => {
+    const d = new Date(dateStr + "T00:00:00Z");
+    const day = d.getUTCDay();
+    const diff = day === 0 ? 7 : (7 - day);
+    return addDays(dateStr, diff);
+  };
 
   // Order of Mass Slide State
   const [orderPartIdx, setOrderPartIdx] = useState<number>(0);
@@ -67,63 +77,107 @@ export function ProjectorView() {
   const [events, setEvents] = useState<ChaplaincyEvent[]>(SEED_EVENTS);
   const [eventIdx, setEventIdx] = useState<number>(0);
 
-  // Today's Mass Intentions State (Real Altar Intentions)
+  // Selected Date Mass Intentions State (Real Altar Intentions)
   const [todayIntentions, setTodayIntentions] = useState<PublicMassIntention[]>([]);
 
-  // Hydrate real actual intentions, announcements, and events
+  // Hydrate real intentions, announcements, and events whenever selectedDate changes
   useEffect(() => {
-    // 1. Fetch real active Mass Intentions for today
-    fetch(`/api/mass-intentions?date=${todayDate}`)
+    // 1. Fetch real active Mass Intentions for selectedDate
+    const localIntentions: PublicMassIntention[] = [];
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("omph_mass_intentions_store");
+        if (raw) {
+          const store = JSON.parse(raw);
+          const entries = Object.values(store) as any[];
+          for (let idx = 0; idx < entries.length; idx++) {
+            const i = entries[idx];
+            const startDate = i.preferredDate || i.scheduledDate || "";
+            const numDays = i.numberOfDays || (i.dates ? i.dates.length : 1);
+            const lastDay = i.endDate || (i.dates && i.dates.length > 0 ? [...i.dates].sort().pop() : addDays(startDate, numDays - 1));
+            const fallsOnSelected =
+              (Array.isArray(i.dates) && i.dates.includes(selectedDate)) ||
+              (startDate && lastDay && startDate <= selectedDate && selectedDate <= lastDay);
+
+            if (fallsOnSelected) {
+              localIntentions.push({
+                id: i.reference || `local-${idx}`,
+                scheduledDate: selectedDate,
+                activityName: i.preferredActivityId === "mass-afternoon"
+                  ? "Afternoon Mass (15:15)"
+                  : i.preferredActivityId === "mass-evening"
+                  ? "Evening Mass (17:30)"
+                  : "Morning Mass (06:20)",
+                listOrder: idx + 1,
+                text: i.text,
+                displayName: i.displayName || "Parishioner",
+              });
+            }
+          }
+        }
+      } catch {}
+    }
+
+    fetch(`/api/mass-intentions?date=${selectedDate}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (d?.intentions) {
+        if (d?.intentions && Array.isArray(d.intentions) && d.intentions.length > 0) {
           setTodayIntentions(d.intentions);
+        } else if (localIntentions.length > 0) {
+          setTodayIntentions(localIntentions);
+        } else {
+          getDataClient()
+            .getPublicMassIntentions(selectedDate)
+            .then((res) => {
+              if (Array.isArray(res) && res.length > 0) {
+                setTodayIntentions(res);
+              } else if (localIntentions.length > 0) {
+                setTodayIntentions(localIntentions);
+              } else {
+                setTodayIntentions([]);
+              }
+            })
+            .catch(() => {
+              setTodayIntentions(localIntentions);
+            });
         }
       })
       .catch(() => {
-        getDataClient()
-          .getPublicMassIntentions(todayDate)
-          .then((res) => {
-            if (Array.isArray(res)) setTodayIntentions(res);
-          })
-          .catch(() => {});
+        setTodayIntentions(localIntentions);
       });
 
-    // 2. Fetch real active upcoming events
-    getDataClient()
-      .getUpcomingEvents()
-      .then((res) => {
-        if (Array.isArray(res) && res.length > 0) {
-          const now = Date.now();
-          setEvents(res.filter((e) => new Date(e.endsAt || e.startsAt).getTime() >= now));
+    // 2. Fetch real announcements (from local storage + server API)
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("omph_announcements_parsed_v1");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setAnnouncements(parsed);
+          }
+        }
+      } catch {}
+    }
+
+    fetch("/api/admin/announcements")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.announcements && Array.isArray(d.announcements) && d.announcements.length > 0) {
+          setAnnouncements(d.announcements);
         }
       })
       .catch(() => {});
 
-    // 3. Fetch real announcements
-    fetch("/api/admin/announcements")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (d?.announcements && d.announcements.length > 0) {
-          setAnnouncements(d.announcements);
-        } else {
-          getDataClient()
-            .getAnnouncements()
-            .then((res) => {
-              if (Array.isArray(res) && res.length > 0) setAnnouncements(res);
-            })
-            .catch(() => {});
+    // 3. Fetch real active upcoming events
+    getDataClient()
+      .getUpcomingEvents()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) {
+          setEvents(res);
         }
       })
-      .catch(() => {
-        getDataClient()
-          .getAnnouncements()
-          .then((res) => {
-            if (Array.isArray(res) && res.length > 0) setAnnouncements(res);
-          })
-          .catch(() => {});
-      });
-  }, [todayDate]);
+      .catch(() => {});
+  }, [selectedDate]);
 
   const activeHymn = useMemo(() => {
     return CATHOLIC_HYMNS.find((h) => h.id === selectedHymnId) || CATHOLIC_HYMNS[0];
@@ -553,6 +607,144 @@ export function ProjectorView() {
         </div>
       </header>
 
+      {/* Liturgical Date Controller & Quick Navigation Bar */}
+      <div
+        style={{
+          background: "rgba(15, 23, 42, 0.96)",
+          borderBottom: `1px solid ${themeStyles.border}`,
+          padding: "0.55rem 1.25rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          fontSize: "0.88rem",
+          zIndex: 40,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+          <span style={{ color: themeStyles.gold, fontWeight: 700, display: "flex", alignItems: "center", gap: "0.35rem" }}>
+            <Calendar size={16} /> Broadcast Date:
+          </span>
+          <span style={{ fontWeight: 700, color: "#fff", fontSize: "0.95rem" }}>
+            {formatLongDate(selectedDate)}
+          </span>
+          {selectedDate === lagosDateString() ? (
+            <span style={{ fontSize: "0.72rem", background: "#166534", color: "#86efac", padding: "0.15rem 0.5rem", borderRadius: "4px", fontWeight: 700 }}>
+              TODAY
+            </span>
+          ) : (
+            <span style={{ fontSize: "0.72rem", background: "rgba(234, 179, 8, 0.2)", color: themeStyles.gold, padding: "0.15rem 0.5rem", borderRadius: "4px", fontWeight: 700 }}>
+              CUSTOM DATE
+            </span>
+          )}
+        </div>
+
+        {/* Date Switchers */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedDate((d) => addDays(d, -1));
+              setReadingSlide(0);
+            }}
+            style={{
+              background: "#1e293b",
+              color: "#cbd5e1",
+              border: "1px solid #334155",
+              borderRadius: "4px",
+              padding: "0.3rem 0.65rem",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+            }}
+            title="Previous Day"
+          >
+            ◀ Prev Day
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedDate(lagosDateString());
+              setReadingSlide(0);
+            }}
+            style={{
+              background: selectedDate === lagosDateString() ? themeStyles.gold : "#1e293b",
+              color: selectedDate === lagosDateString() ? "#000" : "#cbd5e1",
+              fontWeight: selectedDate === lagosDateString() ? 700 : 500,
+              border: "1px solid #334155",
+              borderRadius: "4px",
+              padding: "0.3rem 0.65rem",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+            }}
+          >
+            Today
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedDate((d) => addDays(d, 1));
+              setReadingSlide(0);
+            }}
+            style={{
+              background: "#1e293b",
+              color: "#cbd5e1",
+              border: "1px solid #334155",
+              borderRadius: "4px",
+              padding: "0.3rem 0.65rem",
+              fontSize: "0.8rem",
+              cursor: "pointer",
+            }}
+            title="Next Day"
+          >
+            Next Day ▶
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedDate(getNextSunday(selectedDate));
+              setReadingSlide(0);
+            }}
+            style={{
+              background: "#1e293b",
+              color: themeStyles.gold,
+              border: `1px solid ${themeStyles.gold}`,
+              borderRadius: "4px",
+              padding: "0.3rem 0.65rem",
+              fontSize: "0.8rem",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+            title="Jump to Next Sunday"
+          >
+            Next Sunday ✝
+          </button>
+
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => {
+              if (e.target.value) {
+                setSelectedDate(e.target.value);
+                setReadingSlide(0);
+              }
+            }}
+            style={{
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.82rem",
+              borderRadius: "4px",
+              border: "1px solid #334155",
+              background: "#0f172a",
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          />
+        </div>
+      </div>
+
       {/* Main Broadcast Screen */}
       <main
         style={{
@@ -577,7 +769,7 @@ export function ProjectorView() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: `2px solid ${themeStyles.border}`, paddingBottom: "1rem", marginBottom: "1.5rem" }}>
                 <div>
                   <span style={{ textTransform: "uppercase", fontSize: "1rem", letterSpacing: "0.15em", color: themeStyles.gold, fontWeight: 700 }}>
-                    {formatLongDate(todayDate)} · The Daily Missal (Paulines Africa / CBCN)
+                    {formatLongDate(selectedDate)} · The Daily Missal (Paulines Africa / CBCN)
                   </span>
                   <h1 style={{ fontSize: `${Math.round(fontSizePx * 1.25)}px`, margin: "0.25rem 0 0", color: themeStyles.heading }}>
                     {readingSlides[readingSlide]?.title || "Daily Readings"}
@@ -1068,10 +1260,10 @@ export function ProjectorView() {
                   HOLY SACRIFICE OF THE MASS · INTENTIONS
                 </span>
                 <h1 style={{ fontSize: `${Math.round(fontSizePx * 1.25)}px`, margin: "0.2rem 0 0", color: themeStyles.heading }}>
-                  Mass Intentions for {formatLongDate(todayDate)}
+                  Mass Intentions for {formatLongDate(selectedDate)}
                 </h1>
                 <div style={{ fontSize: "1rem", color: "#94a3b8" }}>
-                  Official altar schedule of intentions celebrated today by the Chaplaincy priests
+                  Official altar schedule of intentions celebrated on {formatLongDate(selectedDate)} by the Chaplaincy priests
                 </div>
               </div>
 
@@ -1086,7 +1278,7 @@ export function ProjectorView() {
                   }}
                 >
                   <p style={{ margin: 0, fontSize: `${Math.round(fontSizePx * 0.8)}px`, color: themeStyles.gold }}>
-                    No public Mass intentions registered for today.
+                    No public Mass intentions registered for {formatLongDate(selectedDate)}.
                   </p>
                   <p style={{ margin: "0.5rem 0 0", fontSize: `${Math.round(fontSizePx * 0.65)}px`, color: "#94a3b8" }}>
                     Liturgies are offered for the intentions of the Holy Father and the spiritual welfare of the AE-FUTHA Chaplaincy community.

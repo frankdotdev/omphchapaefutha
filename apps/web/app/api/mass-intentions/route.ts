@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLiveMassIntentions, saveBookedMassIntention } from "@/lib/data/server-store";
-import { lagosDateString } from "@/lib/time/lagos";
+import { lagosDateString, addDays } from "@/lib/time/lagos";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
@@ -25,18 +25,26 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const reference = generateRef();
+    const reference = body.reference || generateRef();
+    const startDate = body.scheduledDate || body.preferredDate || lagosDateString();
+    const numDays = Math.max(1, Number(body.numberOfDays) || (body.dates ? body.dates.length : 1));
+
+    let datesList: string[] = Array.isArray(body.dates) && body.dates.length > 0 ? body.dates : [];
+    if (datesList.length === 0) {
+      datesList = Array.from({ length: numDays }, (_, i) => addDays(startDate, i));
+    }
+    const endDate = body.endDate || (datesList.length > 0 ? [...datesList].sort().pop()! : addDays(startDate, numDays - 1));
 
     saveBookedMassIntention({
       reference,
-      text: body.text,
-      displayName: body.anonymous ? "Anonymous Parishioner" : body.displayName || "Anonymous Parishioner",
-      scheduledDate: body.preferredDate || lagosDateString(),
-      endDate: body.endDate || null,
-      numberOfDays: body.numberOfDays || 1,
-      dates: body.dates || (body.preferredDate ? [body.preferredDate] : [lagosDateString()]),
-      activityName: body.activityName || "Holy Mass",
-      contact: body.privateContact,
+      text: body.text || body.intention_text || "",
+      displayName: body.anonymous ? "Anonymous Parishioner" : body.displayName || body.display_name || "Parishioner",
+      scheduledDate: startDate,
+      endDate,
+      numberOfDays: numDays,
+      dates: datesList,
+      activityName: body.activityName || body.scheduled_activity_name || "Holy Mass",
+      contact: body.privateContact || body.private_contact,
     });
 
     // Supabase optional sync
@@ -45,21 +53,21 @@ export async function POST(req: Request) {
     if (sbUrl && sbKey) {
       try {
         const sb = createClient(sbUrl, sbKey, { auth: { persistSession: false } });
-        await sb.from("mass_intentions").insert({
+        await sb.from("mass_intentions").upsert({
           reference,
-          intention_text: body.text,
-          display_name: body.displayName,
+          intention_text: body.text || body.intention_text,
+          display_name: body.displayName || body.display_name,
           is_anonymous: Boolean(body.anonymous),
-          private_contact: body.privateContact,
-          preferred_date: body.preferredDate,
-          status: "pending_payment",
-        });
+          private_contact: body.privateContact || body.private_contact,
+          preferred_date: startDate,
+          status: body.status || "pending_payment",
+        }, { onConflict: "reference" });
       } catch (err) {
         console.warn("Supabase mass intention sync note:", err);
       }
     }
 
-    return NextResponse.json({ ok: true, reference });
+    return NextResponse.json({ ok: true, reference, scheduledDate: startDate, endDate, numberOfDays: numDays, dates: datesList });
   } catch (err: any) {
     console.error("Mass intention submission failed:", err);
     return NextResponse.json(

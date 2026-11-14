@@ -44,15 +44,7 @@ export class SeedDataClient implements DataClient {
   }
 
   async getAnnouncements(limit?: number): Promise<Announcement[]> {
-    // 1. Check real published announcements from server store
-    try {
-      const live = getLiveAnnouncements(limit);
-      if (live && live.length > 0) {
-        return live;
-      }
-    } catch {}
-
-    // 2. Browser fallback for immediate preview
+    // 1. Browser client check: if published in this browser, show it immediately!
     if (typeof window !== "undefined") {
       try {
         const stored = localStorage.getItem("omph_announcements_parsed_v1");
@@ -64,6 +56,14 @@ export class SeedDataClient implements DataClient {
         }
       } catch {}
     }
+
+    // 2. Check real published announcements from server store
+    try {
+      const live = getLiveAnnouncements(limit);
+      if (live && live.length > 0) {
+        return live;
+      }
+    } catch {}
 
     return [];
   }
@@ -160,10 +160,10 @@ export class SeedDataClient implements DataClient {
                 continue;
               }
 
-              // Check if intention falls on the targetDate
-              const activeOnTargetDate = i.dates
-                ? i.dates.includes(targetDate)
-                : startDate <= targetDate && targetDate <= lastDay;
+              // Check if intention falls on the targetDate (single or multi-day)
+              const activeOnTargetDate =
+                (Array.isArray(i.dates) && i.dates.includes(targetDate)) ||
+                (startDate && lastDay && startDate <= targetDate && targetDate <= lastDay);
 
               if (activeOnTargetDate) {
                 realBookings.push({
