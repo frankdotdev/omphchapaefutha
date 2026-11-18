@@ -27,11 +27,11 @@ export function AnnouncementsListClient({
       } catch {}
     }
 
-    // 2. Fetch latest live from server API
+    // 2. Fetch latest live from server API (global cloud store)
     fetch("/api/admin/announcements")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.announcements && Array.isArray(data.announcements) && data.announcements.length > 0) {
+        if (data?.announcements && Array.isArray(data.announcements)) {
           setItems(data.announcements);
         }
       })

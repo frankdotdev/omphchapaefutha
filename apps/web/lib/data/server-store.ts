@@ -175,6 +175,56 @@ function saveStore(store: ServerStoreData): void {
   }
 }
 
+export const CLOUD_ANNOUNCEMENTS_URL = "https://kvdb.io/omph_chaplaincy_aefutha_prod_v2/announcements_v2";
+
+export async function syncStoreToCloudAsync(): Promise<void> {
+  const store = loadStore();
+  try {
+    const payload = JSON.stringify({
+      announcements: store.announcements,
+      rawAnnouncementDraft: store.rawAnnouncementDraft,
+      announcementDurationDays: store.announcementDurationDays,
+      massIntentions: store.massIntentions,
+      updatedAt: new Date().toISOString(),
+    });
+    await fetch(CLOUD_ANNOUNCEMENTS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+    }).catch(() => {});
+  } catch {}
+}
+
+export async function syncStoreFromCloudAsync(): Promise<ServerStoreData> {
+  const store = loadStore();
+  try {
+    const res = await fetch(CLOUD_ANNOUNCEMENTS_URL, {
+      method: "GET",
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+      signal: typeof AbortSignal !== "undefined" && "timeout" in AbortSignal ? AbortSignal.timeout(2500) : undefined,
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.announcements)) {
+        store.announcements = data.announcements;
+        if (data.rawAnnouncementDraft) store.rawAnnouncementDraft = data.rawAnnouncementDraft;
+        if (data.announcementDurationDays) store.announcementDurationDays = data.announcementDurationDays;
+        if (Array.isArray(data.massIntentions)) {
+          const existingRefs = new Set(store.massIntentions.map((m) => m.reference));
+          for (const m of data.massIntentions) {
+            if (!existingRefs.has(m.reference)) {
+              store.massIntentions.push(m);
+            }
+          }
+        }
+        saveStore(store);
+      }
+    }
+  } catch {}
+  return syncAndAutoArchive();
+}
+
 /**
  * Applies church time-limit and archiving rules:
  * 1. Announcements expire after durationDays (default 7 days).
@@ -331,6 +381,7 @@ export function savePublishedAnnouncements(
 
   store.announcements = [...newItems, ...store.announcements];
   saveStore(store);
+  syncStoreToCloudAsync().catch(() => {});
 
   return { savedCount: newItems.length, expiresAt };
 }
@@ -360,6 +411,7 @@ export function deleteStoredAnnouncement(idOrSlug: string): boolean {
   });
   if (found) {
     saveStore(store);
+    syncStoreToCloudAsync().catch(() => {});
   }
   return found;
 }
@@ -375,6 +427,7 @@ export function clearActiveAnnouncements(): number {
   }
   if (count > 0) {
     saveStore(store);
+    syncStoreToCloudAsync().catch(() => {});
   }
   return count;
 }
@@ -478,6 +531,7 @@ export function saveBookedMassIntention(input: {
     store.massIntentions.unshift(newItem);
   }
   saveStore(store);
+  syncStoreToCloudAsync().catch(() => {});
 }
 
 // -------------------------------------------------------------

@@ -62,10 +62,10 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 
 /* ---------------------------------------------------------------- header */
 .site-header { background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 40; }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 3.75rem; }
-.brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--navy); min-width: 0; flex-shrink: 1; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; min-height: 3.75rem; }
+.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--navy); flex-shrink: 0; min-width: max-content; }
 .brand svg, .brand img { flex: none; width: 2.1rem; height: 2.1rem; }
-.brand-name { font-family: var(--serif); font-weight: 600; font-size: 1.35rem; line-height: 1; letter-spacing: 0.04em; }
+.brand-name { font-family: var(--serif); font-weight: 600; font-size: clamp(1.15rem, 4vw, 1.35rem); line-height: 1; letter-spacing: 0.04em; white-space: nowrap; }
 .brand-name small { display: block; font-family: var(--sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.12em; color: var(--gold-text); margin-top: 0.2rem; text-transform: uppercase; white-space: nowrap; }
 @media (min-width: 32rem) {
   .site-header .wrap { gap: 1rem; }
@@ -80,12 +80,12 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .nav-desktop a { white-space: nowrap; display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 0.55rem; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.9rem; border-bottom: 2px solid transparent; }
 .nav-desktop a:hover, .nav-desktop a[aria-current="page"] { color: var(--marian); border-bottom-color: var(--gold); }
 
-@media (min-width: 68rem) {
-  .brand-name { font-size: 1.85rem; white-space: nowrap; }
+@media (min-width: 76rem) {
+  .brand-name { font-size: 1.7rem; white-space: nowrap; }
   .brand svg, .brand img { width: 2.6rem !important; height: 2.6rem !important; }
   .site-header .wrap { flex-direction: row; justify-content: space-between; align-items: center; gap: 1.2rem; min-height: 4.25rem; }
   .nav-desktop { display: flex !important; align-items: center; justify-content: flex-end; flex: 1; min-width: 0; border-top: none; margin-top: 0; }
-  .nav-desktop ul { justify-content: flex-end; align-items: center; flex-wrap: nowrap; }
+  .nav-desktop ul { justify-content: flex-end; align-items: center; flex-wrap: nowrap; gap: 0.35rem; }
   .menu-btn { display: none !important; }
 }
 
@@ -279,7 +279,7 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 
 .directory { columns: 1; column-gap: 3rem; }
 @media (min-width: 40rem) { .directory { columns: 2; } }
-@media (min-width: 68rem) { .directory { columns: 3; } }
+@media (min-width: 76rem) { .directory { columns: 3; } }
 .directory ul { list-style: none; padding: 0; margin: 0 0 2rem; break-inside: avoid; }
 .directory li a { display: block; padding: 0.6rem 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; }
 .directory li a:hover { color: var(--burgundy); }

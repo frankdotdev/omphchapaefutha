@@ -49,9 +49,11 @@ export function ProjectorView() {
 
   // Liturgical Broadcast Date State (Selectable for any day/Sunday)
   const [selectedDate, setSelectedDate] = useState<string>(lagosDateString());
-  const readings = CURATED_DAILY_READINGS[selectedDate] ||
+  const [readings, setReadings] = useState<any>(
+    CURATED_DAILY_READINGS[selectedDate] ||
     CURATED_DAILY_READINGS["2026-11-15"] || // Sunday lectionary
-    CURATED_DAILY_READINGS["2026-11-11"];
+    CURATED_DAILY_READINGS["2026-11-11"]
+  );
   const [readingSlide, setReadingSlide] = useState<number>(0);
 
   // Helper to jump to next Sunday
@@ -80,8 +82,30 @@ export function ProjectorView() {
   // Selected Date Mass Intentions State (Real Altar Intentions)
   const [todayIntentions, setTodayIntentions] = useState<PublicMassIntention[]>([]);
 
-  // Hydrate real intentions, announcements, and events whenever selectedDate changes
+  // Hydrate real readings, intentions, announcements, and events whenever selectedDate changes
   useEffect(() => {
+    setReadingSlide(0);
+
+    // 0. Update readings: start with instant offline missal, then dynamically fetch live/staff readings
+    const immediateOffline = CURATED_DAILY_READINGS[selectedDate];
+    if (immediateOffline) {
+      setReadings(immediateOffline);
+    }
+    fetch(`/api/readings?date=${selectedDate}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.readings && (d.readings.gospel || d.readings.firstReading)) {
+          setReadings(d.readings);
+        } else if (!immediateOffline) {
+          setReadings(CURATED_DAILY_READINGS["2026-11-15"] || CURATED_DAILY_READINGS["2026-11-11"]);
+        }
+      })
+      .catch(() => {
+        if (!immediateOffline) {
+          setReadings(CURATED_DAILY_READINGS["2026-11-15"] || CURATED_DAILY_READINGS["2026-11-11"]);
+        }
+      });
+
     // 1. Fetch real active Mass Intentions for selectedDate
     const localIntentions: PublicMassIntention[] = [];
     if (typeof window !== "undefined") {
@@ -162,7 +186,7 @@ export function ProjectorView() {
     fetch("/api/admin/announcements")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (d?.announcements && Array.isArray(d.announcements) && d.announcements.length > 0) {
+        if (d?.announcements && Array.isArray(d.announcements)) {
           setAnnouncements(d.announcements);
         }
       })

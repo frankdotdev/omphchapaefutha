@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { getLiveMassIntentions, saveBookedMassIntention } from "@/lib/data/server-store";
+import {
+  getLiveMassIntentions,
+  saveBookedMassIntention,
+  syncStoreFromCloudAsync,
+  syncStoreToCloudAsync,
+} from "@/lib/data/server-store";
 import { lagosDateString, addDays } from "@/lib/time/lagos";
 import { createClient } from "@supabase/supabase-js";
 
@@ -16,6 +21,7 @@ function generateRef(): string {
 }
 
 export async function GET(req: Request) {
+  await syncStoreFromCloudAsync().catch(() => {});
   const { searchParams } = new URL(req.url);
   const date = searchParams.get("date") || lagosDateString();
   const intentions = getLiveMassIntentions(date);
@@ -66,6 +72,8 @@ export async function POST(req: Request) {
         console.warn("Supabase mass intention sync note:", err);
       }
     }
+
+    await syncStoreToCloudAsync().catch(() => {});
 
     return NextResponse.json({ ok: true, reference, scheduledDate: startDate, endDate, numberOfDays: numDays, dates: datesList });
   } catch (err: any) {

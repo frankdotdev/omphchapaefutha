@@ -7,6 +7,8 @@ import {
   clearActiveAnnouncements,
   getAnnouncementDraft,
   getDatabaseRetentionStats,
+  syncStoreFromCloudAsync,
+  syncStoreToCloudAsync,
 } from "@/lib/data/server-store";
 import { parseBulkAnnouncements } from "@/lib/announcements/parser";
 import { createClient } from "@supabase/supabase-js";
@@ -14,6 +16,7 @@ import { createClient } from "@supabase/supabase-js";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  await syncStoreFromCloudAsync().catch(() => {});
   const announcements = getLiveAnnouncements();
   const storedItems = getStoredAnnouncementsDetailed();
   const draft = getAnnouncementDraft();
@@ -36,11 +39,13 @@ export async function POST(req: Request) {
     // Handle delete action via POST as well for maximum client compatibility
     if (action === "delete" && id) {
       const deleted = deleteStoredAnnouncement(id);
+      await syncStoreToCloudAsync().catch(() => {});
       return NextResponse.json({ ok: true, deleted, remaining: getLiveAnnouncements() });
     }
 
     if (action === "clear_all") {
       const cleared = clearActiveAnnouncements();
+      await syncStoreToCloudAsync().catch(() => {});
       return NextResponse.json({ ok: true, cleared, remaining: [] });
     }
 
@@ -90,6 +95,8 @@ export async function POST(req: Request) {
       }
     }
 
+    await syncStoreToCloudAsync().catch(() => {});
+
     return NextResponse.json({
       ok: true,
       count: savedCount,
@@ -113,6 +120,7 @@ export async function DELETE(req: Request) {
 
     if (clearAll) {
       const cleared = clearActiveAnnouncements();
+      await syncStoreToCloudAsync().catch(() => {});
       return NextResponse.json({ ok: true, cleared, remaining: [] });
     }
 
@@ -121,6 +129,7 @@ export async function DELETE(req: Request) {
     }
 
     const deleted = deleteStoredAnnouncement(id);
+    await syncStoreToCloudAsync().catch(() => {});
     return NextResponse.json({ ok: true, deleted, remaining: getLiveAnnouncements() });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || "Failed to delete" }, { status: 500 });
